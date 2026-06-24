@@ -1,0 +1,2800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#E8A000" />
+<title>Digital Yellow Paper — Delhi's Local Directory</title>
+<style>
+/* ============================================================
+   DIGITAL YELLOW PAPER — DESIGN TOKENS
+   ============================================================ */
+:root {
+  --brand:          #E8A000;
+  --brand-dark:     #B8860B;
+  --brand-light:    #FFF8E6;
+  --brand-medium:   #FFE299;
+  --text-primary:   #1A1A1A;
+  --text-secondary: #6B6B6B;
+  --text-tertiary:  #9B9B9B;
+  --bg-app:         #F4F3EF;
+  --bg-card:        #FFFFFF;
+  --bg-elevated:    #FAFAF8;
+  --border:         #E5E4DF;
+  --border-strong:  #CCCBC5;
+  --success:        #16A34A;
+  --success-bg:     #DCFCE7;
+  --error:          #DC2626;
+  --error-bg:       #FEE2E2;
+  --info:           #2563EB;
+  --info-bg:        #DBEAFE;
+  --warning:        #EA580C;
+
+  /* shadows */
+  --shadow-card:  0 1px 3px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-modal: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.12);
+  --shadow-nav:   0 -1px 0 var(--border), 0 -4px 16px rgba(0,0,0,0.06);
+
+  /* layout */
+  --header-h: 56px;
+  --nav-h: 60px;
+  --sidebar-w: 240px;
+  --maxw: 1240px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+body.dark {
+  --brand:          #FFBA33;
+  --brand-dark:     #FFBA33;
+  --brand-light:    #2A2410;
+  --brand-medium:   #4A3F1A;
+  --text-primary:   #F0EFEB;
+  --text-secondary: #A8A7A2;
+  --text-tertiary:  #6E6D69;
+  --bg-app:         #111110;
+  --bg-card:        #1C1C1A;
+  --bg-elevated:    #242422;
+  --border:         #2C2C2A;
+  --border-strong:  #3C3C3A;
+  --success:        #22C55E;
+  --success-bg:     #14331F;
+  --error:          #F87171;
+  --error-bg:       #3A1A1A;
+  --info:           #60A5FA;
+  --info-bg:        #16243A;
+  --shadow-card:  0 1px 3px rgba(0,0,0,0.30), 0 2px 8px rgba(0,0,0,0.40);
+  --shadow-modal: 0 8px 32px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.40);
+  --shadow-nav:   0 -1px 0 var(--border), 0 -4px 16px rgba(0,0,0,0.30);
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  line-height: 1.5;
+  font-size: 15px;
+  overflow-x: hidden;
+  transition: background 300ms ease, color 300ms ease;
+}
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, textarea, select { font-family: inherit; font-size: 15px; }
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; }
+img { max-width: 100%; display: block; }
+::selection { background: var(--brand-medium); color: var(--text-primary); }
+
+/* ============================================================
+   TYPOGRAPHY UTILITIES
+   ============================================================ */
+.text-xs   { font-size: 11px; font-weight: 400; line-height: 1.4; }
+.text-sm   { font-size: 13px; font-weight: 400; line-height: 1.5; }
+.text-base { font-size: 15px; font-weight: 400; line-height: 1.6; }
+.text-md   { font-size: 17px; font-weight: 500; line-height: 1.4; }
+.text-lg   { font-size: 20px; font-weight: 600; line-height: 1.3; }
+.text-xl   { font-size: 26px; font-weight: 700; line-height: 1.2; }
+.muted     { color: var(--text-secondary); }
+.dim       { color: var(--text-tertiary); }
+.amber     { color: var(--brand-dark); }
+body.dark .amber { color: var(--brand); }
+
+/* ============================================================
+   APP SHELL LAYOUT
+   ============================================================ */
+#app { min-height: 100vh; min-height: 100dvh; }
+
+/* Header */
+.appheader {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--header-h);
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 14px; z-index: 60;
+  transition: background 300ms ease, border-color 300ms ease;
+}
+.logo { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.logo-mark {
+  width: 30px; height: 30px; border-radius: 7px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+  display: grid; place-items: center;
+  font-weight: 800; font-size: 12px; color: #1A1A1A; letter-spacing: -0.5px;
+  box-shadow: 0 1px 4px rgba(184,134,11,0.35);
+}
+.logo-word { font-weight: 700; font-size: 16px; color: var(--brand-dark); white-space: nowrap; letter-spacing: -0.2px; }
+body.dark .logo-word { color: var(--brand); }
+.logo-word .full { display: inline; }
+.logo-word .abbr { display: none; }
+.header-spacer { flex: 1; }
+.icon-btn {
+  width: 38px; height: 38px; border-radius: 9px; flex-shrink: 0;
+  display: grid; place-items: center; color: var(--text-secondary);
+  position: relative; transition: background 150ms ease, color 150ms ease;
+}
+.icon-btn:hover, .icon-btn:active { background: var(--bg-elevated); color: var(--text-primary); }
+.icon-btn svg { width: 21px; height: 21px; }
+.notif-dot {
+  position: absolute; top: 7px; right: 8px; width: 8px; height: 8px;
+  background: var(--error); border-radius: 50%; border: 2px solid var(--bg-card);
+}
+.loc-pill {
+  display: flex; align-items: center; gap: 5px; flex-shrink: 0;
+  padding: 7px 11px; border-radius: 24px; background: var(--brand-light);
+  color: var(--brand-dark); font-weight: 600; font-size: 13px;
+  border: 1px solid var(--brand-medium); transition: background 150ms ease;
+}
+body.dark .loc-pill { color: var(--brand); }
+.loc-pill:hover { filter: brightness(0.97); }
+.loc-pill .caret { font-size: 10px; opacity: 0.8; }
+
+/* Sidebar (desktop) */
+.sidebar {
+  display: none;
+  position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w);
+  background: var(--bg-card); border-right: 1px solid var(--border);
+  padding: 16px 12px; z-index: 55; flex-direction: column;
+  transition: background 300ms ease, border-color 300ms ease;
+}
+.sidebar-logo { display: flex; align-items: center; gap: 10px; padding: 8px 8px 18px; }
+.sidebar-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.side-item {
+  display: flex; align-items: center; gap: 13px; padding: 11px 13px;
+  border-radius: 10px; color: var(--text-secondary); font-weight: 500; font-size: 15px;
+  transition: background 150ms ease, color 150ms ease;
+}
+.side-item svg { width: 21px; height: 21px; flex-shrink: 0; }
+.side-item:hover { background: var(--bg-elevated); color: var(--text-primary); }
+.side-item.active { background: var(--brand-light); color: var(--brand-dark); font-weight: 600; }
+body.dark .side-item.active { color: var(--brand); }
+.side-cta {
+  margin-top: 12px; padding: 12px; border-radius: 10px; text-align: center;
+  background: var(--brand); color: #1A1A1A; font-weight: 700; font-size: 14px;
+  box-shadow: 0 2px 8px rgba(184,134,11,0.30); transition: filter 150ms ease;
+}
+.side-cta:hover { filter: brightness(1.05); }
+
+/* Main scroll area */
+.main {
+  padding-top: var(--header-h);
+  padding-bottom: calc(var(--nav-h) + var(--safe-bottom) + 8px);
+  min-height: 100dvh;
+}
+.tabpage { display: none; animation: fadeIn 150ms ease-in; }
+.tabpage.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.pad { padding: 14px 14px 8px; }
+.section-block { margin-bottom: 22px; }
+.section-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 0 14px; margin: 4px 0 12px;
+}
+.section-head h2 { font-size: 20px; font-weight: 600; line-height: 1.3; }
+.section-link { color: var(--brand-dark); font-weight: 600; font-size: 13px; }
+body.dark .section-link { color: var(--brand); }
+
+/* Bottom nav (mobile) */
+.bottomnav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  height: calc(var(--nav-h) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: var(--bg-card); box-shadow: var(--shadow-nav);
+  display: flex; transition: background 300ms ease;
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px; color: var(--text-tertiary); position: relative;
+  transition: color 200ms ease; padding-top: 6px;
+}
+.nav-item svg { width: 23px; height: 23px; transition: transform 200ms ease; }
+.nav-item span { font-size: 10.5px; font-weight: 500; letter-spacing: 0.1px; }
+.nav-item .nav-dot {
+  position: absolute; bottom: 4px; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--brand); opacity: 0; transform: scale(0); transition: all 200ms ease;
+}
+.nav-item.active { color: var(--brand); }
+.nav-item.active svg { transform: translateY(-1px); }
+.nav-item.active .nav-dot { opacity: 1; transform: scale(1); }
+
+/* ============================================================
+   BUTTONS / CHIPS / PILLS / BADGES
+   ============================================================ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 10px 16px; border-radius: 8px; font-weight: 600; font-size: 14px;
+  transition: filter 150ms ease, background 150ms ease, transform 80ms ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--brand); color: #1A1A1A; box-shadow: 0 2px 8px rgba(184,134,11,0.28); }
+.btn-primary:hover { filter: brightness(1.05); }
+.btn-ghost { background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--bg-card); border-color: var(--border-strong); }
+.btn-block { width: 100%; }
+.btn svg { width: 16px; height: 16px; }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+  padding: 8px 14px; border-radius: 24px; font-size: 13px; font-weight: 500;
+  background: var(--bg-card); color: var(--text-secondary);
+  border: 1px solid var(--border); transition: all 150ms ease; flex-shrink: 0;
+}
+.chip:hover { border-color: var(--border-strong); }
+.chip.active { background: var(--brand); color: #1A1A1A; border-color: var(--brand); font-weight: 600; }
+body.dark .chip.active { color: #1A1A1A; }
+
+.hscroll {
+  display: flex; gap: 9px; overflow-x: auto; padding: 2px 14px 10px;
+  scrollbar-width: none; -ms-overflow-style: none; scroll-snap-type: x proximity;
+}
+.hscroll::-webkit-scrollbar { display: none; }
+
+.badge {
+  display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 4px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase;
+}
+.badge-featured { background: #FFF3CD; color: #7A5000; border: 1px solid #F0C040; }
+.badge-premium  { background: #DBEAFE; color: #1D4ED8; border: 1px solid #BFDBFE; }
+.badge-free     { background: #F3F4F6; color: #6B7280; border: 1px solid #E5E7EB; }
+.badge-deal     { background: var(--brand); color: #1A1A1A; border: 1px solid var(--brand-dark); }
+body.dark .badge-featured { background: #3A2F12; color: #FFD466; border-color: #5A4A1C; }
+body.dark .badge-premium  { background: #15243A; color: #93C5FD; border-color: #1E3A5F; }
+body.dark .badge-free     { background: #2A2A28; color: #A8A7A2; border-color: #3C3C3A; }
+
+.status {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px;
+  border-radius: 24px; font-size: 11.5px; font-weight: 600;
+}
+.status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.status-open   { background: #DCFCE7; color: #15803D; }
+.status-closed { background: #FEE2E2; color: #B91C1C; }
+.status-opens  { background: #FEF3C7; color: #92400E; }
+body.dark .status-open   { background: #13311E; color: #4ADE80; }
+body.dark .status-closed { background: #3A1818; color: #FCA5A5; }
+body.dark .status-opens  { background: #38300F; color: #FCD34D; }
+
+.tag {
+  display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 24px;
+  font-size: 11px; font-weight: 500; background: var(--brand-light);
+  color: var(--brand-dark); border: 1px solid var(--brand-medium);
+}
+body.dark .tag { color: var(--brand); }
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; box-shadow: var(--shadow-card);
+  transition: background 300ms ease, border-color 300ms ease, transform 120ms ease, box-shadow 150ms ease;
+}
+.card:active { transform: scale(0.992); }
+
+/* Business list card */
+.biz-card { padding: 14px; cursor: pointer; }
+.biz-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.biz-name { font-size: 17px; font-weight: 600; line-height: 1.3; color: var(--text-primary); }
+.biz-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 9px; font-size: 13px; color: var(--text-secondary); margin: 5px 0; }
+.biz-meta .dot-sep { color: var(--text-tertiary); }
+.biz-cat { display: inline-flex; align-items: center; gap: 5px; }
+.stars { color: var(--brand); letter-spacing: 1px; font-size: 12px; }
+.rating-num { font-weight: 600; color: var(--text-primary); }
+.biz-loc { display: flex; align-items: center; gap: 5px; font-size: 13px; color: var(--text-secondary); margin-bottom: 9px; }
+.save-btn {
+  width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+  display: grid; place-items: center; color: var(--text-tertiary);
+  transition: color 150ms ease, background 150ms ease;
+}
+.save-btn:hover { background: var(--bg-elevated); }
+.save-btn svg { width: 20px; height: 20px; }
+.save-btn.saved { color: var(--error); }
+.card-divider { height: 1px; background: var(--border); margin: 10px 0; }
+.biz-actions { display: flex; gap: 8px; }
+.biz-actions .act {
+  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 6px; border-radius: 8px; font-size: 12.5px; font-weight: 600;
+  background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-primary);
+  transition: all 150ms ease;
+}
+.biz-actions .act:hover { border-color: var(--border-strong); }
+.biz-actions .act svg { width: 15px; height: 15px; }
+.biz-actions .act.call  { color: var(--success); }
+.biz-actions .act.wapp  { color: #128C7E; }
+.biz-actions .act.dirn  { color: var(--info); }
+body.dark .biz-actions .act.wapp { color: #25D366; }
+.act.disabled { opacity: 0.4; pointer-events: none; }
+
+/* Category quick tiles */
+.tile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 0 14px; }
+.tile {
+  background: var(--brand-light); border: 1px solid var(--brand-medium);
+  border-radius: 14px; padding: 14px 6px 11px; text-align: center;
+  transition: transform 120ms ease, filter 150ms ease;
+}
+.tile:active { transform: scale(0.95); }
+.tile:hover { filter: brightness(0.98); }
+.tile .tile-emoji { font-size: 26px; line-height: 1; }
+.tile .tile-label { display: block; margin-top: 7px; font-size: 12px; font-weight: 600; color: var(--brand-dark); }
+body.dark .tile .tile-label { color: var(--brand); }
+
+/* Market cards (horizontal) */
+.market-card {
+  width: 280px; flex-shrink: 0; border-radius: 16px; overflow: hidden;
+  background: var(--bg-card); border: 1px solid var(--border);
+  box-shadow: var(--shadow-card); cursor: pointer; scroll-snap-align: start;
+  transition: transform 120ms ease;
+}
+.market-card:active { transform: scale(0.985); }
+.market-head {
+  height: 120px; padding: 14px; display: flex; flex-direction: column; justify-content: flex-end;
+  background: linear-gradient(135deg, #E8A000 0%, #7A4000 100%); position: relative;
+}
+.market-head::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.18), transparent 60%);
+}
+.market-head h3 { color: #fff; font-size: 18px; font-weight: 700; position: relative; z-index: 1; text-shadow: 0 1px 4px rgba(0,0,0,0.25); }
+.market-card-body { padding: 12px 14px 14px; }
+.market-sub { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--text-secondary); margin-bottom: 10px; }
+.market-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* Deal cards */
+.deal-card {
+  width: 260px; flex-shrink: 0; padding: 14px; border-radius: 14px;
+  background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-card);
+  scroll-snap-align: start; position: relative;
+}
+.deal-card .biz-line { font-size: 13px; font-weight: 600; color: var(--brand-dark); margin: 9px 0 6px; }
+body.dark .deal-card .biz-line { color: var(--brand); }
+.deal-card .deal-text { font-size: 14px; font-weight: 500; line-height: 1.4; margin-bottom: 8px; }
+.deal-card .deal-expiry { font-size: 11.5px; color: var(--text-tertiary); }
+
+/* Community highlight cards */
+.comm-card {
+  width: 280px; flex-shrink: 0; padding: 14px; border-radius: 14px;
+  background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-card);
+  scroll-snap-align: start; cursor: pointer;
+}
+.comm-card .ch-type { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+.comm-card .ch-title { font-size: 14px; font-weight: 600; line-height: 1.4; margin-bottom: 6px; }
+.comm-card .ch-foot { font-size: 11.5px; color: var(--text-tertiary); }
+
+/* ============================================================
+   SEARCH BARS
+   ============================================================ */
+.searchbar {
+  display: flex; align-items: center; gap: 9px; padding: 12px 14px;
+  background: var(--bg-card); border: 1.5px solid var(--border);
+  border-radius: 12px; transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.searchbar.focused, .searchbar:focus-within { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-light); }
+.searchbar svg { width: 19px; height: 19px; color: var(--text-tertiary); flex-shrink: 0; }
+.searchbar input { flex: 1; border: none; outline: none; background: transparent; color: var(--text-primary); font-size: 15px; min-width: 0; }
+.searchbar input::placeholder { color: var(--text-tertiary); }
+.searchbar .clear-x { color: var(--text-tertiary); font-size: 18px; padding: 0 2px; display: none; }
+.searchbar.has-text .clear-x { display: block; }
+
+.hero-search {
+  margin: 0 14px 12px; padding: 14px 16px; border-radius: 14px;
+  background: var(--bg-card); border: 1.5px solid var(--brand-medium);
+  display: flex; align-items: center; gap: 11px;
+  box-shadow: 0 2px 10px rgba(232,160,0,0.10); transition: all 200ms ease;
+}
+.hero-search.focused { border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-light); }
+.hero-search svg { width: 20px; height: 20px; color: var(--brand-dark); flex-shrink: 0; }
+body.dark .hero-search svg { color: var(--brand); }
+.hero-search input { flex: 1; border: none; outline: none; background: transparent; color: var(--text-primary); font-size: 15px; min-width: 0; }
+.hero-search input::placeholder { color: var(--text-tertiary); }
+
+.live-results {
+  margin: -6px 14px 14px; background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; box-shadow: var(--shadow-card); overflow: hidden; display: none;
+}
+.live-results.show { display: block; }
+.live-row { display: flex; align-items: center; gap: 11px; padding: 11px 14px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 120ms ease; }
+.live-row:last-child { border-bottom: none; }
+.live-row:hover { background: var(--bg-elevated); }
+.live-row .lr-emoji { font-size: 19px; width: 24px; text-align: center; }
+.live-row .lr-name { font-size: 14px; font-weight: 600; }
+.live-row .lr-sub { font-size: 12px; color: var(--text-secondary); }
+
+.context-bar { display: flex; align-items: center; justify-content: space-between; padding: 0 14px 14px; }
+.context-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 24px; background: var(--brand-light); color: var(--brand-dark); font-weight: 600; font-size: 13px; border: 1px solid var(--brand-medium); }
+body.dark .context-pill { color: var(--brand); }
+
+/* ============================================================
+   FILTER BAR (directory)
+   ============================================================ */
+.filterbar {
+  position: sticky; top: var(--header-h); z-index: 40;
+  background: var(--bg-app); padding: 12px 0 8px;
+  border-bottom: 1px solid var(--border);
+  transition: background 300ms ease;
+}
+.filterbar .searchbar { margin: 0 14px 10px; }
+.filter-row3 { display: flex; gap: 9px; padding: 4px 14px 2px; }
+.select-wrap { position: relative; flex: 1; }
+.select-wrap select {
+  width: 100%; appearance: none; -webkit-appearance: none;
+  padding: 9px 30px 9px 13px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg-card); color: var(--text-primary); font-size: 13px; font-weight: 500; cursor: pointer;
+}
+.select-wrap::after { content: '▾'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 10px; color: var(--text-tertiary); pointer-events: none; }
+.results-count { padding: 12px 14px 4px; font-size: 13px; color: var(--text-secondary); }
+
+/* ============================================================
+   SHEETS / MODALS / OVERLAYS
+   ============================================================ */
+.scrim {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 90;
+  opacity: 0; pointer-events: none; transition: opacity 280ms ease;
+  -webkit-backdrop-filter: blur(1px); backdrop-filter: blur(1px);
+}
+.scrim.show { opacity: 1; pointer-events: auto; }
+
+.sheet {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 95;
+  background: var(--bg-card); border-radius: 20px 20px 0 0;
+  box-shadow: var(--shadow-modal); max-height: 92dvh; display: flex; flex-direction: column;
+  transform: translateY(100%); transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
+  overflow: hidden;
+}
+.sheet.show { transform: translateY(0); }
+.sheet-handle { padding: 10px 0 4px; display: flex; justify-content: center; flex-shrink: 0; }
+.sheet-handle span { width: 40px; height: 4px; border-radius: 4px; background: var(--border-strong); }
+.sheet-body { overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(20px + var(--safe-bottom)); }
+.sheet-close {
+  position: absolute; top: 12px; right: 12px; z-index: 5;
+  width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,0.35);
+  color: #fff; display: grid; place-items: center; font-size: 18px;
+}
+.sheet-title-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.sheet-title-row h2 { font-size: 18px; font-weight: 700; }
+
+/* Location sheet */
+.loc-sheet-content { padding: 4px 16px 16px; }
+.breadcrumb { display: flex; align-items: center; gap: 7px; font-size: 14px; color: var(--text-secondary); margin: 10px 0 16px; }
+.breadcrumb b { color: var(--text-primary); }
+.area-grid { display: flex; flex-wrap: wrap; gap: 9px; }
+.area-chip {
+  padding: 9px 14px; border-radius: 24px; font-size: 13px; font-weight: 500;
+  background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-primary);
+  transition: all 150ms ease;
+}
+.area-chip:hover { border-color: var(--border-strong); }
+.area-chip.active { background: var(--brand); color: #1A1A1A; border-color: var(--brand); font-weight: 600; }
+
+/* Modal (centered) */
+.modal {
+  position: fixed; z-index: 95; left: 50%; top: 50%;
+  transform: translate(-50%, -46%) scale(0.96); opacity: 0; pointer-events: none;
+  width: min(520px, calc(100vw - 32px)); max-height: 88dvh;
+  background: var(--bg-card); border-radius: 18px; box-shadow: var(--shadow-modal);
+  display: flex; flex-direction: column; overflow: hidden;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+.modal.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+.modal-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border-bottom: 1px solid var(--border); }
+.modal-head h2 { font-size: 18px; font-weight: 700; }
+.modal-body { padding: 16px 18px; overflow-y: auto; }
+.modal-x { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-elevated); display: grid; place-items: center; font-size: 17px; color: var(--text-secondary); }
+
+/* Form fields */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-primary); }
+.field label .req { color: var(--error); }
+.field input, .field textarea, .field select {
+  width: 100%; padding: 11px 13px; border-radius: 9px; border: 1px solid var(--border);
+  background: var(--bg-elevated); color: var(--text-primary); outline: none; transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-light); }
+.field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+.field select { appearance: none; -webkit-appearance: none; cursor: pointer; }
+
+/* Toasts */
+.toast-wrap { position: fixed; left: 0; right: 0; bottom: calc(var(--nav-h) + var(--safe-bottom) + 14px); z-index: 120; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; padding: 0 16px; }
+.toast {
+  pointer-events: auto; padding: 12px 18px; border-radius: 24px; font-size: 14px; font-weight: 600;
+  color: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.22); display: flex; align-items: center; gap: 8px;
+  transform: translateY(20px); opacity: 0; transition: transform 260ms cubic-bezier(0.32,0.72,0,1), opacity 260ms ease;
+  max-width: 92%;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast-success { background: var(--success); }
+.toast-info    { background: var(--brand); color: #1A1A1A; }
+.toast-error   { background: var(--error); }
+
+/* ============================================================
+   BUSINESS DETAIL PANEL
+   ============================================================ */
+.detail-cover {
+  height: 160px; position: relative; display: grid; place-items: center;
+  background: linear-gradient(135deg, #E8A000 0%, #7A4000 100%);
+}
+.detail-cover::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 75% 25%, rgba(255,255,255,0.16), transparent 55%); }
+.detail-cover .cover-emoji { font-size: 64px; position: relative; z-index: 1; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)); }
+.verified-badge {
+  position: absolute; bottom: 12px; left: 14px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 24px;
+  background: rgba(255,255,255,0.95); color: var(--success); font-size: 12px; font-weight: 700;
+}
+.verified-badge svg { width: 14px; height: 14px; }
+.detail-body { padding: 16px; }
+.detail-title-row { display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.detail-name { font-size: 24px; font-weight: 700; line-height: 1.2; }
+.detail-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 10px; font-size: 14px; color: var(--text-secondary); margin: 8px 0; }
+.detail-actions { display: flex; gap: 9px; margin: 14px 0 4px; }
+.detail-actions .act { flex: 1; padding: 12px 8px; font-size: 13.5px; }
+.detail-section { padding: 16px 0; border-top: 1px solid var(--border); }
+.detail-section:first-of-type { border-top: none; }
+.detail-section h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
+.detail-section p.about-text { font-size: 14px; line-height: 1.65; color: var(--text-secondary); }
+.hours-table { width: 100%; border-collapse: collapse; }
+.hours-table tr { border-bottom: 1px solid var(--border); }
+.hours-table tr:last-child { border-bottom: none; }
+.hours-table td { padding: 9px 2px; font-size: 13.5px; }
+.hours-table td.day { color: var(--text-primary); font-weight: 500; width: 42%; }
+.hours-table td.time { color: var(--text-secondary); text-align: right; }
+.hours-table tr.today td.day { color: var(--brand-dark); font-weight: 700; }
+body.dark .hours-table tr.today td.day { color: var(--brand); }
+.hours-table tr.today td.time { color: var(--text-primary); font-weight: 600; }
+.hours-table td.closed-txt { color: var(--error); text-align: right; }
+.addr-text { font-size: 14px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 12px; }
+.svc-list { display: flex; flex-direction: column; gap: 1px; }
+.svc-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--border); font-size: 14px; }
+.svc-item:last-child { border-bottom: none; }
+.svc-item::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--brand); flex-shrink: 0; }
+.svc-item .svc-name { flex: 1; }
+.photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.photo-tile { aspect-ratio: 1; border-radius: 10px; display: grid; place-items: center; font-size: 26px; background: linear-gradient(135deg, var(--bg-elevated), var(--border)); color: var(--text-tertiary); }
+.review { padding: 14px 0; border-bottom: 1px solid var(--border); }
+.review:last-of-type { border-bottom: none; }
+.review-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.review-author { font-size: 14px; font-weight: 600; }
+.review-author span { font-weight: 400; color: var(--text-tertiary); font-size: 12px; }
+.review-date { font-size: 11.5px; color: var(--text-tertiary); }
+.review-stars { color: var(--brand); font-size: 13px; letter-spacing: 1px; margin-bottom: 6px; }
+.review-text { font-size: 13.5px; line-height: 1.55; color: var(--text-secondary); margin-bottom: 8px; }
+.review-helpful { font-size: 12px; color: var(--text-tertiary); display: inline-flex; align-items: center; gap: 5px; }
+.review-helpful:hover { color: var(--brand-dark); }
+.mini-card {
+  width: 200px; flex-shrink: 0; padding: 12px; border-radius: 12px; cursor: pointer;
+  background: var(--bg-elevated); border: 1px solid var(--border); scroll-snap-align: start;
+}
+.mini-card .mc-name { font-size: 14px; font-weight: 600; line-height: 1.3; margin: 6px 0 4px; }
+.mini-card .mc-sub { font-size: 12px; color: var(--text-secondary); }
+
+/* ============================================================
+   UTILITY TAB
+   ============================================================ */
+.util-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 12px 14px; scrollbar-width: none; }
+.util-tabs::-webkit-scrollbar { display: none; }
+.util-panel { display: none; padding: 4px 14px 8px; animation: fadeIn 150ms ease-in; }
+.util-panel.active { display: block; }
+
+.emerg-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.emerg-card {
+  display: flex; align-items: center; gap: 13px; padding: 14px; border-radius: 14px;
+  background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-card);
+}
+.emerg-icon { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-size: 23px; flex-shrink: 0; }
+.emerg-info { flex: 1; min-width: 0; }
+.emerg-name { font-size: 14.5px; font-weight: 600; }
+.emerg-num { font-size: 19px; font-weight: 700; color: var(--brand-dark); letter-spacing: 0.3px; }
+body.dark .emerg-num { color: var(--brand); }
+.emerg-call {
+  flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 15px; border-radius: 24px; background: var(--success); color: #fff;
+  font-size: 12.5px; font-weight: 700; transition: filter 150ms ease;
+}
+.emerg-call:hover { filter: brightness(1.06); }
+.emerg-call svg { width: 14px; height: 14px; }
+
+.lookup-card { padding: 14px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-card); margin-bottom: 9px; cursor: pointer; transition: border-color 150ms ease; }
+.lookup-card:hover { border-color: var(--border-strong); }
+.ifsc-bank { font-size: 15px; font-weight: 600; }
+.ifsc-branch { font-size: 13px; color: var(--text-secondary); margin: 2px 0 6px; }
+.ifsc-code { display: inline-flex; align-items: center; gap: 8px; }
+.ifsc-code .code-val { font-family: 'Courier New', monospace; font-size: 14px; font-weight: 700; color: var(--brand-dark); letter-spacing: 0.5px; background: var(--brand-light); padding: 3px 9px; border-radius: 6px; }
+body.dark .ifsc-code .code-val { color: var(--brand); }
+.copy-btn { font-size: 11.5px; font-weight: 600; color: var(--info); padding: 3px 8px; border-radius: 6px; background: var(--info-bg); }
+.ifsc-detail-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+.ifsc-detail-row:last-child { border-bottom: none; }
+.ifsc-detail-row .lbl { color: var(--text-secondary); }
+.ifsc-detail-row .val { font-weight: 600; text-align: right; }
+
+.pin-card { padding: 14px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-card); margin-bottom: 9px; display: flex; gap: 14px; align-items: flex-start; }
+.pin-num { font-size: 22px; font-weight: 700; color: var(--brand-dark); flex-shrink: 0; letter-spacing: 0.5px; }
+body.dark .pin-num { color: var(--brand); }
+.pin-areas { font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; }
+
+.metro-card { padding: 14px; border-radius: 14px; background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-card); margin-bottom: 10px; border-left: 5px solid var(--line-color, #999); }
+.metro-name { display: flex; align-items: center; gap: 9px; font-size: 16px; font-weight: 700; margin-bottom: 5px; }
+.metro-dot { width: 13px; height: 13px; border-radius: 50%; background: var(--line-color, #999); flex-shrink: 0; }
+.metro-route { font-size: 13.5px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+.metro-stations { font-size: 12.5px; color: var(--text-secondary); line-height: 1.55; }
+.metro-stations b { color: var(--text-primary); font-weight: 600; }
+.metro-footer { padding: 13px; border-radius: 12px; background: var(--brand-light); border: 1px solid var(--brand-medium); font-size: 12.5px; color: var(--brand-dark); line-height: 1.6; margin-top: 4px; }
+body.dark .metro-footer { color: var(--brand); }
+
+.std-card { display: flex; align-items: center; justify-content: space-between; padding: 13px 14px; border-radius: 11px; background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-card); margin-bottom: 8px; }
+.std-city { font-size: 14.5px; font-weight: 600; }
+.std-code { font-family: 'Courier New', monospace; font-size: 16px; font-weight: 700; color: var(--brand-dark); background: var(--brand-light); padding: 4px 11px; border-radius: 8px; }
+body.dark .std-code { color: var(--brand); }
+
+/* Weather / AQI */
+.weather-hero { border-radius: 18px; padding: 20px; background: linear-gradient(135deg, #E8A000 0%, #B8860B 100%); color: #fff; margin-bottom: 14px; position: relative; overflow: hidden; }
+.weather-hero::after { content: ''; position: absolute; top: -30px; right: -20px; width: 140px; height: 140px; border-radius: 50%; background: rgba(255,255,255,0.14); }
+.weather-city { font-size: 15px; font-weight: 600; opacity: 0.95; position: relative; z-index: 1; }
+.weather-temp { font-size: 52px; font-weight: 800; line-height: 1; margin: 6px 0; position: relative; z-index: 1; }
+.weather-cond { font-size: 15px; font-weight: 500; position: relative; z-index: 1; }
+.weather-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; margin-top: 16px; position: relative; z-index: 1; }
+.weather-stat { padding: 7px 0; }
+.weather-stat .ws-lbl { font-size: 11.5px; opacity: 0.85; }
+.weather-stat .ws-val { font-size: 15px; font-weight: 700; }
+.aqi-card { border-radius: 16px; padding: 16px; background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-card); margin-bottom: 14px; }
+.aqi-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.aqi-val { font-size: 38px; font-weight: 800; line-height: 1; }
+.aqi-badge { padding: 6px 14px; border-radius: 24px; font-size: 13px; font-weight: 700; }
+.aqi-scale { display: flex; flex-direction: column; gap: 7px; }
+.aqi-scale-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+.aqi-swatch { width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0; }
+.sun-row { display: flex; justify-content: space-around; padding: 14px; border-radius: 14px; background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-card); text-align: center; }
+.sun-stat .ss-lbl { font-size: 11.5px; color: var(--text-tertiary); }
+.sun-stat .ss-val { font-size: 15px; font-weight: 700; margin-top: 2px; }
+
+/* ============================================================
+   COMMUNITY TAB
+   ============================================================ */
+.post-card { padding: 14px; border-radius: 14px; background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-card); margin-bottom: 11px; }
+.post-top { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+.post-emoji { font-size: 21px; }
+.post-badge { padding: 3px 9px; border-radius: 24px; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; }
+.pb-news { background: var(--info-bg); color: var(--info); }
+.pb-lost { background: var(--error-bg); color: var(--error); }
+.pb-found { background: var(--success-bg); color: var(--success); }
+.pb-sell { background: #FEF3C7; color: #92400E; }
+.pb-job { background: #EDE9FE; color: #6D28D9; }
+.pb-rent { background: var(--brand-light); color: var(--brand-dark); }
+body.dark .pb-sell { background: #38300F; color: #FCD34D; }
+body.dark .pb-job { background: #271E3A; color: #C4B5FD; }
+body.dark .pb-rent { color: var(--brand); }
+.post-title { font-size: 14.5px; font-weight: 600; line-height: 1.45; margin-bottom: 7px; }
+.post-body { font-size: 13.5px; line-height: 1.55; color: var(--text-secondary); margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; transition: all 200ms ease; }
+.post-body.expanded { -webkit-line-clamp: unset; }
+.post-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.post-meta { font-size: 11.5px; color: var(--text-tertiary); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.post-contact { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 24px; background: var(--brand-light); color: var(--brand-dark); font-size: 12.5px; font-weight: 600; border: 1px solid var(--brand-medium); }
+body.dark .post-contact { color: var(--brand); }
+.expand-link { font-size: 12px; color: var(--brand-dark); font-weight: 600; margin-top: -4px; margin-bottom: 8px; display: inline-block; }
+body.dark .expand-link { color: var(--brand); }
+
+/* ============================================================
+   MARKET PAGE (full detail)
+   ============================================================ */
+.market-banner { height: 180px; padding: 18px; display: flex; flex-direction: column; justify-content: flex-end; background: linear-gradient(135deg, #E8A000 0%, #7A4000 100%); position: relative; }
+.market-banner::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 78% 22%, rgba(255,255,255,0.18), transparent 58%); }
+.market-banner h2 { color: #fff; font-size: 26px; font-weight: 700; position: relative; z-index: 1; text-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+.market-banner .mb-area { color: rgba(255,255,255,0.92); font-size: 14px; font-weight: 500; position: relative; z-index: 1; margin-top: 3px; }
+.mtab-row { display: flex; gap: 6px; padding: 12px 16px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); }
+.mtab-row::-webkit-scrollbar { display: none; }
+.mtab { padding: 8px 14px; border-radius: 24px; font-size: 13px; font-weight: 600; color: var(--text-secondary); background: var(--bg-elevated); white-space: nowrap; transition: all 150ms ease; }
+.mtab.active { background: var(--brand); color: #1A1A1A; }
+.mpanel { display: none; padding: 16px; animation: fadeIn 150ms ease-in; }
+.mpanel.active { display: block; }
+.info-block { margin-bottom: 16px; }
+.info-block h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-tertiary); margin-bottom: 7px; }
+.info-block p { font-size: 14px; line-height: 1.6; color: var(--text-secondary); }
+.tip-box { padding: 13px; border-radius: 12px; background: var(--brand-light); border: 1px solid var(--brand-medium); display: flex; gap: 10px; }
+.tip-box .tip-emoji { font-size: 18px; }
+.tip-box .tip-text { font-size: 13px; line-height: 1.55; color: var(--brand-dark); }
+body.dark .tip-box .tip-text { color: #FFD466; }
+.shop-row { display: flex; align-items: center; gap: 11px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.shop-row:last-child { border-bottom: none; }
+.shop-num { width: 26px; height: 26px; border-radius: 50%; background: var(--brand-light); color: var(--brand-dark); font-size: 12px; font-weight: 700; display: grid; place-items: center; flex-shrink: 0; }
+body.dark .shop-num { color: var(--brand); }
+.shop-name { font-size: 14px; font-weight: 500; }
+.reach-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.reach-item:last-child { border-bottom: none; }
+.reach-ic { font-size: 20px; width: 28px; text-align: center; flex-shrink: 0; }
+.reach-info .ri-lbl { font-size: 12px; color: var(--text-tertiary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+.reach-info .ri-val { font-size: 14px; color: var(--text-primary); margin-top: 2px; }
+.event-card { padding: 13px; border-radius: 12px; background: var(--bg-elevated); border: 1px solid var(--border); margin-bottom: 10px; }
+.event-card .ev-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.event-card .ev-sub { font-size: 12.5px; color: var(--text-secondary); }
+
+/* ============================================================
+   PROFILE TAB
+   ============================================================ */
+.profile-hero { padding: 22px 16px 16px; display: flex; align-items: center; gap: 14px; }
+.profile-avatar { width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, var(--brand), var(--brand-dark)); display: grid; place-items: center; font-size: 24px; font-weight: 800; color: #1A1A1A; flex-shrink: 0; }
+.profile-hero .ph-name { font-size: 19px; font-weight: 700; }
+.profile-hero .ph-sub { font-size: 13px; color: var(--text-secondary); }
+.settings-group { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-card); margin: 0 14px 16px; }
+.settings-group-title { padding: 14px 16px 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-tertiary); }
+.set-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--border); transition: background 120ms ease; }
+.set-row:last-child { border-bottom: none; }
+.set-row.tappable { cursor: pointer; }
+.set-row.tappable:hover { background: var(--bg-elevated); }
+.set-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.set-ic { width: 34px; height: 34px; border-radius: 9px; background: var(--brand-light); display: grid; place-items: center; flex-shrink: 0; color: var(--brand-dark); }
+body.dark .set-ic { color: var(--brand); }
+.set-ic svg { width: 18px; height: 18px; }
+.set-label { font-size: 14.5px; font-weight: 500; }
+.set-value { font-size: 13px; color: var(--text-secondary); }
+.set-arrow { color: var(--text-tertiary); font-size: 18px; }
+
+/* toggle switch */
+.toggle { width: 46px; height: 27px; border-radius: 27px; background: var(--border-strong); position: relative; transition: background 200ms ease; flex-shrink: 0; }
+.toggle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 21px; height: 21px; border-radius: 50%; background: #fff; transition: transform 200ms cubic-bezier(0.32,0.72,0,1); box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
+.toggle.on { background: var(--brand); }
+.toggle.on::after { transform: translateX(19px); }
+
+.empty-state { text-align: center; padding: 40px 24px; }
+.empty-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--brand-light); display: grid; place-items: center; margin: 0 auto 16px; color: var(--brand-dark); }
+body.dark .empty-icon { color: var(--brand); }
+.empty-icon svg { width: 30px; height: 30px; }
+.empty-state h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+.empty-state p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; max-width: 280px; margin: 0 auto 16px; }
+.saved-remove { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; color: var(--error); background: var(--error-bg); font-size: 16px; flex-shrink: 0; }
+
+/* ============================================================
+   SEARCH OVERLAY
+   ============================================================ */
+.search-overlay { position: fixed; inset: 0; z-index: 100; background: var(--bg-app); display: flex; flex-direction: column; opacity: 0; pointer-events: none; transform: translateY(-8px); transition: opacity 220ms ease, transform 220ms ease; }
+.search-overlay.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.so-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.so-search { flex: 1; display: flex; align-items: center; gap: 9px; padding: 11px 14px; border-radius: 12px; background: var(--bg-card); border: 1.5px solid var(--brand); box-shadow: 0 0 0 3px var(--brand-light); }
+.so-search svg { width: 19px; height: 19px; color: var(--brand-dark); }
+body.dark .so-search svg { color: var(--brand); }
+.so-search input { flex: 1; border: none; outline: none; background: transparent; color: var(--text-primary); font-size: 16px; }
+.so-cancel { font-size: 14px; font-weight: 600; color: var(--brand-dark); padding: 6px 4px; }
+body.dark .so-cancel { color: var(--brand); }
+.so-body { flex: 1; overflow-y: auto; padding: 16px 14px; }
+.so-sec-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-tertiary); margin: 8px 0 10px; }
+.recent-row { display: flex; align-items: center; gap: 10px; padding: 11px 4px; border-bottom: 1px solid var(--border); cursor: pointer; }
+.recent-row svg { width: 17px; height: 17px; color: var(--text-tertiary); }
+.recent-row .rr-text { flex: 1; font-size: 14px; }
+.recent-row .rr-remove { color: var(--text-tertiary); font-size: 16px; }
+.so-chips { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 20px; }
+
+/* ============================================================
+   FLOATING ADD BUTTON
+   ============================================================ */
+.fab {
+  position: fixed; right: 18px; bottom: calc(var(--nav-h) + var(--safe-bottom) + 18px);
+  width: 56px; height: 56px; border-radius: 50%; z-index: 70;
+  background: var(--brand); color: #1A1A1A; display: grid; place-items: center;
+  box-shadow: 0 6px 18px rgba(184,134,11,0.40); font-size: 28px; font-weight: 300;
+  transition: transform 250ms cubic-bezier(0.32,0.72,0,1), opacity 250ms ease;
+}
+.fab:hover { filter: brightness(1.05); }
+.fab:active { transform: scale(0.92); }
+.fab.hidden { transform: scale(0) translateY(20px); opacity: 0; pointer-events: none; }
+.fab svg { width: 26px; height: 26px; }
+
+.no-results-state { text-align: center; padding: 48px 24px; }
+.nr-icon { width: 60px; height: 60px; border-radius: 50%; background: var(--brand-light); display: grid; place-items: center; margin: 0 auto 16px; color: var(--brand-dark); font-size: 28px; }
+body.dark .nr-icon { color: var(--brand); }
+.no-results-state h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+.no-results-state p { font-size: 13.5px; color: var(--text-secondary); margin-bottom: 16px; }
+
+.directory-list { padding: 4px 14px 8px; display: flex; flex-direction: column; gap: 11px; }
+
+/* ============================================================
+   RESPONSIVE — DESKTOP (>900px)
+   ============================================================ */
+@media (min-width: 901px) {
+  .sidebar { display: flex; }
+  .bottomnav { display: none; }
+  .appheader { left: var(--sidebar-w); }
+  .main { margin-left: var(--sidebar-w); padding-bottom: 40px; max-width: var(--maxw); }
+  .fab { display: none; }
+  .toast-wrap { bottom: 24px; left: var(--sidebar-w); }
+  .tile-grid { grid-template-columns: repeat(8, 1fr); }
+  .directory-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .biz-grid-home { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 0 14px; }
+  .sheet { left: 50%; transform: translate(-50%, 100%); width: min(620px, 92vw); border-radius: 20px; bottom: 4vh; max-height: 90dvh; }
+  .sheet.show { transform: translate(-50%, 0); }
+  .search-overlay { left: var(--sidebar-w); }
+  .emerg-grid { grid-template-columns: repeat(2, 1fr); }
+  .pad-desktop { max-width: 920px; }
+}
+
+@media (min-width: 1100px) {
+  .biz-grid-home, .directory-list { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* small phones */
+@media (max-width: 360px) {
+  .logo-word .full { display: none; }
+  .logo-word .abbr { display: inline; }
+  .tile-grid { gap: 8px; }
+  .biz-actions .act { font-size: 11.5px; padding: 8px 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* focus visibility */
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
+
+.scroll-hint { font-size: 11px; color: var(--text-tertiary); padding: 0 14px 6px; }
+.spacer-sm { height: 8px; }
+.section-intro { padding: 0 14px 10px; font-size: 13.5px; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ SIDEBAR (desktop) ============ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">DY</div>
+      <div class="logo-word">Digital Yellow Paper</div>
+    </div>
+    <nav class="sidebar-nav" id="sideNav">
+      <a class="side-item active" data-tab="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg>
+        <span>Home</span>
+      </a>
+      <a class="side-item" data-tab="directory">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        <span>Directory</span>
+      </a>
+      <a class="side-item" data-tab="utility">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-2.5z"/></svg>
+        <span>Utility</span>
+      </a>
+      <a class="side-item" data-tab="community">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="7" r="2.3"/><path d="M16 13.5c2.6.3 4.8 2.4 4.8 5.2"/></svg>
+        <span>Community</span>
+      </a>
+      <a class="side-item" data-tab="profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+        <span>Profile</span>
+      </a>
+    </nav>
+    <button class="side-cta" onclick="openAddBusiness()">+ Add your business</button>
+  </aside>
+
+  <!-- ============ HEADER ============ -->
+  <header class="appheader">
+    <div class="logo">
+      <div class="logo-mark">DY</div>
+      <div class="logo-word"><span class="full">Digital Yellow Paper</span><span class="abbr">DYP</span></div>
+    </div>
+    <div class="header-spacer"></div>
+    <button class="icon-btn" onclick="openSearchOverlay()" aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    </button>
+    <button class="icon-btn" onclick="toast('No new notifications','info')" aria-label="Notifications">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      <span class="notif-dot"></span>
+    </button>
+    <button class="loc-pill" onclick="openLocationSheet()">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
+      <span id="headerArea">Delhi</span><span class="caret">▾</span>
+    </button>
+  </header>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <!-- ===== TAB 1: HOME ===== -->
+    <section class="tabpage active" id="page-home">
+      <div style="height:14px"></div>
+      <div class="hero-search" id="heroSearch">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="homeSearchInput" type="text" placeholder="Restaurants, hospitals, markets..." autocomplete="off" />
+      </div>
+      <div class="hscroll" id="homeSuggestChips" style="display:none"></div>
+      <div class="live-results" id="homeLiveResults"></div>
+
+      <div class="context-bar">
+        <span class="context-pill">📍 Delhi, NCR</span>
+        <a class="section-link" onclick="openLocationSheet()">Change area</a>
+      </div>
+
+      <div class="section-block">
+        <div class="section-head"><h2>Browse categories</h2></div>
+        <div class="tile-grid" id="categoryTiles"></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-head"><h2>Markets near you</h2><a class="section-link" onclick="switchTab('directory')">View all →</a></div>
+        <div class="hscroll" id="homeMarkets"></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-head"><h2>Featured businesses</h2><a class="section-link" onclick="goDirectoryFiltered('All')">See more →</a></div>
+        <div class="biz-grid-home" id="homeFeatured"></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-head"><h2>Today's deals</h2></div>
+        <div class="hscroll" id="homeDeals"></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-head"><h2>Community highlights</h2><a class="section-link" onclick="switchTab('community')">View all →</a></div>
+        <div class="hscroll" id="homeCommunity"></div>
+      </div>
+    </section>
+
+    <!-- ===== TAB 2: DIRECTORY ===== -->
+    <section class="tabpage" id="page-directory">
+      <div class="filterbar">
+        <div class="searchbar" id="dirSearchBar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="dirSearchInput" type="text" placeholder="Search businesses in Delhi..." autocomplete="off" />
+          <button class="clear-x" onclick="clearDirSearch()">✕</button>
+        </div>
+        <div class="hscroll" id="dirCategoryChips"></div>
+        <div class="filter-row3">
+          <div class="select-wrap">
+            <select id="dirSort" onchange="renderDirectory()">
+              <option value="relevance">Sort: Relevance</option>
+              <option value="rating">Sort: Rating (high→low)</option>
+              <option value="name">Sort: Name (A→Z)</option>
+            </select>
+          </div>
+          <div class="select-wrap">
+            <select id="dirArea" onchange="renderDirectory()"></select>
+          </div>
+        </div>
+      </div>
+      <div class="results-count" id="dirCount"></div>
+      <div class="directory-list" id="directoryList"></div>
+    </section>
+
+    <!-- ===== TAB 3: UTILITY ===== -->
+    <section class="tabpage" id="page-utility">
+      <div class="hscroll util-tabs" id="utilTabs">
+        <button class="chip active" data-util="emergency">Emergency</button>
+        <button class="chip" data-util="ifsc">IFSC Codes</button>
+        <button class="chip" data-util="pincode">Pincodes</button>
+        <button class="chip" data-util="metro">Delhi Metro</button>
+        <button class="chip" data-util="std">STD Codes</button>
+        <button class="chip" data-util="weather">AQI &amp; Weather</button>
+      </div>
+
+      <div class="util-panel active" id="util-emergency">
+        <div class="section-intro">Tap to call any service directly. All numbers are live Delhi helplines.</div>
+        <div class="emerg-grid" id="emergGrid"></div>
+      </div>
+
+      <div class="util-panel" id="util-ifsc">
+        <div class="searchbar" style="margin:4px 0 12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="ifscSearch" type="text" placeholder="Enter bank name or branch..." autocomplete="off" /></div>
+        <div id="ifscList"></div>
+      </div>
+
+      <div class="util-panel" id="util-pincode">
+        <div class="searchbar" style="margin:4px 0 12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="pinSearch" type="text" placeholder="Enter area name or pincode..." autocomplete="off" /></div>
+        <div id="pinList"></div>
+      </div>
+
+      <div class="util-panel" id="util-metro">
+        <div id="metroList"></div>
+      </div>
+
+      <div class="util-panel" id="util-std">
+        <div class="searchbar" style="margin:4px 0 12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="stdSearch" type="text" placeholder="Enter city name..." autocomplete="off" /></div>
+        <div id="stdList"></div>
+      </div>
+
+      <div class="util-panel" id="util-weather" style="padding-top:8px"></div>
+    </section>
+
+    <!-- ===== TAB 4: COMMUNITY ===== -->
+    <section class="tabpage" id="page-community">
+      <div class="hscroll util-tabs" id="commTabs">
+        <button class="chip active" data-comm="news">News</button>
+        <button class="chip" data-comm="lostFound">Lost &amp; Found</button>
+        <button class="chip" data-comm="classifieds">Classifieds</button>
+        <button class="chip" data-comm="jobs">Jobs</button>
+        <button class="chip" data-comm="rentals">PG &amp; Rentals</button>
+      </div>
+      <div id="commList" style="padding:4px 14px 8px"></div>
+    </section>
+
+    <!-- ===== TAB 5: PROFILE ===== -->
+    <section class="tabpage" id="page-profile">
+      <div class="profile-hero">
+        <div class="profile-avatar">D</div>
+        <div>
+          <div class="ph-name">Delhi Resident</div>
+          <div class="ph-sub">Member · Delhi, NCR</div>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-group-title">My saved businesses</div>
+        <div id="savedList"></div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-group-title">Deals &amp; offers (saved)</div>
+        <div id="savedDealsList"></div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-group-title">App settings</div>
+        <div class="set-row tappable" onclick="openLocationSheet()">
+          <div class="set-left">
+            <div class="set-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/></svg></div>
+            <div><div class="set-label">Location</div><div class="set-value" id="settingsArea">Delhi, NCR</div></div>
+          </div>
+          <span class="set-arrow">›</span>
+        </div>
+        <div class="set-row">
+          <div class="set-left">
+            <div class="set-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9c-4 0-9-1-9-9z"/></svg></div>
+            <div><div class="set-label">Dark mode</div><div class="set-value">Easy on the eyes at night</div></div>
+          </div>
+          <div class="toggle" id="darkToggle" onclick="toggleDark()"></div>
+        </div>
+        <div class="set-row tappable" onclick="cycleLanguage()">
+          <div class="set-left">
+            <div class="set-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3C9.5 5.6 9.5 18.4 12 21"/></svg></div>
+            <div><div class="set-label">Language</div><div class="set-value" id="langValue">English</div></div>
+          </div>
+          <span class="set-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-group-title">Notifications</div>
+        <div class="set-row">
+          <div class="set-left"><div class="set-label">Deals near me</div></div>
+          <div class="toggle on" onclick="this.classList.toggle('on'); toast('Preference saved','success')"></div>
+        </div>
+        <div class="set-row">
+          <div class="set-left"><div class="set-label">Emergency alerts</div></div>
+          <div class="toggle on" onclick="this.classList.toggle('on'); toast('Preference saved','success')"></div>
+        </div>
+        <div class="set-row">
+          <div class="set-left"><div class="set-label">Community posts</div></div>
+          <div class="toggle" onclick="this.classList.toggle('on'); toast('Preference saved','success')"></div>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-group-title">More</div>
+        <div class="set-row tappable" onclick="shareApp()">
+          <div class="set-left"><div class="set-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg></div><div class="set-label">Share app</div></div>
+          <span class="set-arrow">›</span>
+        </div>
+        <div class="set-row tappable" onclick="openAddBusiness()">
+          <div class="set-left"><div class="set-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V10l9-6 9 6v11"/><path d="M9 21v-6h6v6"/><path d="M12 4v3M10.5 5.5h3" transform="translate(0,0)"/></svg></div><div class="set-label">List your business</div></div>
+          <span class="set-arrow">›</span>
+        </div>
+        <div class="set-row tappable" onclick="toast('Digital Yellow Paper v1.0 — India ka apna local directory','info')">
+          <div class="set-left"><div class="set-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></div><div><div class="set-label">About DYP</div><div class="set-value">Version 1.0 · India ka apna local directory</div></div></div>
+          <span class="set-arrow">›</span>
+        </div>
+      </div>
+      <div style="height:20px"></div>
+    </section>
+
+  </main>
+
+  <!-- ============ BOTTOM NAV (mobile) ============ -->
+  <nav class="bottomnav" id="bottomNav">
+    <button class="nav-item active" data-tab="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg>
+      <span>Home</span><span class="nav-dot"></span>
+    </button>
+    <button class="nav-item" data-tab="directory">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      <span>Directory</span><span class="nav-dot"></span>
+    </button>
+    <button class="nav-item" data-tab="utility">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-2.5z"/></svg>
+      <span>Utility</span><span class="nav-dot"></span>
+    </button>
+    <button class="nav-item" data-tab="community">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="7" r="2.3"/><path d="M16 13.5c2.6.3 4.8 2.4 4.8 5.2"/></svg>
+      <span>Community</span><span class="nav-dot"></span>
+    </button>
+    <button class="nav-item" data-tab="profile">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      <span>Profile</span><span class="nav-dot"></span>
+    </button>
+  </nav>
+
+  <!-- ============ FAB ============ -->
+  <button class="fab" id="fab" onclick="openAddBusiness()" aria-label="Add your business">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+
+  <!-- ============ SCRIM ============ -->
+  <div class="scrim" id="scrim" onclick="closeAllSheets()"></div>
+
+  <!-- ============ LOCATION SHEET ============ -->
+  <div class="sheet" id="locationSheet">
+    <div class="sheet-handle"><span></span></div>
+    <div class="sheet-title-row"><h2>Choose your area</h2><button class="modal-x" onclick="closeAllSheets()">✕</button></div>
+    <div class="sheet-body">
+      <div class="loc-sheet-content">
+        <div class="breadcrumb">India <span>›</span> <b>Delhi</b> <span>›</span> <b id="crumbArea">All areas</b></div>
+        <div class="area-grid" id="areaGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ BUSINESS DETAIL SHEET ============ -->
+  <div class="sheet" id="detailSheet">
+    <div class="sheet-handle"><span></span></div>
+    <button class="sheet-close" onclick="closeAllSheets()">✕</button>
+    <div class="sheet-body" id="detailBody"></div>
+  </div>
+
+  <!-- ============ MARKET DETAIL SHEET ============ -->
+  <div class="sheet" id="marketSheet">
+    <div class="sheet-handle"><span></span></div>
+    <button class="sheet-close" onclick="closeAllSheets()">✕</button>
+    <div class="sheet-body" id="marketBody"></div>
+  </div>
+
+  <!-- ============ ADD BUSINESS MODAL ============ -->
+  <div class="modal" id="addModal">
+    <div class="modal-head"><h2>List your business</h2><button class="modal-x" onclick="closeModal('addModal')">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Business name <span class="req">*</span></label><input id="ab_name" type="text" placeholder="e.g. Sharma General Store" /></div>
+      <div class="field"><label>Category</label><select id="ab_cat"></select></div>
+      <div class="field"><label>Phone <span class="req">*</span></label><input id="ab_phone" type="tel" placeholder="e.g. 9811000000" /></div>
+      <div class="field"><label>WhatsApp number</label><input id="ab_wa" type="tel" placeholder="Optional" /></div>
+      <div class="field"><label>Address <span class="req">*</span></label><input id="ab_addr" type="text" placeholder="Shop no., street, landmark" /></div>
+      <div class="field"><label>Area</label><select id="ab_area"></select></div>
+      <div class="field"><label>About your business</label><textarea id="ab_about" placeholder="What do you offer? Tell customers about your business..."></textarea></div>
+      <button class="btn btn-primary btn-block" onclick="submitBusiness()">Submit listing</button>
+    </div>
+  </div>
+
+  <!-- ============ WRITE REVIEW MODAL ============ -->
+  <div class="modal" id="reviewModal">
+    <div class="modal-head"><h2>Write a review</h2><button class="modal-x" onclick="closeModal('reviewModal')">✕</button></div>
+    <div class="modal-body">
+      <div id="reviewForName" style="font-size:14px;font-weight:600;margin-bottom:14px;color:var(--text-secondary)"></div>
+      <div class="field">
+        <label>Your rating</label>
+        <div id="ratingPicker" style="display:flex;gap:6px;font-size:30px;color:var(--border-strong);cursor:pointer"></div>
+      </div>
+      <div class="field"><label>Your name</label><input id="rv_name" type="text" placeholder="e.g. Amit Verma" /></div>
+      <div class="field"><label>Your review</label><textarea id="rv_text" placeholder="Share your experience..."></textarea></div>
+      <button class="btn btn-primary btn-block" onclick="submitReview()">Post review</button>
+    </div>
+  </div>
+
+  <!-- ============ SEARCH OVERLAY ============ -->
+  <div class="search-overlay" id="searchOverlay">
+    <div class="so-header">
+      <div class="so-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="overlaySearchInput" type="text" placeholder="Search Delhi businesses..." autocomplete="off" />
+      </div>
+      <button class="so-cancel" onclick="closeSearchOverlay()">Cancel</button>
+    </div>
+    <div class="so-body" id="searchOverlayBody"></div>
+  </div>
+
+  <!-- ============ TOASTS ============ -->
+  <div class="toast-wrap" id="toastWrap"></div>
+
+</div>
+<script>
+/* ============================================================
+   DIGITAL YELLOW PAPER — APP DATA
+   All hardcoded. Delhi demo city. No external calls.
+   ============================================================ */
+const APP_DATA = {
+
+  /* ---------- 32 BUSINESSES ---------- */
+  businesses: [
+    /* === 8 FEATURED === */
+    { id:1, name:"Karim's Restaurant", category:"Restaurant", emoji:"🍽️", area:"Old Delhi", pincode:"110006",
+      address:"16, Gali Kababian, Near Jama Masjid, Chandni Chowk, Delhi", phone:"01123264981", whatsapp:"919811111001",
+      tier:"featured", rating:4.5, reviews:2847, openTime:"12:00 PM", closeTime:"11:00 PM", closedDay:null,
+      about:"Iconic Mughlai restaurant established in 1913 by Haji Karimuddin. Famous for mutton burra kebabs, nahari, seekh kebabs, and authentic Old Delhi cuisine. A culinary landmark for over a century.",
+      services:["Mutton Burra Kebab — ₹280","Seekh Kebab — ₹220","Nahari — ₹180","Biryani — ₹250","Sheermal — ₹60"] },
+
+    { id:2, name:"Apollo Hospital Delhi", category:"Hospital", emoji:"🏥", area:"Sarita Vihar", pincode:"110076",
+      address:"Indraprastha Apollo Hospital, Mathura Road, Sarita Vihar, Delhi", phone:"01171791090", whatsapp:"919811111002",
+      tier:"featured", rating:4.6, reviews:5234, openTime:"24 Hours", closeTime:null, closedDay:null,
+      about:"Multi-specialty tertiary care hospital with 700+ beds and 52 specialties. NABH and JCI accredited. Emergency, ICU, organ transplant, oncology, and cardiac sciences under one roof.",
+      services:["Emergency & Trauma — 24hrs","Cardiac Sciences","Oncology","Organ Transplant","Neurosciences"] },
+
+    { id:3, name:"Fabindia — Khan Market", category:"Clothing", emoji:"👗", area:"Khan Market", pincode:"110003",
+      address:"14, Middle Lane, Khan Market, New Delhi", phone:"01141551311", whatsapp:"919811111003",
+      tier:"featured", rating:4.3, reviews:1892, openTime:"10:00 AM", closeTime:"8:00 PM", closedDay:"Sunday",
+      about:"India's largest private platform for Indian handmade textiles, crafts, and organic food products. Supports over 55,000 craft-based rural and urban producers across India.",
+      services:["Cotton Kurtas — from ₹1,200","Home Furnishings","Organic Foods","Jewellery","Men's Linen Shirts — from ₹1,500"] },
+
+    { id:4, name:"Haldiram's Connaught Place", category:"Restaurant", emoji:"🍽️", area:"Connaught Place", pincode:"110001",
+      address:"P-9, Connaught Circus, Connaught Place, New Delhi", phone:"01123413444", whatsapp:"919811111004",
+      tier:"featured", rating:4.4, reviews:3102, openTime:"9:00 AM", closeTime:"11:00 PM", closedDay:null,
+      about:"India's most beloved sweets and snacks brand. Famous for bhujia, rasgulla, kaju katli, samosas, and South Indian breakfast. A Delhi institution for generations of families.",
+      services:["Kaju Katli — ₹800/kg","Bhujia — ₹300/kg","Aloo Tikki Chaat — ₹80","South Indian Thali — ₹180","Gift Boxes — from ₹350"] },
+
+    { id:5, name:"Manyavar — Karol Bagh", category:"Ethnic Wear", emoji:"👘", area:"Karol Bagh", pincode:"110005",
+      address:"3/5, Dev Nagar, Ajmal Khan Road, Karol Bagh, New Delhi", phone:"01145008100", whatsapp:"919811111005",
+      tier:"featured", rating:4.4, reviews:1567, openTime:"10:30 AM", closeTime:"8:30 PM", closedDay:"Sunday",
+      about:"India's largest and most trusted ethnic wear brand for men. Specialising in sherwanis, kurta pajamas, Indo-westerns, and wedding collection. Exclusive Mohey collection for women.",
+      services:["Sherwani — from ₹7,999","Kurta Pajama — from ₹2,499","Nehru Jacket Set","Indo-Western Suits","Dupatta & Accessories"] },
+
+    { id:6, name:"Looks Salon — Greater Kailash 2", category:"Salon", emoji:"✂️", area:"Greater Kailash-2", pincode:"110048",
+      address:"M-50, M Block Market, Greater Kailash Part 2, New Delhi", phone:"01141780900", whatsapp:"919811111006",
+      tier:"featured", rating:4.5, reviews:1245, openTime:"10:00 AM", closeTime:"8:00 PM", closedDay:null,
+      about:"Delhi's premier chain of unisex salons with expert stylists trained internationally. Specialising in hair colouring, global treatment, bridal makeup, and skin care. Walk-ins welcome.",
+      services:["Hair Cut (Women) — from ₹500","Global Hair Colour — from ₹2,500","Bridal Makeup — from ₹8,000","Facial — from ₹1,200","Manicure & Pedicure — from ₹800"] },
+
+    { id:7, name:"FIITJEE — South Extension", category:"Coaching", emoji:"🎓", area:"South Extension", pincode:"110049",
+      address:"29A/1, Kalu Sarai, Near Hauz Khas Metro, New Delhi", phone:"01146080400", whatsapp:"919811111007",
+      tier:"featured", rating:4.3, reviews:756, openTime:"8:00 AM", closeTime:"8:00 PM", closedDay:null,
+      about:"India's leading IIT-JEE preparation institute since 1992. Proven record with thousands of IIT selections annually. Expert faculty, rigorous study material, and regular test series.",
+      services:["IIT-JEE (Class 11-12) — ₹2,80,000/yr","NTSE Coaching","Olympiad Training","Correspondence Course","NEET Preparation"] },
+
+    { id:8, name:"Indian Accent", category:"Fine Dining", emoji:"🍽️", area:"Lodhi Colony", pincode:"110003",
+      address:"The Lodhi, Lodhi Road, New Delhi", phone:"01126924151", whatsapp:"919811111008",
+      tier:"featured", rating:4.8, reviews:1456, openTime:"12:30 PM", closeTime:"11:00 PM", closedDay:null,
+      about:"Ranked India's #1 restaurant and consistently among Asia's 50 Best. Chef Manish Mehrotra's flagship restaurant reinvents Indian cuisine with global techniques and seasonal ingredients. Reservations essential.",
+      services:["7-course Tasting Menu — ₹5,500","A-la-Carte Lunch","Meetha Chaat Amuse Bouche","Chef's Table Experience","Private Dining Room (up to 12)"] },
+
+    /* === 11 PREMIUM === */
+    { id:9, name:"Paranthe Wali Gali", category:"Street Food", emoji:"🫓", area:"Chandni Chowk", pincode:"110006",
+      address:"Gali Paranthe Wali, Near Chandni Chowk Metro, Old Delhi", phone:"09811111009", whatsapp:"919811111009",
+      tier:"premium", rating:4.3, reviews:2156, openTime:"8:00 AM", closeTime:"11:00 PM", closedDay:null,
+      about:"Famous lane of stuffed paratha shops in the heart of Old Delhi, serving unique stuffed parathas since 1875. Dozens of varieties from aloo to dry fruit — served with pickle, chutney, and curd.",
+      services:["Aloo Paratha — ₹50","Rabdi Paratha — ₹80","Kaju Paratha — ₹90","Mix Vegetable Paratha — ₹60","Special Thali — ₹150"] },
+
+    { id:10, name:"Andhra Bhavan Canteen", category:"Restaurant", emoji:"🍽️", area:"Ashoka Road", pincode:"110001",
+      address:"1, Ashoka Road, Near CP, New Delhi (Andhra Pradesh Bhavan)", phone:"01123389760", whatsapp:"919811111010",
+      tier:"premium", rating:4.4, reviews:3892, openTime:"8:00 AM", closeTime:"10:00 PM", closedDay:null,
+      about:"Delhi's most beloved government canteen serving authentic Andhra Pradesh cuisine at unbeatable prices. Famous for crab curry, prawn fry, rice meals, and Andhra breakfasts. A beloved Delhi secret.",
+      services:["Full Meals — ₹100","Crab Curry Thali — ₹140","Prawn Fry — ₹120","Idli-Sambhar — ₹40","Pesarattu — ₹50"] },
+
+    { id:11, name:"Al-Jawahar Restaurant", category:"Restaurant", emoji:"🍽️", area:"Old Delhi", pincode:"110006",
+      address:"8, Matia Mahal, Near Jama Masjid, Old Delhi", phone:"01123261290", whatsapp:"919811111011",
+      tier:"premium", rating:4.4, reviews:1876, openTime:"8:00 AM", closeTime:"11:00 PM", closedDay:null,
+      about:"Legendary Mughlai restaurant established over 60 years ago. Famous for nahari, paya, khichda, and mutton dishes. A generations-old institution sitting next to Jama Masjid with impeccable authentic flavours.",
+      services:["Nahari — ₹160","Paya Soup — ₹140","Mutton Curry — ₹250","Khichda — ₹180","Sheermal Bread — ₹40"] },
+
+    { id:12, name:"Delhi Tyre House", category:"Automotive", emoji:"🚗", area:"Karol Bagh", pincode:"110005",
+      address:"12, Rani Jhansi Road, Near Karol Bagh Metro, Delhi", phone:"09811111012", whatsapp:"919811111012",
+      tier:"premium", rating:4.1, reviews:534, openTime:"9:00 AM", closeTime:"7:00 PM", closedDay:"Sunday",
+      about:"Delhi's trusted multi-brand tyre dealer with 25+ years experience. Stocking MRF, CEAT, Bridgestone, Apollo, and Michelin. Expert wheel alignment, balancing, and nitrogen inflation services.",
+      services:["Car Tyres — from ₹3,200","Wheel Alignment — ₹400","Wheel Balancing — ₹300/wheel","Nitrogen Filling — ₹200","Puncture Repair — ₹80"] },
+
+    { id:13, name:"Quick Wash Laundry", category:"Laundry", emoji:"🧺", area:"Sarojini Nagar", pincode:"110023",
+      address:"Shop 12, Sarojini Nagar Market, New Delhi", phone:"09811111013", whatsapp:"919811111013",
+      tier:"premium", rating:4.0, reviews:287, openTime:"8:00 AM", closeTime:"9:00 PM", closedDay:null,
+      about:"Professional dry cleaning and laundry service with 48-hour turnaround. Home pickup and delivery available within 5km. Specialising in delicate fabrics, bridal wear, and corporate shirts.",
+      services:["Shirt — ₹35","Trouser — ₹50","Suit (dry clean) — ₹250","Saree — ₹120","Home Pickup (min 5 pieces) — Free"] },
+
+    { id:14, name:"V Grooming Studio", category:"Grooming", emoji:"✂️", area:"Greater Kailash-1", pincode:"110048",
+      address:"M-67, M Block Market, Greater Kailash Part 1, New Delhi", phone:"09811111014", whatsapp:"919811111014",
+      tier:"premium", rating:4.4, reviews:876, openTime:"10:00 AM", closeTime:"9:00 PM", closedDay:null,
+      about:"Luxury men's grooming studio in South Delhi. Expert barbers for classic cuts, beard shaping, royal shave, and skin treatments. By-appointment and walk-in. Complimentary coffee with every visit.",
+      services:["Haircut & Style — ₹350","Beard Sculpting — ₹200","Royal Shave — ₹300","Hair Spa — ₹800","Skin Brightening Facial — ₹1,200"] },
+
+    { id:15, name:"Medi Clinic Lajpat Nagar", category:"Clinic", emoji:"🏥", area:"Lajpat Nagar", pincode:"110024",
+      address:"Central Market, Shop 34, Lajpat Nagar II, New Delhi", phone:"09811111015", whatsapp:"919811111015",
+      tier:"premium", rating:4.2, reviews:432, openTime:"9:00 AM", closeTime:"7:00 PM", closedDay:"Sunday",
+      about:"Multi-specialty outpatient clinic with experienced doctors across 12 specialties. Same-day appointments available. In-house lab, pharmacy, and digital X-ray for convenient one-stop healthcare.",
+      services:["General Physician — ₹400","Paediatrics — ₹500","Gynaecology — ₹600","Dermatology — ₹550","Lab Tests — from ₹80"] },
+
+    { id:16, name:"Muthoot Finance — Laxmi Nagar", category:"Finance", emoji:"💰", area:"Laxmi Nagar", pincode:"110092",
+      address:"C-12, Vikas Marg, Laxmi Nagar, East Delhi", phone:"09811111016", whatsapp:"919811111016",
+      tier:"premium", rating:4.0, reviews:345, openTime:"9:00 AM", closeTime:"5:30 PM", closedDay:"Sunday",
+      about:"India's largest gold loan NBFC. Instant gold loans in 5 minutes, money transfer (Western Union), foreign exchange, insurance, and Aadhaar Pay services. Safe and transparent with 24/7 security.",
+      services:["Gold Loan — from ₹1,500","Money Transfer","Foreign Exchange","Insurance Premium Payment","Microfinance Loans"] },
+
+    { id:17, name:"The Mobile Store — Nehru Place", category:"Electronics", emoji:"💻", area:"Nehru Place", pincode:"110019",
+      address:"Shop 44B, Nehru Place Market, South Delhi", phone:"09811111017", whatsapp:"919811111017",
+      tier:"premium", rating:4.1, reviews:678, openTime:"10:00 AM", closeTime:"7:00 PM", closedDay:"Sunday",
+      about:"Authorised dealer for Samsung, Apple, Xiaomi, OnePlus, and all major mobile brands. New phones, refurbished devices, accessories, and fast repairs. EMI available. Exchange old phone.",
+      services:["New Mobiles — all brands","Screen Replacement — from ₹1,200","Battery Replacement — from ₹600","Accessories","EMI Plans Available"] },
+
+    { id:18, name:"Jan Aushadhi Kendra — Karol Bagh", category:"Pharmacy", emoji:"💊", area:"Karol Bagh", pincode:"110005",
+      address:"Ajmeri Gate Road, Near Karol Bagh, New Delhi", phone:"09811111018", whatsapp:"919811111018",
+      tier:"premium", rating:4.2, reviews:198, openTime:"9:00 AM", closeTime:"6:00 PM", closedDay:"Sunday",
+      about:"Government-approved Pradhan Mantri Jan Aushadhi Kendra providing quality generic medicines at 50–90% less than branded equivalents. Over 1,000 generic medicines available. Prescriptions honoured.",
+      services:["Generic Medicines — 60-90% cheaper","Nutraceuticals","Medical Devices","Sanitary Napkins","Protein Supplements"] },
+
+    { id:19, name:"Mr. Quick Tailor", category:"Tailoring", emoji:"🪡", area:"Chandni Chowk", pincode:"110006",
+      address:"Shop 8, Near Kinari Bazaar, Chandni Chowk, Old Delhi", phone:"09811111019", whatsapp:"919811111019",
+      tier:"premium", rating:4.2, reviews:345, openTime:"9:00 AM", closeTime:"8:00 PM", closedDay:"Sunday",
+      about:"Expert tailoring shop for custom men's and women's clothing. Specialising in custom shirts, suits, salwar kameez, blouses, and kurtas. Alterations and fittings completed in 24 hours.",
+      services:["Custom Shirt — from ₹400","Salwar Kameez — from ₹600","Suit Tailoring — from ₹2,500","Blouse — from ₹350","Alterations — from ₹80"] },
+
+    /* === 13 FREE === */
+    { id:20, name:"AIIMS New Delhi", category:"Hospital", emoji:"🏥", area:"Ansari Nagar", pincode:"110029",
+      address:"Sri Aurobindo Marg, Ansari Nagar, New Delhi", phone:"01126588500", whatsapp:null,
+      tier:"free", rating:4.5, reviews:8932, openTime:"24 Hours", closeTime:null, closedDay:null,
+      about:"All India Institute of Medical Sciences — India's premier government medical institution. Emergency, OPD, complex surgeries, research. Over 2,400 beds. OPD registration starts at 8:30 AM. Bring original ID proof.",
+      services:["OPD Registration — from 8:30 AM","Emergency & Trauma — 24hrs","Specialty Clinics","Diagnostic Laboratories","Research Departments"] },
+
+    { id:21, name:"Sir Ganga Ram Hospital", category:"Hospital", emoji:"🏥", area:"Rajinder Nagar", pincode:"110060",
+      address:"Sir Ganga Ram Hospital Marg, Rajinder Nagar, New Delhi", phone:"01125750000", whatsapp:"919811111021",
+      tier:"free", rating:4.4, reviews:4567, openTime:"24 Hours", closeTime:null, closedDay:null,
+      about:"750-bed multi-specialty private hospital ranked among India's top 10. Known for cardiac sciences, organ transplant, neurosciences, and minimal access surgery. 24/7 emergency and trauma centre.",
+      services:["Cardiac Sciences","Organ Transplant","Neurosciences","Minimal Access Surgery","24/7 Emergency"] },
+
+    { id:22, name:"Delhi University North Campus", category:"Education", emoji:"🎓", area:"North Delhi", pincode:"110007",
+      address:"University Road, Chhatra Marg, North Delhi", phone:"01127662832", whatsapp:null,
+      tier:"free", rating:4.3, reviews:5678, openTime:"8:00 AM", closeTime:"5:00 PM", closedDay:"Sunday",
+      about:"One of India's largest and most prestigious universities with 86+ colleges, 300,000+ students. Located across North and South campuses. Admission through CUET. Famous for its annual cultural festival.",
+      services:["Undergraduate Admissions (CUET)","Postgraduate Programmes","Research Programmes","Central Library","Annual Cultural Festival"] },
+
+    { id:23, name:"Akshardham Temple", category:"Religious", emoji:"⛪", area:"Noida Border, East Delhi", pincode:"110092",
+      address:"National Highway 24, Noida Mor, New Delhi", phone:"01143442344", whatsapp:null,
+      tier:"free", rating:4.8, reviews:12456, openTime:"9:30 AM", closeTime:"6:30 PM", closedDay:"Monday",
+      about:"A spectacular Hindu temple complex and cultural campus spanning 100 acres. Features: Swaminarayan Akshardham monument, Sahaj Anand water show (7:30 PM), Yagnapurush Kund, cultural boat ride. No cameras inside.",
+      services:["Monument Darshan — Free","Sahaj Anand Water Show — ₹80","Cultural Boat Ride — ₹50","Exhibition Halls — ₹170","Food Court (Premvati)"] },
+
+    { id:24, name:"Jama Masjid", category:"Religious", emoji:"🕌", area:"Old Delhi", pincode:"110006",
+      address:"Jama Masjid Road, Chandni Chowk, Old Delhi", phone:"01123269199", whatsapp:null,
+      tier:"free", rating:4.6, reviews:9123, openTime:"7:00 AM", closeTime:"6:30 PM", closedDay:null,
+      about:"India's largest mosque, commissioned by Mughal Emperor Shah Jahan and completed in 1656 CE. Accommodates 25,000 worshippers. Entry free for Muslims. ₹300 camera charge for non-Muslims. Dress modestly.",
+      services:["Entry — Free (worshippers)","Camera Charge — ₹300","Minaret Climb — ₹100","Courtyard Visit","Five Daily Prayers"] },
+
+    { id:25, name:"Gurudwara Sis Ganj Sahib", category:"Religious", emoji:"⛪", area:"Chandni Chowk", pincode:"110006",
+      address:"Chandni Chowk Road, Near Town Hall, Old Delhi", phone:"01123942448", whatsapp:null,
+      tier:"free", rating:4.8, reviews:7890, openTime:"24 Hours", closeTime:null, closedDay:null,
+      about:"Historic Sikh gurudwara marking the martyrdom site of the 9th Sikh Guru, Guru Tegh Bahadur ji. Free langar (community meal) served all day. Entry open to all. Head covered required inside.",
+      services:["Darshan — 24hrs","Free Langar — all day","Shoe Stall — free","Head Covering Provided","Sarovar (holy tank)"] },
+
+    { id:26, name:"Birla Mandir (Lakshmi Narayan Temple)", category:"Religious", emoji:"⛪", area:"Mandir Marg", pincode:"110001",
+      address:"Mandir Marg, Near CP, New Delhi", phone:"01123363947", whatsapp:null,
+      tier:"free", rating:4.7, reviews:8234, openTime:"4:30 AM", closeTime:"9:00 PM", closedDay:null,
+      about:"Beautiful Birla Group temple inaugurated by Mahatma Gandhi on 21 March 1939, on the condition that it be open to all castes and creeds. Dedicated to Lakshmi Narayan. No cameras. No leather items inside.",
+      services:["Darshan — 4:30 AM to 9 PM","Morning & Evening Aarti","Geeta Bhawan","Temple Gardens","No leather / cameras inside"] },
+
+    { id:27, name:"SBI — Connaught Place Branch", category:"Banking", emoji:"🏦", area:"Connaught Place", pincode:"110001",
+      address:"Block E, Connaught Place, New Delhi", phone:"01123417630", whatsapp:null, ifsc:"SBIN0000691", micr:"110002032",
+      tier:"free", rating:3.8, reviews:234, openTime:"10:00 AM", closeTime:"4:00 PM", closedDay:"Saturday & Sunday",
+      about:"State Bank of India, Connaught Place branch — full-service banking in the heart of New Delhi. Savings, current accounts, lockers, loans and NRI services. ATM available 24 hours.",
+      services:["Savings & Current Accounts","Locker Facility","Home & Personal Loans","NRI Services","24-hour ATM"] },
+
+    { id:28, name:"HDFC Bank — Saket Branch", category:"Banking", emoji:"🏦", area:"Saket", pincode:"110017",
+      address:"Select Citywalk Mall, A-3, District Centre, Saket, New Delhi", phone:"01841600111", whatsapp:null, ifsc:"HDFC0000062", micr:"110240048",
+      tier:"free", rating:4.0, reviews:456, openTime:"9:30 AM", closeTime:"4:30 PM", closedDay:"Sunday",
+      about:"HDFC Bank, Saket branch — located inside Select Citywalk Mall. Personal and business banking, demat and trading, loans, forex and wealth management. Convenient mall-hours access.",
+      services:["Savings & Current Accounts","Demat & Trading","Loans & Credit Cards","Forex Services","Wealth Management"] },
+
+    { id:29, name:"Ghantewala Sweets (Est. 1790)", category:"Sweets", emoji:"🍮", area:"Chandni Chowk", pincode:"110006",
+      address:"1861, Chandni Chowk Main Road, Old Delhi", phone:"01123877592", whatsapp:"919811111029",
+      tier:"free", rating:4.5, reviews:1234, openTime:"9:00 AM", closeTime:"8:00 PM", closedDay:null,
+      about:"Delhi's oldest and most legendary sweet shop, established in 1790. Made sweets for Mughal emperors. Famous for sohan halwa, khurchan, rabdi, kalakand, and burfi. A UNESCO-worthy culinary heritage of Delhi.",
+      services:["Sohan Halwa — ₹600/kg","Khurchan — ₹700/kg","Kalakand — ₹500/kg","Rabdi — ₹250/kg","Assorted Burfi — ₹550/kg"] },
+
+    { id:30, name:"British Council Library Delhi", category:"Library/Education", emoji:"📚", area:"Connaught Place", pincode:"110001",
+      address:"17, Kasturba Gandhi Marg, Near CP, New Delhi", phone:"01141490000", whatsapp:null,
+      tier:"free", rating:4.5, reviews:876, openTime:"11:00 AM", closeTime:"7:00 PM", closedDay:"Sunday & Monday",
+      about:"The British Council is the UK's international organisation for cultural relations. Delhi library holds 25,000+ books, journals, and digital resources. Membership-based. English language courses, IELTS preparation, and cultural events.",
+      services:["Library Membership","English Language Courses","IELTS Preparation","Digital Resources","Cultural Events"] },
+
+    { id:31, name:"Carnation Auto — NH-48", category:"Car Service", emoji:"🔧", area:"Sheetla Mata Road, Gurgaon", pincode:"122001",
+      address:"Sheetla Mata Road, NH-48, Near Rajiv Chowk, Gurgaon", phone:"01244093000", whatsapp:"919811111031",
+      tier:"free", rating:4.3, reviews:654, openTime:"8:00 AM", closeTime:"7:00 PM", closedDay:null,
+      about:"India's largest multi-brand car service chain co-founded by Jagdish Khattar (ex-Maruti MD). Expert technicians for all car brands. Genuine parts, transparent pricing, doorstep pickup & delivery.",
+      services:["Full Car Service — from ₹2,800","AC Gas Refill — ₹1,800","Wheel Alignment & Balancing — ₹700","Denting & Painting","Doorstep Pickup — Free within 10km"] },
+
+    { id:32, name:"Maruti Arena Showroom — Dwarka", category:"Car Dealer", emoji:"🚗", area:"Dwarka", pincode:"110045",
+      address:"Sector 10, Dwarka, New Delhi", phone:"09811111032", whatsapp:"919811111032",
+      tier:"free", rating:4.2, reviews:987, openTime:"9:00 AM", closeTime:"7:00 PM", closedDay:"Sunday",
+      about:"Authorised Maruti Suzuki Arena dealership. Full showroom, workshop, genuine parts, and accessories. Test drives available. Easy finance with Maruti Finance. Exchange old car. All latest models on display.",
+      services:["New Car Bookings","Test Drive — free","Exchange Offer","Maruti Finance — 0% processing fee","Maruti Insurance"] }
+  ],
+
+  /* ---------- 10 MARKETS ---------- */
+  markets: [
+    { id:1, name:"Chandni Chowk Market", pincode:"110006", area:"Old Delhi",
+      timings:"10:00 AM – 8:00 PM", closed:"Sunday", metro:"Chandni Chowk (Yellow Line — Direct)",
+      famous:"Wholesale goods, spices, electronics, sari shopping, street food, wedding accessories. One of Asia's oldest and largest markets.",
+      tags:["Wholesale","Spices","Sarees","Street Food"],
+      shops:["Ghantewala Sweets (est. 1790)","Kinari Bazaar (wedding accessories)","Giani di Hatti (kulfi, since 1956)","Nai Sarak (wholesale books)"],
+      parking:"Very limited. Use metro.", autoFare:"On foot (3 mins from station)", busRoutes:"Routes 101, 139, 405 to Lal Qila / Chandni Chowk",
+      tip:"Visit before 11 AM to beat the crowd. Bargain is expected and respected — start at 50% of the first quoted price.",
+      events:[{title:"Diwali Wholesale Mela",sub:"Festive decorations & lights bazaar · Oct–Nov"},{title:"Heritage Walk Sundays",sub:"Guided Old Delhi food & history walk · weekly"}] },
+
+    { id:2, name:"Sarojini Nagar Market", pincode:"110023", area:"South Delhi",
+      timings:"10:00 AM – 9:00 PM", closed:"Monday", metro:"INA (Pink Line) → auto 10 mins, or Sarojini Nagar (upcoming)",
+      famous:"Budget fashion, export surplus clothing, accessories, street food. One of Delhi's most popular weekend shopping destinations.",
+      tags:["Budget Fashion","Export Surplus","Accessories"],
+      shops:["Export surplus shops (Row C, D)","Bata Outlet","Famous street food lane (back of market)"],
+      parking:"Paid parking near main gate, fills fast.", autoFare:"₹40–60 from INA metro", busRoutes:"Routes 522, 620 to Sarojini Nagar",
+      tip:"Wednesday and Saturday see fresh export surplus stock arrive. Come early. No dressing rooms in most shops — wear easy-to-try-on clothes.",
+      events:[{title:"Weekend Flea Pop-ups",sub:"Independent designers near Babu Market · weekends"}] },
+
+    { id:3, name:"Connaught Place (CP)", pincode:"110001", area:"Central Delhi",
+      timings:"Open all week, shops 11 AM – 9 PM", closed:"Open all 7 days", metro:"Rajiv Chowk (Blue + Yellow Line — Direct)",
+      famous:"Delhi's iconic commercial hub. Circular colonial architecture, international brands, restaurants, cinemas, banks, government offices.",
+      tags:["Brands","Restaurants","Cinemas","Heritage"],
+      shops:["Inner Circle (premium brands)","Outer Circle (restaurants)","Janpath (handicrafts)","Palika Bazaar (underground market)"],
+      parking:"Multi-level parking at Palika & Baba Kharak Singh Marg.", autoFare:"Direct metro exit", busRoutes:"Most central Delhi routes terminate here",
+      tip:"Rajiv Chowk metro is Delhi's busiest. Exit Gate 7 for Janpath, Gate 2 for P-Block restaurants.",
+      events:[{title:"CP Christmas & New Year Carnival",sub:"Central Park lights & performances · December"},{title:"Republic Day Celebrations",sub:"Decorations & footfall surge · late January"}] },
+
+    { id:4, name:"Karol Bagh Market", pincode:"110005", area:"Central-West Delhi",
+      timings:"11:00 AM – 8:30 PM", closed:"Sunday", metro:"Karol Bagh (Blue Line — Direct)",
+      famous:"Electronics, bridal wear, shoes, mobile accessories, jewellery, fabrics, and variety shopping. A one-stop market for most needs.",
+      tags:["Electronics","Bridal Wear","Shoes","Jewellery"],
+      shops:["Manyavar (ethnic wear)","Bata (shoes)","Gaffar Market (mobiles, electronics)"],
+      parking:"Paid parking on Ajmal Khan Road, often full.", autoFare:"Direct metro exit", busRoutes:"Routes 871, 990 along Pusa Road",
+      tip:"Gaffar Market inside Karol Bagh is Delhi's electronics grey market. Good for mobile accessories and repairs at lower prices.",
+      events:[{title:"Wedding Season Bridal Expo",sub:"Lehenga & jewellery showcases · Oct–Feb"}] },
+
+    { id:5, name:"Lajpat Nagar Central Market", pincode:"110024", area:"South Delhi",
+      timings:"11:00 AM – 9:00 PM", closed:"Monday", metro:"Lajpat Nagar (Pink Line — Direct)",
+      famous:"Ethnic Indian wear, wedding shopping, Punjabi street food, Sindhi traders with great fabric deals. Popular with families.",
+      tags:["Ethnic Wear","Fabrics","Wedding","Street Food"],
+      shops:["Fabrics lane (Block A)","Wedding lehengas (Block B)","Punjab Sweets (famous corner shop)"],
+      parking:"Limited paid parking, very crowded on weekends.", autoFare:"Direct metro exit", busRoutes:"Ring Road routes 419, 522",
+      tip:"Thursday is the least crowded day. Food stalls open latest at Block C near the back lane — don't miss chole bhature.",
+      events:[{title:"Karva Chauth Mehndi Stalls",sub:"Pop-up henna artists across market · seasonal"}] },
+
+    { id:6, name:"Nehru Place IT Market", pincode:"110019", area:"South Delhi",
+      timings:"10:00 AM – 7:00 PM", closed:"Sunday", metro:"Nehru Place (Violet Line — Direct)",
+      famous:"India's largest IT and electronics market. Computer hardware, software, networking, CCTV, server equipment, mobile repairs, all brands.",
+      tags:["Computers","Hardware","CCTV","Repairs"],
+      shops:["Lamington Electronics","Computer World","IT Express"],
+      parking:"Paid multi-level parking behind the plaza.", autoFare:"Direct metro exit", busRoutes:"Routes 433, 460 to Nehru Place terminal",
+      tip:"Always get a handwritten receipt with serial number. Bargain on accessories but not on branded products. Repair rates here are 40–60% cheaper than authorised service centres.",
+      events:[{title:"Tech Clearance Weekends",sub:"Refurbished laptops & component sales · monthly"}] },
+
+    { id:7, name:"Khan Market", pincode:"110003", area:"Lodhi Colony",
+      timings:"10:00 AM – 8:00 PM", closed:"Sunday", metro:"JLN Stadium (Violet Line) → auto 5 mins",
+      famous:"Delhi's most expensive commercial real estate. Upscale boutiques, bookstores (Full Circle, Bahrisons), international cuisine, cafes.",
+      tags:["Boutiques","Bookstores","Cafes","Dining"],
+      shops:["Bahrisons Booksellers","The Shop (ethnic)","Satvam Veg Restaurant"],
+      parking:"Tight paid parking, valet at some cafes.", autoFare:"₹40–50 from JLN Stadium", busRoutes:"Routes 423, 522 along Subramania Bharti Marg",
+      tip:"Khan Market is Delhi's celebrity hangout. The bookstores here stock rare finds. Best for brunch and leisurely weekend afternoon.",
+      events:[{title:"Independent Book Readings",sub:"Author sessions at Full Circle / Bahrisons · monthly"}] },
+
+    { id:8, name:"Dilli Haat — INA", pincode:"110023", area:"INA Colony, South Delhi",
+      timings:"10:30 AM – 10:00 PM", closed:"Open all 7 days", metro:"INA (Pink Line — 3 mins walk)",
+      famous:"Authentic handicrafts from all 28 states, regional food court with stalls representing each state, cultural programmes.",
+      tags:["Handicrafts","State Foods","Culture","Crafts"], entry:"₹30 adults · ₹15 students · Free for children under 12",
+      shops:["Rotating state craft stalls (weekly)","State food court (28 cuisines)","Handloom & textile pavilion"],
+      parking:"Paid parking opposite INA metro.", autoFare:"3 mins walk from INA metro", busRoutes:"Ring Road routes 522, 620",
+      tip:"Different states rotate their stalls weekly. Best time is 7–9 PM when cultural programmes start and lights come on. Carry cash.",
+      events:[{title:"State Theme Food Festival",sub:"Featured-state cuisine & dance · rotating weekly"},{title:"Classical Dance Evenings",sub:"Open-air performances · selected weekends"}] },
+
+    { id:9, name:"Janpath Market", pincode:"110001", area:"Connaught Place area",
+      timings:"10:00 AM – 7:00 PM", closed:"Sunday", metro:"Rajiv Chowk (Yellow + Blue Line) — 8 mins walk",
+      famous:"Tibetan handicrafts, silver jewellery, cotton fabrics, kurtis, footwear, artifacts, souvenirs. Popular with tourists.",
+      tags:["Tibetan Crafts","Silver","Kurtis","Souvenirs"],
+      shops:["Tibetan Market stalls","Silver jewellery row","Cotton & block-print fabric stalls"],
+      parking:"Use CP parking, walk down.", autoFare:"8 mins walk from Rajiv Chowk", busRoutes:"Janpath / Tolstoy Marg routes",
+      tip:"The stalls towards the Tibetan Market end are best for silver jewellery and pashmina. Always bargain — first price is 3× real.",
+      events:[{title:"Tourist Season Craft Stalls",sub:"Extra handicraft vendors · Oct–Mar"}] },
+
+    { id:10, name:"INA Market", pincode:"110023", area:"INA Colony",
+      timings:"7:00 AM – 9:00 PM", closed:"Open all 7 days", metro:"INA (Pink Line — Direct, 2 mins walk)",
+      famous:"Delhi's best fresh vegetable market, imported food products, South Indian and international ingredients, wholesale grocery.",
+      tags:["Vegetables","Imported Foods","Fish & Meat","Spices"],
+      shops:["Imported foods section (Block C)","Fresh fish & meat stalls","Organic produce corner","Spices & dry fruits (wholesale)"],
+      parking:"Paid parking at INA metro.", autoFare:"2 mins walk from INA metro", busRoutes:"Ring Road routes 522, 620",
+      tip:"Come before 9 AM for freshest vegetables at best rates. The imported section has items unavailable in most supermarkets — great for bakers and international cuisine cooks.",
+      events:[{title:"Festive Dry-Fruit Bazaar",sub:"Bulk dry fruits & gifting · Diwali season"}] }
+  ],
+
+  /* ---------- 15 IFSC RECORDS ---------- */
+  ifsc: [
+    { bank:"State Bank of India", branch:"Connaught Place", ifsc:"SBIN0000691", address:"Block E, CP, New Delhi" },
+    { bank:"State Bank of India", branch:"Karol Bagh", ifsc:"SBIN0003424", address:"Karol Bagh, New Delhi" },
+    { bank:"HDFC Bank", branch:"Saket", ifsc:"HDFC0000062", address:"Select Citywalk, Saket" },
+    { bank:"HDFC Bank", branch:"Connaught Place", ifsc:"HDFC0000060", address:"Connaught Place" },
+    { bank:"ICICI Bank", branch:"Greater Kailash", ifsc:"ICIC0000177", address:"GK-1, New Delhi" },
+    { bank:"ICICI Bank", branch:"Saket", ifsc:"ICIC0001484", address:"Saket District Centre" },
+    { bank:"Punjab National Bank", branch:"Karol Bagh", ifsc:"PUNB0006500", address:"Ajmal Khan Rd, Karol Bagh" },
+    { bank:"Axis Bank", branch:"Connaught Place", ifsc:"UTIB0000008", address:"Connaught Place" },
+    { bank:"Axis Bank", branch:"Lajpat Nagar", ifsc:"UTIB0000256", address:"Central Market, Lajpat Nagar" },
+    { bank:"Kotak Mahindra Bank", branch:"Nehru Place", ifsc:"KKBK0000278", address:"Nehru Place" },
+    { bank:"Bank of Baroda", branch:"Chandni Chowk", ifsc:"BARB0CHAND1", address:"Chandni Chowk" },
+    { bank:"Canara Bank", branch:"Karol Bagh", ifsc:"CNRB0000026", address:"Karol Bagh Main Rd" },
+    { bank:"Union Bank of India", branch:"Rajouri Garden", ifsc:"UBIN0551953", address:"Rajouri Garden" },
+    { bank:"YES Bank", branch:"South Extension", ifsc:"YESB0000112", address:"South Extension Part-1" },
+    { bank:"IndusInd Bank", branch:"Khan Market", ifsc:"INDB0000010", address:"Khan Market" }
+  ],
+
+  /* ---------- 20 PINCODES ---------- */
+  pincodes: [
+    { code:"110001", areas:"Connaught Place, Janpath, Parliament St, Sansad Marg" },
+    { code:"110002", areas:"Darya Ganj, ITO, Delhi Gate" },
+    { code:"110003", areas:"Khan Market, Lodhi Colony, Jangpura, Bhogal" },
+    { code:"110005", areas:"Karol Bagh, Patel Nagar, Naiwara" },
+    { code:"110006", areas:"Chandni Chowk, Fatehpuri, Hauz Qazi, Turkman Gate" },
+    { code:"110007", areas:"Civil Lines, Kashmere Gate, Timarpur" },
+    { code:"110011", areas:"RK Puram, Munirka, Sadiq Nagar" },
+    { code:"110016", areas:"Hauz Khas, Green Park, Safdarjung Enclave, IIT Delhi" },
+    { code:"110019", areas:"Lajpat Nagar IV, Defence Colony, Kalkaji" },
+    { code:"110021", areas:"Chanakyapuri, Diplomatic Enclave, Shanti Path" },
+    { code:"110023", areas:"Sarojini Nagar, INA Colony, Moti Bagh" },
+    { code:"110024", areas:"Lajpat Nagar I-III, South Extension" },
+    { code:"110025", areas:"Okhla, Jamia Nagar, Batla House" },
+    { code:"110027", areas:"Janakpuri, Vikaspuri" },
+    { code:"110048", areas:"Greater Kailash I & II" },
+    { code:"110049", areas:"South Extension, Malviya Nagar" },
+    { code:"110059", areas:"Dwarka Sec 14–23, Uttam Nagar" },
+    { code:"110085", areas:"Rohini Sec 1–16, Pitampura" },
+    { code:"110091", areas:"Preet Vihar, Mayur Vihar Phase-1" },
+    { code:"110092", areas:"Laxmi Nagar, Vivek Vihar, Shakarpur" }
+  ],
+
+  /* ---------- 25 STD CODES ---------- */
+  stdCodes: [
+    { code:"011", city:"Delhi" }, { code:"022", city:"Mumbai" }, { code:"033", city:"Kolkata" },
+    { code:"044", city:"Chennai" }, { code:"080", city:"Bengaluru" }, { code:"040", city:"Hyderabad" },
+    { code:"020", city:"Pune" }, { code:"0141", city:"Jaipur" }, { code:"0265", city:"Vadodara" },
+    { code:"0261", city:"Surat" }, { code:"0294", city:"Udaipur" }, { code:"0512", city:"Kanpur" },
+    { code:"0532", city:"Prayagraj" }, { code:"0522", city:"Lucknow" }, { code:"0731", city:"Indore" },
+    { code:"0755", city:"Bhopal" }, { code:"0422", city:"Coimbatore" }, { code:"0484", city:"Kochi" },
+    { code:"0172", city:"Chandigarh" }, { code:"0651", city:"Ranchi" }, { code:"0612", city:"Patna" },
+    { code:"0361", city:"Guwahati" }, { code:"0832", city:"Panaji (Goa)" }, { code:"0177", city:"Shimla" },
+    { code:"079", city:"Ahmedabad" }
+  ],
+
+  /* ---------- 16 EMERGENCY CONTACTS ---------- */
+  emergency: [
+    { icon:"🚨", name:"Police Emergency", num:"100", color:"#FEE2E2", tel:"100" },
+    { icon:"🆘", name:"National Emergency", num:"112", color:"#FEF3C7", tel:"112" },
+    { icon:"🚑", name:"Ambulance (Delhi)", num:"102 / 108", color:"#DCFCE7", tel:"102" },
+    { icon:"🔥", name:"Fire Brigade", num:"101", color:"#FFEDD5", tel:"101" },
+    { icon:"👩", name:"Women Helpline", num:"1091", color:"#FCE7F3", tel:"1091" },
+    { icon:"👦", name:"Child Helpline", num:"1098", color:"#DBEAFE", tel:"1098" },
+    { icon:"☎️", name:"Disaster Management", num:"1077", color:"#FEF3C7", tel:"1077" },
+    { icon:"🏥", name:"AIIMS Emergency", num:"011-26588500", color:"#DCFCE7", tel:"01126588500" },
+    { icon:"🏥", name:"Safdarjung Emergency", num:"011-26707444", color:"#DCFCE7", tel:"01126707444" },
+    { icon:"🏥", name:"GTB Hospital", num:"011-22582010", color:"#DCFCE7", tel:"01122582010" },
+    { icon:"🚔", name:"Traffic Police", num:"1095", color:"#DBEAFE", tel:"1095" },
+    { icon:"🔌", name:"BSES Power Helpline", num:"19123", color:"#FEF3C7", tel:"19123" },
+    { icon:"💧", name:"Delhi Jal Board", num:"1916", color:"#DBEAFE", tel:"1916" },
+    { icon:"🚇", name:"Delhi Metro Helpline", num:"011-23417910", color:"#FFF3CD", tel:"01123417910" },
+    { icon:"✈️", name:"IGI Airport Info", num:"011-24223174", color:"#E0E7FF", tel:"01124223174" },
+    { icon:"💊", name:"Poison Control", num:"011-26589391", color:"#FEE2E2", tel:"01126589391" }
+  ],
+
+  /* ---------- 6 METRO LINES ---------- */
+  metro: [
+    { name:"Yellow Line", color:"#F5C518", route:"Samaypur Badli → Huda City Centre",
+      stations:"Chandni Chowk, Kashmere Gate, Rajiv Chowk, Central Secretariat, INA, AIIMS, Qutab Minar, Sultanpur, Huda City Centre" },
+    { name:"Blue Line", color:"#3B82F6", route:"Dwarka Sec-21 → Electronic City (Noida)",
+      stations:"Dwarka, Rajouri Garden, Karol Bagh, Rajiv Chowk, Barakhamba, Mandi House, Yamuna Bank, Noida City Centre" },
+    { name:"Pink Line", color:"#EC4899", route:"Majlis Park → Shiv Vihar",
+      stations:"Azadpur, Netaji Subhash Place, Shankar Vihar, INA, Sarojini Nagar, Lajpat Nagar, Mayur Vihar" },
+    { name:"Green Line", color:"#22C55E", route:"Inderlok → Brigadier Hoshiyar Singh",
+      stations:"Inderlok, Ashok Park Main, Punjabi Bagh, Peeragarhi, Tikri Border, Brigadier Hoshiyar Singh" },
+    { name:"Red Line", color:"#EF4444", route:"Rithala → Shaheed Sthal (New Bus Adda)",
+      stations:"Rithala, Rohini, Netaji Subhash Place, Kashmere Gate, Welcome, Dilshad Garden, Shaheed Sthal" },
+    { name:"Airport Line", color:"#F97316", route:"New Delhi → T3 IGI Airport (fare ₹60 flat)",
+      stations:"New Delhi, Shivaji Stadium, Dhaula Kuan, Delhi Aerocity, IGI Airport T3" }
+  ],
+
+  /* ---------- 3 DEALS ---------- */
+  deals: [
+    { biz:"Looks Salon GK-2", text:"20% off on all hair colour services today", expiry:"Expires 9 PM today", bizId:6 },
+    { biz:"Haldiram's CP", text:"Buy 2 sweets boxes, get 1 mithai free", expiry:"Expires 11 PM today", bizId:4 },
+    { biz:"The Mobile Store, Nehru Place", text:"Free screen guard with every mobile repair", expiry:"Today only", bizId:17 }
+  ],
+
+  /* ---------- COMMUNITY BOARD ---------- */
+  community: {
+    news: [
+      { emoji:"🚇", badge:"News", cls:"pb-news", title:"New Delhi Metro Pink Line extension to connect Inderlok to Majlis Park — DMRC announces 3 new stations", body:"The Delhi Metro Rail Corporation has confirmed three additional stations on the Pink Line corridor, easing connectivity between west and north Delhi. Trial runs are expected to begin shortly, with commercial operations targeted for the coming months.", area:"Central Delhi", time:"3 hours ago", contactLabel:"Read full story" },
+      { emoji:"🏛️", badge:"News", cls:"pb-news", title:"Chandni Chowk heritage street redevelopment Phase 2 begins this November — complete closure of vehicle entry for 8 months", body:"Phase 2 of the Chandni Chowk redevelopment will pedestrianise the main stretch, with vehicle entry barred for roughly eight months. Shopkeepers have been briefed on revised loading windows and pedestrian-only access timings.", area:"Old Delhi", time:"1 day ago", contactLabel:"Read full story" },
+      { emoji:"📦", badge:"News", cls:"pb-news", title:"Delhi government to start doorstep ration delivery for AAY card holders from next month, 72 lakh families to benefit", body:"Doorstep ration delivery for Antyodaya Anna Yojana card holders rolls out next month, with around 72 lakh families set to benefit. Beneficiaries can opt in at their nearest fair-price shop.", area:"Citywide", time:"2 days ago", contactLabel:"Read full story" },
+      { emoji:"🚧", badge:"News", cls:"pb-news", title:"ITO flyover repairs: traffic diversions on Vikas Marg and Tilak Bridge from 10 PM–5 AM daily for 3 weeks starting Monday", body:"Night-time structural repairs at the ITO flyover will divert traffic via Vikas Marg and Tilak Bridge between 10 PM and 5 AM for about three weeks. Commuters are advised to plan alternate late-night routes.", area:"East Delhi", time:"2 days ago", contactLabel:"Read full story" },
+      { emoji:"🎨", badge:"News", cls:"pb-news", title:"Dilli Haat hosts National Crafts Mela — 240+ artisans from 28 states, free entry for students with ID, till 15th this month", body:"The National Crafts Mela at Dilli Haat brings together more than 240 artisans representing all 28 states. Students with a valid ID get free entry, and evening cultural programmes run through the 15th.", area:"INA", time:"3 days ago", contactLabel:"Read full story" }
+    ],
+    lostFound: [
+      { emoji:"🐕", badge:"Lost", cls:"pb-lost", title:"LOST DOG: Golden Retriever puppy 'Bruno', 4 months", body:"Golden Retriever puppy, 4 months old, answers to 'Bruno'. Lost near Hauz Khas Village on Saturday evening. Wearing a blue collar. Reward ₹5,000 for safe return. Please call if seen.", area:"Hauz Khas", time:"5 hours ago", contactLabel:"Call 9810XXXXX1", contactInfo:"9810XXXXX1" },
+      { emoji:"🔑", badge:"Found", cls:"pb-found", title:"FOUND KEYS: Bunch of 4 keys on a Hrithik Roshan keychain", body:"Found a bunch of 4 keys on a Hrithik Roshan keychain near Lajpat Nagar Metro Exit 2. Message or call to verify ownership and collect.", area:"Lajpat Nagar", time:"1 day ago", contactLabel:"Contact to collect", contactInfo:"info@dyp.in" },
+      { emoji:"📱", badge:"Lost", cls:"pb-lost", title:"LOST PHONE: iPhone 15 Pro (Natural Titanium)", body:"iPhone 15 Pro in natural titanium lost in Palika Bazaar, CP area, around 3 PM yesterday. It has a clear case. Reward offered for honest return.", area:"Connaught Place", time:"2 days ago", contactLabel:"Call 9810XXXXX3", contactInfo:"9810XXXXX3" },
+      { emoji:"💍", badge:"Lost", cls:"pb-lost", title:"LOST JEWELLERY: Silver bangle engraved 'Meera'", body:"Silver bangle with the name 'Meera' engraved inside, lost at Sarojini Nagar market. Very sentimental piece. Reward ₹2,000 cash, no questions asked.", area:"Sarojini Nagar", time:"3 days ago", contactLabel:"Call 9810XXXXX4", contactInfo:"9810XXXXX4" },
+      { emoji:"📋", badge:"Found", cls:"pb-found", title:"FOUND: Aadhar card + PAN card near Rajiv Chowk", body:"Aadhar card and PAN card found near the Rajiv Chowk metro ticket counter. Name is visible on the documents. Contact to collect.", area:"Connaught Place", time:"3 days ago", contactLabel:"Contact to collect", contactInfo:"info@dyp.in" },
+      { emoji:"🎒", badge:"Found", cls:"pb-found", title:"FOUND BAG: Blue Nike school bag (name 'Arjun')", body:"Blue Nike school bag with class 8 books inside, name 'Arjun', found at the Rohini Sector 7 DTC stop. Call to collect.", area:"Rohini", time:"4 days ago", contactLabel:"Call 9810XXXXX6", contactInfo:"9810XXXXX6" }
+    ],
+    classifieds: [
+      { emoji:"💻", badge:"For Sale", cls:"pb-sell", title:"MacBook Pro M3 2024, 16-inch, 36GB / 1TB", body:"MacBook Pro M3 2024, 16-inch, 36GB RAM, 1TB SSD. Under AppleCare till 2027. Original box included. ₹1,55,000 negotiable. Greater Kailash.", area:"Greater Kailash", time:"1 day ago", contactLabel:"Call 9810XXXXX1", contactInfo:"9810XXXXX1" },
+      { emoji:"🛵", badge:"For Sale", cls:"pb-sell", title:"Honda Activa 5G 2022, 18,000 km, single owner", body:"Honda Activa 5G 2022, 18,000 km, single owner, all original parts. Excellent condition. ₹62,000 negotiable. RC transfer included. Rohini.", area:"Rohini", time:"2 days ago", contactLabel:"Contact seller", contactInfo:"Available on request" },
+      { emoji:"📚", badge:"For Sale", cls:"pb-sell", title:"Complete FIITJEE 4-year IIT-JEE study material", body:"Complete FIITJEE 4-year IIT-JEE study material (2020–2024), all subjects, excellent condition. ₹6,000 for the full set. South Extension.", area:"South Extension", time:"2 days ago", contactLabel:"Contact seller", contactInfo:"Available on request" },
+      { emoji:"📷", badge:"For Sale", cls:"pb-sell", title:"Sony A7 IV + 28-70mm GM lens + bag", body:"Sony A7 IV mirrorless camera with 28-70mm GM lens and camera bag. Used only 3 months. ₹1,85,000 for the full kit. Lajpat Nagar.", area:"Lajpat Nagar", time:"3 days ago", contactLabel:"Contact seller", contactInfo:"Available on request" },
+      { emoji:"🛋️", badge:"For Sale", cls:"pb-sell", title:"IKEA MARKUS chair + teak study table", body:"IKEA MARKUS office chair and a 6-year-old teak study table, good condition. ₹4,500 for both. Self-pickup only. Laxmi Nagar.", area:"Laxmi Nagar", time:"4 days ago", contactLabel:"Contact seller", contactInfo:"Available on request" },
+      { emoji:"🎮", badge:"For Sale", cls:"pb-sell", title:"PS5 Disc Edition + 4 games", body:"PS5 Disc Edition with 4 games (FC 24, Elden Ring, Spider-Man 2, God of War). ₹48,000. Charger and 2 controllers included. Preet Vihar.", area:"Preet Vihar", time:"5 days ago", contactLabel:"Contact seller", contactInfo:"Available on request" }
+    ],
+    jobs: [
+      { emoji:"💼", badge:"Hiring", cls:"pb-job", title:"Digital Marketing Manager — TechStart India Pvt Ltd", body:"₹45,000–₹60,000/month. Okhla Phase 3. 3+ years experience. SEO, SEM and Meta Ads expertise required. Full-time role with growth opportunities.", area:"Okhla", time:"1 day ago", contactLabel:"Apply now", contactInfo:"careers@techstart.in" },
+      { emoji:"📊", badge:"Hiring", cls:"pb-job", title:"Senior Accountant (CA Inter) — Arora & Associates", body:"₹38,000–₹48,000/month. Karol Bagh. 3+ years experience. Tally and GST return filing expertise required. Stable, growing firm.", area:"Karol Bagh", time:"1 day ago", contactLabel:"Apply now", contactInfo:"hr@aroraassociates.in" },
+      { emoji:"👨‍🍳", badge:"Hiring", cls:"pb-job", title:"Head Chef — North Indian & Mughlai", body:"₹35,000/month. Restaurant in Old Delhi. 5 years experience. Live-in accommodation available. Immediate joining preferred.", area:"Old Delhi", time:"2 days ago", contactLabel:"Apply now", contactInfo:"Contact restaurant" },
+      { emoji:"💻", badge:"Hiring", cls:"pb-job", title:"Senior UI/UX Designer — DesignCo Studio", body:"₹65,000–₹85,000/month. Nehru Place. 4+ years experience. Figma expert, portfolio mandatory. 5-day work week.", area:"Nehru Place", time:"3 days ago", contactLabel:"Apply now", contactInfo:"jobs@designco.studio" },
+      { emoji:"🏫", badge:"Hiring", cls:"pb-job", title:"Maths Teacher (Class 9–12, CBSE) — Bright Future Academy", body:"₹30,000–₹40,000/month. Lajpat Nagar. Full-time. B.Ed or M.Sc Maths preferred. Supportive teaching environment.", area:"Lajpat Nagar", time:"4 days ago", contactLabel:"Apply now", contactInfo:"Contact academy" },
+      { emoji:"🛍️", badge:"Hiring", cls:"pb-job", title:"Retail Store Manager — Fashion Brand", body:"₹28,000 + incentives. Select Citywalk, Saket. 2+ years retail management experience. 6-day work week.", area:"Saket", time:"5 days ago", contactLabel:"Apply now", contactInfo:"Contact store" }
+    ],
+    rentals: [
+      { emoji:"🏠", badge:"For Rent", cls:"pb-rent", title:"3 BHK fully furnished luxury flat — ₹48,000/month", body:"Greater Kailash-1, M-Block. 3rd floor, 2 parking, lift, 24-hour security. Families only. Immediately available.", area:"Greater Kailash", time:"1 day ago", contactLabel:"Call 9810XXXXX1", contactInfo:"9810XXXXX1" },
+      { emoji:"🛏️", badge:"PG Women", cls:"pb-rent", title:"Premium PG for working women — ₹11,000–₹14,000/month", body:"Lajpat Nagar. All-inclusive: AC rooms, WiFi, 3 meals, laundry and housekeeping. Safe, well-connected area.", area:"Lajpat Nagar", time:"1 day ago", contactLabel:"Enquire now", contactInfo:"Contact owner" },
+      { emoji:"🏠", badge:"For Rent", cls:"pb-rent", title:"2 BHK semi-furnished — ₹29,000/month", body:"Rohini Sector 22. 2nd floor, near metro. Gated society with gym and park. Professionals preferred.", area:"Rohini", time:"2 days ago", contactLabel:"Enquire now", contactInfo:"Contact owner" },
+      { emoji:"🛏️", badge:"PG Men", cls:"pb-rent", title:"PG for students / working men — ₹7,500/month", body:"Near North Campus DU. Double sharing. WiFi, RO water, meals optional, warden on premises. Ideal for students.", area:"North Delhi", time:"3 days ago", contactLabel:"Enquire now", contactInfo:"Contact owner" },
+      { emoji:"🏠", badge:"For Rent", cls:"pb-rent", title:"1 BHK studio, fully furnished — ₹16,000/month", body:"Sarojini Nagar area. Geyser, gas and WiFi included. Ground floor. Ideal for working singles.", area:"Sarojini Nagar", time:"4 days ago", contactLabel:"Enquire now", contactInfo:"Contact owner" },
+      { emoji:"🏢", badge:"Office Space", cls:"pb-rent", title:"1,200 sq ft plug-and-play office — ₹70,000/month", body:"Nehru Place. 30 workstations, 2 cabins, conference room, high-speed internet and reception. Move-in ready.", area:"Nehru Place", time:"5 days ago", contactLabel:"Enquire now", contactInfo:"Contact owner" }
+    ]
+  },
+
+  /* ---------- AREAS for location selector ---------- */
+  areas: ["Connaught Place","Karol Bagh","Chandni Chowk","Paharganj","Lajpat Nagar","Sarojini Nagar","Hauz Khas","South Extension","Khan Market","Nehru Place","Rajouri Garden","Dwarka","Rohini","Preet Vihar","Laxmi Nagar","Civil Lines","Model Town","Okhla","Janakpuri","Greater Kailash"],
+
+  /* ---------- POOLS for generated reviews ---------- */
+  reviewerNames: ["Ravi Kumar","Priya Sharma","Amit Verma","Sneha Gupta","Rahul Singh","Pooja Mehta","Vikram Aggarwal","Neha Bansal","Arjun Malhotra","Divya Kapoor","Sandeep Yadav","Anjali Rao","Manish Tyagi","Kavita Joshi","Rohit Chauhan","Shweta Nair","Deepak Saxena","Ritu Khanna","Gaurav Sethi","Meena Iyer","Nitin Dua","Tanvi Bhardwaj","Suresh Goel","Aarti Chopra","Mohit Arora","Pallavi Jain","Karan Bedi","Ishita Roy"],
+  reviewerAreas: ["Rohini","Karol Bagh","Dwarka","Lajpat Nagar","Saket","Pitampura","Janakpuri","Mayur Vihar","Preet Vihar","Vasant Kunj","Greater Kailash","Model Town","Laxmi Nagar","Paschim Vihar","Rajouri Garden","Punjabi Bagh","Najafgarh","Kalkaji"],
+  reviewDates: ["2 days ago","5 days ago","1 week ago","2 weeks ago","3 weeks ago","1 month ago","2 months ago","3 months ago"]
+};
+
+/* ============================================================
+   STATE + STORAGE
+   ============================================================ */
+const LS = {
+  saved:'dyp_saved', dark:'dyp_darkmode', tab:'dyp_tab',
+  listings:'dyp_user_listings', recent:'dyp_recent_searches', lang:'dyp_lang', savedDeals:'dyp_saved_deals'
+};
+function lsGet(k, fb){ try { const v = localStorage.getItem(k); return v===null?fb:JSON.parse(v); } catch(e){ return fb; } }
+function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+
+const state = {
+  tab: lsGet(LS.tab,'home'),
+  dirCategory: 'All',
+  dirAreaFilter: 'all',
+  area: 'Delhi',
+  saved: lsGet(LS.saved, []),
+  dark: lsGet(LS.dark, false),
+  recent: lsGet(LS.recent, []),
+  lang: lsGet(LS.lang, 'English'),
+  reviewRating: 0,
+  reviewBizId: null,
+  currentMarket: null,
+  extraReviews: {}   // bizId -> [reviews added this session]
+};
+
+/* ============================================================
+   SMALL HELPERS
+   ============================================================ */
+const $  = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmt(n){ return Number(n).toLocaleString('en-IN'); }
+function bizById(id){ return APP_DATA.businesses.find(b => b.id === id); }
+function mapsUrl(b){ return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(b.name + ' ' + b.area + ' Delhi'); }
+function waUrl(num){ return 'https://wa.me/' + num; }
+
+const DAYS_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DAYS_SHORT = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const DAY_KEY    = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+function parseTime(t){
+  if(!t || t === '24 Hours') return null;
+  const m = t.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  if(!m) return null;
+  let h = parseInt(m[1],10); const min = parseInt(m[2],10); const ap = m[3].toUpperCase();
+  if(ap === 'PM' && h !== 12) h += 12;
+  if(ap === 'AM' && h === 12) h = 0;
+  return h*60 + min;
+}
+function isClosedToday(b, dayName){ return b.closedDay && b.closedDay.indexOf(dayName) !== -1; }
+
+function computeStatus(b){
+  const now = new Date();
+  const dayName = DAYS_FULL[now.getDay()];
+  if(isClosedToday(b, dayName)) return { label:'Closed today', cls:'status-closed' };
+  if(b.openTime === '24 Hours') return { label:'Open 24 Hours', cls:'status-open' };
+  const open = parseTime(b.openTime), close = parseTime(b.closeTime);
+  if(open === null || close === null) return { label: b.openTime ? 'Open Now' : 'Hours vary', cls:'status-open' };
+  const nowMin = now.getHours()*60 + now.getMinutes();
+  let openNow;
+  if(close < open) openNow = (nowMin >= open || nowMin < close);
+  else openNow = (nowMin >= open && nowMin < close);
+  if(openNow) return { label:'Open Now', cls:'status-open' };
+  if(nowMin < open) return { label:'Opens at ' + b.openTime, cls:'status-opens' };
+  return { label:'Closed', cls:'status-closed' };
+}
+
+function getHours(b){
+  const todayName = DAYS_FULL[new Date().getDay()];
+  return DAY_KEY.map((day, i) => {
+    let time, closed = false;
+    if(isClosedToday(b, day)){ time = 'Closed'; closed = true; }
+    else if(b.openTime === '24 Hours'){ time = 'Open 24 Hours'; }
+    else if(b.closeTime){ time = b.openTime + ' – ' + b.closeTime; }
+    else { time = b.openTime || '—'; }
+    return { label: DAYS_SHORT[i], time, closed, today: day === todayName };
+  });
+}
+
+function starsRow(rating){
+  const full = Math.round(rating);
+  let s = '';
+  for(let i=1;i<=5;i++){ s += i<=full ? '★' : '<span style="color:var(--text-tertiary)">★</span>'; }
+  return s;
+}
+function ratingInline(b){
+  return '<span class="stars">★</span> <span class="rating-num">'+b.rating+'</span> <span class="dim">('+fmt(b.reviews)+')</span>';
+}
+
+/* ============================================================
+   REVIEW GENERATION (deterministic, contextual)
+   ============================================================ */
+const REVIEW_BANK = {
+  food: [
+    "Came here on a friend's recommendation and the food did not disappoint. Portions are generous and the flavours are spot on. Will definitely return.",
+    "Authentic taste that reminds me of proper home-style cooking. A bit crowded during peak hours, so go early. Worth every rupee.",
+    "One of the better places in the area. The staff are quick and the food arrives hot. Prices are reasonable for the quality.",
+    "Loved the experience. Rich, well-spiced dishes and a lively atmosphere. Parking is a challenge but the food makes up for it.",
+    "Solid food, consistent quality every time I visit. The seating can get tight on weekends but service stays friendly."
+  ],
+  health: [
+    "Doctors here are patient and explain things clearly. The waiting time was reasonable and the staff were courteous throughout.",
+    "Clean facility and well-organised. Got my reports the same day. Reception was helpful in guiding me to the right department.",
+    "Professional and caring staff. The consultation didn't feel rushed at all. Highly recommend for anyone in the area.",
+    "Good experience overall. The diagnostics were quick and accurate. Could improve the seating in the waiting area though.",
+    "Trustworthy and transparent about costs. The doctor took time to understand my concerns. Felt well looked after."
+  ],
+  salon: [
+    "Excellent service and the stylists really know their craft. Walked out very happy with the result. Will be coming back.",
+    "Relaxing experience and the staff are skilled and polite. They listen to exactly what you want. Slightly pricey but worth it.",
+    "Great attention to detail. Booked an appointment and there was no waiting. The ambience is clean and comfortable.",
+    "Consistently good results. The team is friendly and professional. Highly recommend for anyone wanting quality work.",
+    "Happy with the styling and the hygiene standards. Complimentary touches make the visit feel premium."
+  ],
+  shop: [
+    "Good collection and helpful staff who don't pressure you. Found exactly what I was looking for. Quality is reliable.",
+    "Wide range to choose from and fair prices. The staff helped me pick the right size and fit. Pleasant shopping experience.",
+    "Authentic products and good after-sales support. The store is well laid out and easy to browse. Recommended.",
+    "Quality stitching and nice fabrics. A little crowded on weekends but the staff manage well. Will shop again.",
+    "Decent prices for the quality on offer. Billing was quick and the return policy was clearly explained."
+  ],
+  edu: [
+    "Faculty here are genuinely dedicated and the study material is thorough. Saw real improvement in my preparation.",
+    "Structured approach and regular tests keep you on track. The teachers are approachable and clear doubts patiently.",
+    "Good learning environment with focused batches. The mentorship made a real difference to my results.",
+    "Well-organised programme and supportive staff. Fees are on the higher side but the quality justifies it.",
+    "Helpful guidance and a disciplined schedule. The faculty go the extra mile for serious students."
+  ],
+  religious: [
+    "A peaceful and beautifully maintained place. The atmosphere is calming and the arrangements are very well managed.",
+    "Visited with family and it was a serene experience. Clean surroundings and respectful, helpful volunteers.",
+    "Spiritually uplifting and historically rich. Go early to avoid the crowds and enjoy the calm.",
+    "Stunning architecture and a deeply peaceful vibe. The management keeps everything orderly and clean.",
+    "A must-visit. The sense of devotion and the upkeep of the premises are both wonderful."
+  ],
+  finance: [
+    "Staff were efficient and the process was smoother than expected. Clear about charges and documentation needed.",
+    "Quick service and helpful executives. The queue moved fast and my work was done without hassle.",
+    "Transparent and professional. They explained all the options patiently before I decided. Reliable branch.",
+    "Decent experience. Got my work done in one visit. Could use a few more counters during peak hours.",
+    "Trustworthy service and courteous staff. Convenient location and reasonable processing time."
+  ],
+  electronics: [
+    "Genuine products and honest pricing. The staff knew their stuff and helped me compare options. Got a fair deal.",
+    "Fast repair and reasonable rates. They fixed my device the same day. Much cheaper than the service centre.",
+    "Good range of brands and accessories. Staff are knowledgeable and don't oversell. Smooth purchase.",
+    "Reliable place for electronics. The warranty terms were clearly explained and billing was proper.",
+    "Helpful and quick. Got an authentic accessory at a better price than online. Will return for repairs."
+  ],
+  auto: [
+    "Honest mechanics who explain the work before doing it. No unnecessary upselling. My car runs great now.",
+    "Transparent pricing and quality parts. The service was completed on time as promised. Very satisfied.",
+    "Professional team and clean workshop. The pickup and delivery option is super convenient. Recommended.",
+    "Good service and fair rates. They walked me through what needed fixing. Trustworthy place.",
+    "Quick turnaround and genuine spares. The staff are courteous and knowledgeable. Will service here again."
+  ],
+  service: [
+    "Reliable and on time every single time. The quality of work is consistent and the staff are polite.",
+    "Convenient pickup and prompt delivery. Clothes came back fresh and well pressed. Fair pricing.",
+    "Dependable service with good attention to detail. Communication is clear about timelines. Recommended.",
+    "Happy with the results. Quick turnaround and careful handling of delicate items. Will use again.",
+    "Professional and hassle-free. The staff are friendly and the rates are reasonable for the quality."
+  ],
+  tailor: [
+    "Excellent fit and neat finishing. They understood exactly what I wanted and delivered on time. Highly recommend.",
+    "Skilled tailoring and good fabric advice. The alterations were perfect on the first try. Reasonable rates.",
+    "Careful measurements and quality stitching. Quick turnaround too. Will definitely come back for more.",
+    "Reliable and precise work. The staff are patient with fittings. Worth the slightly higher price.",
+    "Great craftsmanship. My outfit fit beautifully. Friendly service and fair pricing."
+  ],
+  generic: [
+    "Good experience overall. Helpful staff and fair pricing. Would recommend to others in the area.",
+    "Reliable and professional service. Got my work done smoothly without any hassle. Satisfied.",
+    "Decent place with courteous staff. Convenient location and reasonable rates. Will visit again.",
+    "Pleasant experience and quick service. The team is friendly and knows what they're doing.",
+    "Trustworthy and well managed. Met my expectations and the staff were polite throughout."
+  ]
+};
+function reviewType(cat){
+  const map = {
+    'Restaurant':'food','Fine Dining':'food','Street Food':'food','Sweets':'food',
+    'Hospital':'health','Clinic':'health','Pharmacy':'health',
+    'Salon':'salon','Grooming':'salon',
+    'Clothing':'shop','Ethnic Wear':'shop',
+    'Coaching':'edu','Education':'edu','Library/Education':'edu',
+    'Religious':'religious','Banking':'finance','Finance':'finance',
+    'Electronics':'electronics','Automotive':'auto','Car Service':'auto','Car Dealer':'auto',
+    'Laundry':'service','Tailoring':'tailor'
+  };
+  return map[cat] || 'generic';
+}
+function genReviews(b){
+  let seed = b.id * 7 + 13;
+  const rnd = () => { seed = (seed*9301 + 49297) % 233280; return seed/233280; };
+  const bank = REVIEW_BANK[reviewType(b.category)];
+  const usedTxt = new Set(), usedName = new Set();
+  const out = [];
+  for(let i=0;i<3;i++){
+    let ti; do { ti = Math.floor(rnd()*bank.length); } while(usedTxt.has(ti) && usedTxt.size < bank.length); usedTxt.add(ti);
+    let ni; do { ni = Math.floor(rnd()*APP_DATA.reviewerNames.length); } while(usedName.has(ni)); usedName.add(ni);
+    const ai = Math.floor(rnd()*APP_DATA.reviewerAreas.length);
+    const di = Math.floor(rnd()*APP_DATA.reviewDates.length);
+    let r = Math.round(b.rating);
+    if(i === 2 && rnd() > 0.55) r = Math.max(3, r - 1);   // a little variety
+    const helpful = 3 + Math.floor(rnd()*44);
+    out.push({ name:APP_DATA.reviewerNames[ni], area:APP_DATA.reviewerAreas[ai], rating:r, date:APP_DATA.reviewDates[di], text:bank[ti], helpful });
+  }
+  return out;
+}
+
+/* ============================================================
+   TOASTS
+   ============================================================ */
+function toast(msg, type='success'){
+  const wrap = $('#toastWrap');
+  const t = document.createElement('div');
+  t.className = 'toast toast-' + type;
+  t.textContent = msg;
+  wrap.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => {
+    t.classList.remove('show');
+    setTimeout(() => t.remove(), 300);
+  }, 3000);
+}
+
+/* ============================================================
+   ICONS (inline SVG strings used inside content)
+   ============================================================ */
+const ICONS = {
+  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.5a2 2 0 0 1 2.1-.4c.8.3 1.7.6 2.6.7A2 2 0 0 1 22 16.9z"/></svg>',
+  wa:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-2.8.7.8-2.7-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.6 6.6 0 0 1-2-1.2 7.4 7.4 0 0 1-1.3-1.7c-.1-.2 0-.4.1-.5l.4-.5.3-.4v-.4c0-.1-.6-1.4-.8-2s-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 2.9 2.9 0 0 0-.9 2.1 5 5 0 0 0 1 2.6 11.4 11.4 0 0 0 4.4 3.9c2.2.9 2.2.6 2.6.6a2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3z"/></svg>',
+  map:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3 3 5.5v15.5l6-2.5 6 2.5 6-2.5V3l-6 2.5L9 3z"/><path d="M9 3v15.5M15 5.5V21"/></svg>',
+  share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>',
+  verified:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  empty:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>',
+  heartEmpty:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1 7.8 7.8 7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>',
+  heartFull:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21 4.2 13.2l-1-1a5.5 5.5 0 1 1 7.8-7.8l1 1 1-1a5.5 5.5 0 1 1 7.8 7.8l-1 1z"/></svg>'
+};
+function heartIcon(filled){ return filled ? ICONS.heartFull : ICONS.heartEmpty; }
+
+/* ============================================================
+   CATEGORY GROUPS + MATCHING
+   ============================================================ */
+const DIR_CHIPS = ['All','Restaurants','Medical','Education','Shopping','Services','Auto','Finance','Religious','Street Vendors','Electronics','Tailoring'];
+const CATEGORY_GROUPS = {
+  'Restaurants':['Restaurant','Fine Dining','Street Food'],
+  'Medical':['Hospital','Clinic','Pharmacy'],
+  'Education':['Coaching','Education','Library/Education'],
+  'Shopping':['Clothing','Ethnic Wear','Sweets'],
+  'Services':['Salon','Grooming','Laundry','Tailoring'],
+  'Auto':['Automotive','Car Service','Car Dealer'],
+  'Finance':['Finance','Banking'],
+  'Religious':['Religious'],
+  'Street Vendors':['Street Food'],
+  'Electronics':['Electronics'],
+  'Tailoring':['Tailoring']
+};
+function matchesCategory(b, filter){
+  if(filter === 'All') return true;
+  const g = CATEGORY_GROUPS[filter];
+  return g ? g.indexOf(b.category) !== -1 : false;
+}
+const ALL_CATEGORIES = [...new Set(APP_DATA.businesses.map(b => b.category))].sort();
+
+/* ============================================================
+   SAVE / UNSAVE
+   ============================================================ */
+function isSaved(id){ return state.saved.indexOf(id) !== -1; }
+function toggleSave(id, el){
+  const i = state.saved.indexOf(id);
+  if(i === -1){ state.saved.push(id); toast('Saved to your list','success'); }
+  else { state.saved.splice(i,1); toast('Removed from saved','info'); }
+  lsSet(LS.saved, state.saved);
+  // sync all heart buttons for this id across the DOM
+  $$('.save-btn[data-id="'+id+'"]').forEach(btn => {
+    const on = isSaved(id);
+    btn.classList.toggle('saved', on);
+    btn.innerHTML = heartIcon(on);
+  });
+  if(el){ const on = isSaved(id); el.classList.toggle('saved', on); el.innerHTML = heartIcon(on); el.setAttribute('data-id', id); }
+  renderSaved();
+}
+
+/* ============================================================
+   BUSINESS CARD
+   ============================================================ */
+function bizCardHtml(b){
+  const st = computeStatus(b);
+  const saved = isSaved(b.id);
+  const wa = b.whatsapp
+    ? '<a class="act wapp" href="'+waUrl(b.whatsapp)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+ICONS.wa+' WhatsApp</a>'
+    : '<span class="act wapp disabled">'+ICONS.wa+' WhatsApp</span>';
+  return ''+
+  '<div class="card biz-card" onclick="openDetail('+b.id+')">'+
+    '<div class="biz-card-top">'+
+      '<span class="badge badge-'+b.tier+'">'+b.tier+'</span>'+
+      '<button class="save-btn '+(saved?'saved':'')+'" data-id="'+b.id+'" onclick="event.stopPropagation(); toggleSave('+b.id+', this)" aria-label="Save business">'+heartIcon(saved)+'</button>'+
+    '</div>'+
+    '<div class="biz-name">'+esc(b.name)+'</div>'+
+    '<div class="biz-meta"><span class="biz-cat">'+b.emoji+' '+esc(b.category)+'</span><span class="dot-sep">·</span><span>'+ratingInline(b)+'</span></div>'+
+    '<div class="biz-loc">📍 '+esc(b.area)+', Delhi</div>'+
+    '<span class="status '+st.cls+'">'+st.label+'</span>'+
+    '<div class="card-divider"></div>'+
+    '<div class="biz-actions">'+
+      '<a class="act call" href="tel:'+b.phone+'" onclick="event.stopPropagation()">'+ICONS.phone+' Call</a>'+
+      wa+
+      '<a class="act dirn" href="'+mapsUrl(b)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+ICONS.map+' Dir</a>'+
+    '</div>'+
+  '</div>';
+}
+
+/* ============================================================
+   HOME TAB
+   ============================================================ */
+const HOME_TILES = [
+  {emoji:'🍽️', label:'Food', filter:'Restaurants'},
+  {emoji:'🏥', label:'Medical', filter:'Medical'},
+  {emoji:'🎓', label:'Education', filter:'Education'},
+  {emoji:'💻', label:'Electronics', filter:'Electronics'},
+  {emoji:'✂️', label:'Salons', filter:'Services'},
+  {emoji:'🚗', label:'Auto', filter:'Auto'},
+  {emoji:'💰', label:'Finance', filter:'Finance'},
+  {emoji:'🛒', label:'Markets', filter:'Shopping'}
+];
+function renderHome(){
+  // tiles
+  $('#categoryTiles').innerHTML = HOME_TILES.map(t =>
+    '<button class="tile" onclick="goDirectoryFiltered(\''+t.filter+'\')"><span class="tile-emoji">'+t.emoji+'</span><span class="tile-label">'+t.label+'</span></button>'
+  ).join('');
+
+  // markets (first 5)
+  $('#homeMarkets').innerHTML = APP_DATA.markets.slice(0,5).map(marketCardHtml).join('');
+
+  // featured (4)
+  $('#homeFeatured').innerHTML = APP_DATA.businesses.filter(b => b.tier==='featured').slice(0,4).map(bizCardHtml).join('');
+
+  // deals
+  $('#homeDeals').innerHTML = APP_DATA.deals.map(d =>
+    '<div class="card deal-card">'+
+      '<span class="badge badge-deal">Deal</span>'+
+      '<div class="biz-line">'+esc(d.biz)+'</div>'+
+      '<div class="deal-text">'+esc(d.text)+'</div>'+
+      '<div class="deal-expiry">⏱ '+esc(d.expiry)+'</div>'+
+    '</div>'
+  ).join('');
+
+  // community highlights: latest lost&found + latest job
+  const lf = APP_DATA.community.lostFound[0];
+  const jb = APP_DATA.community.jobs[0];
+  $('#homeCommunity').innerHTML =
+    commHighlightHtml(lf, 'lostFound', 'Lost & Found') +
+    commHighlightHtml(jb, 'jobs', 'Jobs');
+}
+function commHighlightHtml(post, section, label){
+  return '<div class="card comm-card" onclick="goCommunity(\''+section+'\')">'+
+    '<div class="ch-type"><span style="font-size:18px">'+post.emoji+'</span><span class="post-badge '+post.cls+'">'+esc(label)+'</span></div>'+
+    '<div class="ch-title">'+esc(post.title)+'</div>'+
+    '<div class="ch-foot">📍 '+esc(post.area)+' · '+esc(post.time)+'</div>'+
+  '</div>';
+}
+function marketCardHtml(m){
+  return '<div class="market-card" onclick="openMarket('+m.id+')">'+
+    '<div class="market-head"><h3>'+esc(m.name)+'</h3></div>'+
+    '<div class="market-card-body">'+
+      '<div class="market-sub"><span>📍 '+esc(m.area)+'</span><span>🕐 '+esc(m.timings)+'</span></div>'+
+      '<div class="market-tags">'+m.tags.slice(0,3).map(t => '<span class="tag">'+esc(t)+'</span>').join('')+'</div>'+
+    '</div>'+
+  '</div>';
+}
+
+/* ============================================================
+   NAVIGATION / TAB SWITCHING
+   ============================================================ */
+function switchTab(name){
+  state.tab = name;
+  lsSet(LS.tab, name);
+  $$('.tabpage').forEach(p => p.classList.toggle('active', p.id === 'page-'+name));
+  $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.tab === name));
+  $$('.side-item').forEach(n => n.classList.toggle('active', n.dataset.tab === name));
+  window.scrollTo({ top:0, behavior:'instant' in window ? 'auto' : 'auto' });
+  updateFab();
+}
+function goDirectoryFiltered(filter){
+  state.dirCategory = filter;
+  switchTab('directory');
+  renderDirChips();
+  renderDirectory();
+}
+function goCommunity(section){
+  switchTab('community');
+  setCommTab(section);
+}
+
+/* ============================================================
+   FAB scroll behaviour (mobile)
+   ============================================================ */
+let lastScroll = 0, fabHideTimer = null;
+function updateFab(){
+  const fab = $('#fab');
+  const anyOpen = $('#scrim').classList.contains('show') || $('#searchOverlay').classList.contains('show');
+  if(anyOpen){ fab.classList.add('hidden'); return; }
+  fab.classList.remove('hidden');
+}
+window.addEventListener('scroll', () => {
+  const fab = $('#fab');
+  const y = window.scrollY;
+  if($('#scrim').classList.contains('show') || $('#searchOverlay').classList.contains('show')) return;
+  if(y > lastScroll && y > 120){ fab.classList.add('hidden'); }
+  else { fab.classList.remove('hidden'); }
+  lastScroll = y;
+  clearTimeout(fabHideTimer);
+  fabHideTimer = setTimeout(() => { if(!$('#scrim').classList.contains('show')) fab.classList.remove('hidden'); }, 600);
+}, { passive:true });
+
+/* ============================================================
+   DIRECTORY TAB
+   ============================================================ */
+const tierRank = { featured:0, premium:1, free:2 };
+
+function renderDirChips(){
+  $('#dirCategoryChips').innerHTML = DIR_CHIPS.map(c =>
+    '<button class="chip '+(state.dirCategory===c?'active':'')+'" onclick="setDirCategory(\''+esc(c)+'\')">'+esc(c)+'</button>'
+  ).join('');
+}
+function setDirCategory(c){
+  state.dirCategory = c;
+  renderDirChips();
+  renderDirectory();
+  // keep active chip in view
+  const active = $('#dirCategoryChips .chip.active');
+  if(active) active.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+}
+function populateAreaFilter(){
+  const areas = [...new Set(APP_DATA.businesses.map(b => b.area))].sort();
+  const sel = $('#dirArea');
+  sel.innerHTML = '<option value="all">All areas</option>' + areas.map(a => '<option value="'+esc(a)+'">'+esc(a)+'</option>').join('');
+}
+function getDirResults(){
+  const q = $('#dirSearchInput').value.trim().toLowerCase();
+  const area = $('#dirArea').value;
+  const sort = $('#dirSort').value;
+  let list = APP_DATA.businesses.filter(b => {
+    if(!matchesCategory(b, state.dirCategory)) return false;
+    if(area !== 'all' && b.area !== area) return false;
+    if(q){
+      const hay = (b.name+' '+b.category+' '+b.area+' '+b.about).toLowerCase();
+      if(hay.indexOf(q) === -1) return false;
+    }
+    return true;
+  });
+  if(sort === 'rating') list.sort((a,b) => b.rating - a.rating || b.reviews - a.reviews);
+  else if(sort === 'name') list.sort((a,b) => a.name.localeCompare(b.name));
+  else list.sort((a,b) => tierRank[a.tier]-tierRank[b.tier] || b.rating-a.rating);
+  return list;
+}
+function renderDirectory(){
+  const list = getDirResults();
+  const cont = $('#directoryList');
+  const q = $('#dirSearchInput').value.trim();
+  $('#dirSearchBar').classList.toggle('has-text', q.length > 0);
+  $('#dirCount').textContent = list.length + (list.length === 1 ? ' business' : ' businesses') + (state.dirCategory !== 'All' ? ' in ' + state.dirCategory : '') + ' · Delhi';
+  if(list.length === 0){
+    cont.style.gridTemplateColumns = '1fr';
+    cont.innerHTML = '<div class="no-results-state">'+
+      '<div class="nr-icon">🔍</div>'+
+      '<h3>Nothing found'+(q?' for "'+esc(q)+'"':'')+' in Delhi</h3>'+
+      '<p>Try a different keyword or browse by category.</p>'+
+      '<button class="btn btn-primary" onclick="resetDirectory()">Clear search</button>'+
+    '</div>';
+    return;
+  }
+  cont.style.gridTemplateColumns = '';
+  cont.innerHTML = list.map(bizCardHtml).join('');
+}
+function clearDirSearch(){
+  $('#dirSearchInput').value = '';
+  renderDirectory();
+  $('#dirSearchInput').focus();
+}
+function resetDirectory(){
+  $('#dirSearchInput').value = '';
+  $('#dirArea').value = 'all';
+  $('#dirSort').value = 'relevance';
+  state.dirCategory = 'All';
+  renderDirChips();
+  renderDirectory();
+}
+
+/* ============================================================
+   HOME HERO SEARCH (live)
+   ============================================================ */
+const SUGGEST_CHIPS = ['Restaurants','Medical','Salons','Electronics','Shopping','Finance','Religious'];
+function buildSuggestChips(){
+  $('#homeSuggestChips').innerHTML = SUGGEST_CHIPS.map(c => {
+    const f = c === 'Salons' ? 'Services' : c;
+    return '<button class="chip" onclick="goDirectoryFiltered(\''+f+'\')">'+esc(c)+'</button>';
+  }).join('');
+}
+function homeSearchInput(){
+  const q = $('#homeSearchInput').value.trim().toLowerCase();
+  const box = $('#homeLiveResults');
+  if(!q){ box.classList.remove('show'); box.innerHTML=''; return; }
+  const res = APP_DATA.businesses.filter(b =>
+    (b.name+' '+b.category+' '+b.area).toLowerCase().indexOf(q) !== -1
+  ).slice(0,6);
+  if(res.length === 0){
+    box.innerHTML = '<div class="live-row" style="cursor:default"><div><div class="lr-name">No matches for "'+esc(q)+'"</div><div class="lr-sub">Try another keyword or browse categories</div></div></div>';
+  } else {
+    box.innerHTML = res.map(b =>
+      '<div class="live-row" onclick="openDetailFromHome('+b.id+')">'+
+        '<span class="lr-emoji">'+b.emoji+'</span>'+
+        '<div><div class="lr-name">'+esc(b.name)+'</div><div class="lr-sub">'+esc(b.category)+' · '+esc(b.area)+'</div></div>'+
+      '</div>'
+    ).join('');
+  }
+  box.classList.add('show');
+}
+function openDetailFromHome(id){
+  $('#homeLiveResults').classList.remove('show');
+  $('#homeSearchInput').value = '';
+  $('#homeSuggestChips').style.display = 'none';
+  $('#heroSearch').classList.remove('focused');
+  openDetail(id);
+}
+
+/* ============================================================
+   BUSINESS DETAIL PANEL
+   ============================================================ */
+function openDetail(id){
+  const b = bizById(id);
+  if(!b) return;
+  $('#detailBody').innerHTML = buildDetail(b);
+  $('#detailBody').scrollTop = 0;
+  openSheet('detailSheet');
+}
+function buildDetail(b){
+  const st = computeStatus(b);
+  const saved = isSaved(b.id);
+  const verified = b.tier === 'featured'
+    ? '<span class="verified-badge">'+ICONS.verified+' Verified</span>' : '';
+  const wa = b.whatsapp
+    ? '<a class="act wapp" href="'+waUrl(b.whatsapp)+'" target="_blank" rel="noopener">'+ICONS.wa+' WhatsApp</a>'
+    : '<span class="act wapp disabled">'+ICONS.wa+' WhatsApp</span>';
+
+  // hours table
+  const hours = getHours(b).map(h =>
+    '<tr class="'+(h.today?'today':'')+'"><td class="day">'+h.label+(h.today?' (Today)':'')+'</td>'+
+    '<td class="'+(h.closed?'closed-txt':'time')+'">'+esc(h.time)+'</td></tr>'
+  ).join('');
+
+  // services
+  const services = (b.services||[]).map(s => {
+    const parts = s.split(' — ');
+    if(parts.length === 2) return '<div class="svc-item"><span class="svc-name">'+esc(parts[0])+'</span><span class="muted">'+esc(parts[1])+'</span></div>';
+    return '<div class="svc-item"><span class="svc-name">'+esc(s)+'</span></div>';
+  }).join('');
+
+  // bank extra
+  const bankBlock = b.ifsc ? '<div class="detail-section"><h3>🏦 Bank details</h3>'+
+      '<div class="ifsc-detail-row"><span class="lbl">IFSC Code</span><span class="val">'+esc(b.ifsc)+'</span></div>'+
+      (b.micr?'<div class="ifsc-detail-row"><span class="lbl">MICR Code</span><span class="val">'+esc(b.micr)+'</span></div>':'')+
+    '</div>' : '';
+
+  // reviews
+  const all = (state.extraReviews[b.id]||[]).concat(genReviews(b));
+  const reviews = all.map(r =>
+    '<div class="review">'+
+      '<div class="review-top"><span class="review-author">'+esc(r.name)+' <span>· '+esc(r.area)+'</span></span><span class="review-date">'+esc(r.date)+'</span></div>'+
+      '<div class="review-stars">'+starsRow(r.rating)+'</div>'+
+      '<div class="review-text">'+esc(r.text)+'</div>'+
+      '<span class="review-helpful">👍 Helpful ('+r.helpful+')</span>'+
+    '</div>'
+  ).join('');
+
+  // photos
+  const photos = Array(4).fill(0).map(() => '<div class="photo-tile">'+b.emoji+'</div>').join('');
+
+  // similar
+  const type = reviewType(b.category);
+  const similar = APP_DATA.businesses.filter(x => x.id !== b.id && reviewType(x.category) === type).slice(0,3);
+  const similarHtml = similar.length ? '<div class="detail-section"><h3>Similar businesses near you</h3>'+
+    '<div class="hscroll" style="padding-left:0;padding-right:0">'+
+    similar.map(s => '<div class="mini-card" onclick="openDetail('+s.id+')"><span class="badge badge-'+s.tier+'">'+s.tier+'</span><div class="mc-name">'+esc(s.name)+'</div><div class="mc-sub">'+s.emoji+' '+esc(s.category)+' · ★'+s.rating+'</div></div>').join('')+
+    '</div></div>' : '';
+
+  return ''+
+  '<div class="detail-cover"><span class="cover-emoji">'+b.emoji+'</span>'+verified+'</div>'+
+  '<div class="detail-body">'+
+    '<div class="detail-title-row"><h1 class="detail-name">'+esc(b.name)+'</h1><span class="badge badge-'+b.tier+'">'+b.tier+'</span>'+
+      '<button class="save-btn '+(saved?'saved':'')+'" data-id="'+b.id+'" style="margin-left:auto" onclick="toggleSave('+b.id+', this)" aria-label="Save">'+heartIcon(saved)+'</button></div>'+
+    '<div class="detail-meta"><span>'+b.emoji+' '+esc(b.category)+'</span><span class="dot-sep">·</span><span class="stars">'+starsRow(b.rating)+'</span><span class="rating-num">'+b.rating+'</span><span class="dim">('+fmt(b.reviews)+' reviews)</span></div>'+
+    '<div><span class="status '+st.cls+'">'+st.label+'</span></div>'+
+    '<div class="detail-actions">'+
+      '<a class="act call" href="tel:'+b.phone+'">'+ICONS.phone+' Call</a>'+
+      wa+
+      '<button class="act dirn" onclick="shareBusiness('+b.id+')">'+ICONS.share+' Share</button>'+
+    '</div>'+
+
+    '<div class="detail-section"><h3>About</h3><p class="about-text">'+esc(b.about)+'</p></div>'+
+
+    '<div class="detail-section"><h3>Working hours</h3><table class="hours-table">'+hours+'</table></div>'+
+
+    '<div class="detail-section"><h3>Address</h3><p class="addr-text">📍 '+esc(b.address)+'<br><span class="muted">PIN: '+esc(b.pincode)+'</span></p>'+
+      '<a class="btn btn-ghost btn-block" href="'+mapsUrl(b)+'" target="_blank" rel="noopener">'+ICONS.map+' Open in Google Maps</a></div>'+
+
+    bankBlock +
+
+    (services ? '<div class="detail-section"><h3>Products &amp; services</h3><div class="svc-list">'+services+'</div></div>' : '')+
+
+    '<div class="detail-section"><h3>Photos</h3><div class="photo-grid">'+photos+'</div></div>'+
+
+    '<div class="detail-section"><h3>Reviews ('+fmt(b.reviews)+')</h3>'+reviews+
+      '<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="openReview('+b.id+')">Write a review</button></div>'+
+
+    similarHtml +
+  '</div>';
+}
+
+function shareBusiness(id){
+  const b = bizById(id);
+  const text = b.name + ' — ' + b.category + ', ' + b.area + ', Delhi. Found on Digital Yellow Paper.';
+  if(navigator.share){
+    navigator.share({ title: b.name, text }).catch(()=>{});
+  } else {
+    copyText(text);
+    toast('Business details copied','success');
+  }
+}
+
+/* ============================================================
+   MARKET DETAIL PANEL
+   ============================================================ */
+function openMarket(id){
+  const m = APP_DATA.markets.find(x => x.id === id);
+  if(!m) return;
+  state.currentMarket = id;
+  $('#marketBody').innerHTML = buildMarket(m);
+  $('#marketBody').scrollTop = 0;
+  openSheet('marketSheet');
+}
+function buildMarket(m){
+  const entry = m.entry ? '<div class="info-block"><h4>Entry fee</h4><p>'+esc(m.entry)+'</p></div>' : '';
+  const shops = m.shops.map((s,i) => '<div class="shop-row"><span class="shop-num">'+(i+1)+'</span><span class="shop-name">'+esc(s)+'</span></div>').join('');
+  const events = (m.events||[]).map(e => '<div class="event-card"><div class="ev-title">'+esc(e.title)+'</div><div class="ev-sub">'+esc(e.sub)+'</div></div>').join('');
+
+  return ''+
+  '<div class="market-banner"><h2>'+esc(m.name)+'</h2><div class="mb-area">📍 '+esc(m.area)+' · PIN '+esc(m.pincode)+'</div></div>'+
+  '<div class="mtab-row">'+
+    '<button class="mtab active" onclick="setMarketTab(this,\'ov\')">Overview</button>'+
+    '<button class="mtab" onclick="setMarketTab(this,\'sh\')">Shops</button>'+
+    '<button class="mtab" onclick="setMarketTab(this,\'re\')">How to reach</button>'+
+    '<button class="mtab" onclick="setMarketTab(this,\'ev\')">Events</button>'+
+  '</div>'+
+
+  '<div class="mpanel active" data-mp="ov">'+
+    '<div class="info-block"><h4>About this market</h4><p>'+esc(m.famous)+'</p></div>'+
+    '<div class="info-block"><h4>Timings</h4><p>🕐 '+esc(m.timings)+' · Closed: '+esc(m.closed)+'</p></div>'+
+    entry +
+    '<div class="info-block"><h4>Famous for</h4><div class="market-tags">'+m.tags.map(t=>'<span class="tag">'+esc(t)+'</span>').join('')+'</div></div>'+
+    '<div class="info-block"><h4>Tip of the day</h4><div class="tip-box"><span class="tip-emoji">💡</span><span class="tip-text">'+esc(m.tip)+'</span></div></div>'+
+    '<a class="btn btn-ghost btn-block" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(m.name+' Delhi')+'" target="_blank" rel="noopener">'+ICONS.map+' Open in Google Maps</a>'+
+  '</div>'+
+
+  '<div class="mpanel" data-mp="sh"><div class="info-block"><h4>Top shops &amp; spots</h4>'+shops+'</div></div>'+
+
+  '<div class="mpanel" data-mp="re">'+
+    '<div class="reach-item"><span class="reach-ic">🚇</span><div class="reach-info"><div class="ri-lbl">Nearest Metro</div><div class="ri-val">'+esc(m.metro)+'</div></div></div>'+
+    '<div class="reach-item"><span class="reach-ic">🚌</span><div class="reach-info"><div class="ri-lbl">Bus Routes</div><div class="ri-val">'+esc(m.busRoutes)+'</div></div></div>'+
+    '<div class="reach-item"><span class="reach-ic">🛺</span><div class="reach-info"><div class="ri-lbl">Auto from metro</div><div class="ri-val">'+esc(m.autoFare)+'</div></div></div>'+
+    '<div class="reach-item"><span class="reach-ic">🅿️</span><div class="reach-info"><div class="ri-lbl">Parking</div><div class="ri-val">'+esc(m.parking)+'</div></div></div>'+
+  '</div>'+
+
+  '<div class="mpanel" data-mp="ev"><div class="info-block"><h4>Upcoming events</h4>'+(events||'<p class="muted">No events listed right now.</p>')+'</div></div>';
+}
+function setMarketTab(btn, key){
+  $$('#marketBody .mtab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  $$('#marketBody .mpanel').forEach(p => p.classList.toggle('active', p.dataset.mp === key));
+  $('#marketBody').scrollTop = 0;
+}
+
+/* ============================================================
+   UTILITY TAB
+   ============================================================ */
+function renderUtility(){
+  renderEmergency();
+  renderIfsc('');
+  renderPin('');
+  renderMetro();
+  renderStd('');
+  renderWeather();
+}
+function setUtilTab(key){
+  $$('#utilTabs .chip').forEach(c => c.classList.toggle('active', c.dataset.util === key));
+  $$('.util-panel').forEach(p => p.classList.toggle('active', p.id === 'util-'+key));
+}
+function renderEmergency(){
+  $('#emergGrid').innerHTML = APP_DATA.emergency.map(e =>
+    '<div class="emerg-card">'+
+      '<div class="emerg-icon" style="background:'+e.color+'">'+e.icon+'</div>'+
+      '<div class="emerg-info"><div class="emerg-name">'+esc(e.name)+'</div><div class="emerg-num">'+esc(e.num)+'</div></div>'+
+      '<a class="emerg-call" href="tel:'+e.tel+'">'+ICONS.phone+' Call now</a>'+
+    '</div>'
+  ).join('');
+}
+function renderIfsc(q){
+  q = (q||'').trim().toLowerCase();
+  let list = APP_DATA.ifsc;
+  if(q) list = list.filter(r => (r.bank+' '+r.branch+' '+r.ifsc+' '+r.address).toLowerCase().indexOf(q) !== -1);
+  const cont = $('#ifscList');
+  if(list.length === 0){ cont.innerHTML = emptyMini('No bank or branch found for "'+esc(q)+'".'); return; }
+  cont.innerHTML = list.map(r =>
+    '<div class="lookup-card">'+
+      '<div class="ifsc-bank">'+esc(r.bank)+'</div>'+
+      '<div class="ifsc-branch">'+esc(r.branch)+' · '+esc(r.address)+'</div>'+
+      '<div class="ifsc-code"><span class="code-val">'+esc(r.ifsc)+'</span><button class="copy-btn" onclick="copyText(\''+esc(r.ifsc)+'\'); toast(\'IFSC copied\',\'success\')">Copy IFSC</button></div>'+
+    '</div>'
+  ).join('');
+}
+function renderPin(q){
+  q = (q||'').trim().toLowerCase();
+  let list = APP_DATA.pincodes;
+  if(q) list = list.filter(r => (r.code+' '+r.areas).toLowerCase().indexOf(q) !== -1);
+  const cont = $('#pinList');
+  if(list.length === 0){ cont.innerHTML = emptyMini('No area or pincode found for "'+esc(q)+'".'); return; }
+  cont.innerHTML = list.map(r =>
+    '<div class="pin-card"><div class="pin-num">'+esc(r.code)+'</div><div class="pin-areas">'+esc(r.areas)+'</div></div>'
+  ).join('');
+}
+function renderMetro(){
+  $('#metroList').innerHTML = APP_DATA.metro.map(l =>
+    '<div class="metro-card" style="--line-color:'+l.color+'">'+
+      '<div class="metro-name"><span class="metro-dot"></span>'+esc(l.name)+'</div>'+
+      '<div class="metro-route">'+esc(l.route)+'</div>'+
+      '<div class="metro-stations"><b>Key stations:</b> '+esc(l.stations)+'</div>'+
+    '</div>'
+  ).join('') +
+    '<div class="metro-footer">🕐 Metro hours 6:00 AM – 11:00 PM · Helpline 011-23417910<br>💳 Smart card: ₹150 deposit + balance · 🎫 Token: single journey</div>';
+}
+function renderStd(q){
+  q = (q||'').trim().toLowerCase();
+  let list = APP_DATA.stdCodes;
+  if(q) list = list.filter(r => (r.city+' '+r.code).toLowerCase().indexOf(q) !== -1);
+  const cont = $('#stdList');
+  if(list.length === 0){ cont.innerHTML = emptyMini('No city found for "'+esc(q)+'".'); return; }
+  cont.innerHTML = list.map(r =>
+    '<div class="std-card"><span class="std-city">'+esc(r.city)+'</span><span class="std-code">'+esc(r.code)+'</span></div>'
+  ).join('');
+}
+function renderWeather(){
+  $('#util-weather').innerHTML =
+    '<div class="weather-hero">'+
+      '<div class="weather-city">📍 New Delhi</div>'+
+      '<div class="weather-temp">36°C</div>'+
+      '<div class="weather-cond">Hazy Sunshine · Feels like 42°C</div>'+
+      '<div class="weather-grid">'+
+        '<div class="weather-stat"><div class="ws-lbl">Humidity</div><div class="ws-val">28%</div></div>'+
+        '<div class="weather-stat"><div class="ws-lbl">Wind</div><div class="ws-val">14 km/h NW</div></div>'+
+        '<div class="weather-stat"><div class="ws-lbl">Visibility</div><div class="ws-val">5 km</div></div>'+
+        '<div class="weather-stat"><div class="ws-lbl">UV Index</div><div class="ws-val">9 · Very High</div></div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="aqi-card">'+
+      '<div class="aqi-top"><div><div class="muted text-sm">Air Quality Index</div><div class="aqi-val">178</div></div>'+
+        '<span class="aqi-badge" style="background:#FEE2E2;color:#B91C1C">Poor</span></div>'+
+      '<div class="aqi-scale">'+
+        '<div class="aqi-scale-row"><span class="aqi-swatch" style="background:#16A34A"></span>0–50 · Good</div>'+
+        '<div class="aqi-scale-row"><span class="aqi-swatch" style="background:#EAB308"></span>51–100 · Satisfactory</div>'+
+        '<div class="aqi-scale-row"><span class="aqi-swatch" style="background:#F97316"></span>101–200 · Moderate</div>'+
+        '<div class="aqi-scale-row"><span class="aqi-swatch" style="background:#DC2626"></span>201–300 · Poor</div>'+
+        '<div class="aqi-scale-row"><span class="aqi-swatch" style="background:#7F1D1D"></span>300+ · Severe</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="sun-row">'+
+      '<div class="sun-stat"><div class="ss-lbl">🌅 Sunrise</div><div class="ss-val">5:34 AM</div></div>'+
+      '<div class="sun-stat"><div class="ss-lbl">🌇 Sunset</div><div class="ss-val">7:08 PM</div></div>'+
+      '<div class="sun-stat"><div class="ss-lbl">☀️ UV Index</div><div class="ss-val">9</div></div>'+
+    '</div>';
+}
+function emptyMini(msg){ return '<div class="no-results-state" style="padding:32px 16px"><div class="nr-icon">🔍</div><p>'+msg+'</p></div>'; }
+
+/* ============================================================
+   COMMUNITY TAB
+   ============================================================ */
+const COMM_LABELS = { news:'News', lostFound:'Lost & Found', classifieds:'Classifieds', jobs:'Jobs', rentals:'PG & Rentals' };
+function setCommTab(section){
+  state.commSection = section;
+  $$('#commTabs .chip').forEach(c => c.classList.toggle('active', c.dataset.comm === section));
+  const active = $('#commTabs .chip.active');
+  if(active) active.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+  renderComm(section);
+}
+function renderComm(section){
+  const posts = APP_DATA.community[section] || [];
+  $('#commList').innerHTML = posts.map((p,i) => postCardHtml(p, section, i)).join('');
+}
+function postCardHtml(p, section, i){
+  return '<div class="post-card">'+
+    '<div class="post-top"><span class="post-emoji">'+p.emoji+'</span><span class="post-badge '+p.cls+'">'+esc(p.badge)+'</span></div>'+
+    '<div class="post-title">'+esc(p.title)+'</div>'+
+    '<div class="post-body" id="pb-'+section+'-'+i+'">'+esc(p.body)+'</div>'+
+    '<span class="expand-link" onclick="togglePost(\''+section+'\','+i+', this)">Read more</span>'+
+    '<div class="post-foot">'+
+      '<span class="post-meta">📍 '+esc(p.area)+' <span class="dot-sep">·</span> '+esc(p.time)+'</span>'+
+      '<button class="post-contact" onclick="commContact(\''+section+'\','+i+')">'+esc(p.contactLabel||'Contact')+'</button>'+
+    '</div>'+
+  '</div>';
+}
+function togglePost(section, i, el){
+  const body = $('#pb-'+section+'-'+i);
+  const open = body.classList.toggle('expanded');
+  el.textContent = open ? 'Show less' : 'Read more';
+}
+function commContact(section, i){
+  const p = APP_DATA.community[section][i];
+  if(p.contactInfo) toast('Contact: ' + p.contactInfo, 'info');
+  else toast('Full story available in DYP News', 'info');
+}
+
+/* ============================================================
+   PROFILE TAB
+   ============================================================ */
+function renderSaved(){
+  const saved = state.saved.map(bizById).filter(Boolean);
+  const cont = $('#savedList');
+  if(saved.length === 0){
+    cont.innerHTML = savedEmpty('♡', 'Tap ♡ on any business to save it here.');
+    return;
+  }
+  cont.innerHTML = saved.map(b =>
+    '<div class="set-row tappable" onclick="openDetail('+b.id+')">'+
+      '<div class="set-left"><div class="set-ic">'+b.emoji+'</div>'+
+      '<div><div class="set-label">'+esc(b.name)+'</div><div class="set-value">'+esc(b.category)+' · '+esc(b.area)+'</div></div></div>'+
+      '<button class="saved-remove" onclick="event.stopPropagation(); toggleSave('+b.id+')" aria-label="Remove">✕</button>'+
+    '</div>'
+  ).join('');
+}
+function renderSavedDeals(){
+  $('#savedDealsList').innerHTML = savedEmpty('🏷️', 'Deals you save will appear here for quick access.');
+}
+function savedEmpty(icon, text){
+  return '<div style="padding:26px 16px;text-align:center"><div style="font-size:30px;margin-bottom:8px">'+icon+'</div><p style="font-size:13.5px;color:var(--text-secondary)">'+esc(text)+'</p></div>';
+}
+
+/* dark mode */
+function applyDark(on){
+  document.body.classList.toggle('dark', on);
+  $('#darkToggle').classList.toggle('on', on);
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute('content', on ? '#111110' : '#E8A000');
+  state.dark = on;
+  lsSet(LS.dark, on);
+}
+function toggleDark(){
+  applyDark(!state.dark);
+  toast(state.dark ? 'Dark mode on' : 'Dark mode off', 'info');
+}
+
+/* language */
+const LANGS = ['English','हिन्दी','বাংলা'];
+function cycleLanguage(){
+  let i = LANGS.indexOf(state.lang); i = (i+1) % LANGS.length;
+  state.lang = LANGS[i]; lsSet(LS.lang, state.lang);
+  $('#langValue').textContent = state.lang;
+  toast('Language set to ' + state.lang + ' (UI demo)', 'info');
+}
+
+/* share + clipboard */
+function copyText(text){
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).catch(()=>fallbackCopy(text)); }
+  else fallbackCopy(text);
+}
+function fallbackCopy(text){
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch(e){}
+  document.body.removeChild(ta);
+}
+function shareApp(){
+  const text = 'Digital Yellow Paper — India ka apna local directory. Find every local business, utility and community update for Delhi in one app.';
+  if(navigator.share){ navigator.share({ title:'Digital Yellow Paper', text }).catch(()=>{}); }
+  else { copyText(text); toast('App link copied to clipboard','success'); }
+}
+
+/* ============================================================
+   ADD BUSINESS MODAL
+   ============================================================ */
+function populateModalDropdowns(){
+  const cats = ALL_CATEGORIES.map(c => '<option value="'+esc(c)+'">'+esc(c)+'</option>').join('');
+  $('#ab_cat').innerHTML = cats;
+  const areas = APP_DATA.areas.map(a => '<option value="'+esc(a)+'">'+esc(a)+'</option>').join('');
+  $('#ab_area').innerHTML = areas;
+}
+function openAddBusiness(){ openModal('addModal'); }
+function submitBusiness(){
+  const name = $('#ab_name').value.trim();
+  const phone = $('#ab_phone').value.trim();
+  const addr = $('#ab_addr').value.trim();
+  if(!name || !phone || !addr){ toast('Please fill business name, phone and address', 'error'); return; }
+  const listings = lsGet(LS.listings, []);
+  listings.push({ name, category:$('#ab_cat').value, phone, whatsapp:$('#ab_wa').value.trim(),
+    address:addr, area:$('#ab_area').value, about:$('#ab_about').value.trim(), submitted:Date.now() });
+  lsSet(LS.listings, listings);
+  closeModal('addModal');
+  ['ab_name','ab_phone','ab_wa','ab_addr','ab_about'].forEach(id => { $('#'+id).value=''; });
+  toast('Your listing is under review!', 'success');
+}
+
+/* ============================================================
+   WRITE REVIEW MODAL
+   ============================================================ */
+function openReview(id){
+  state.reviewBizId = id;
+  state.reviewRating = 0;
+  const b = bizById(id);
+  $('#reviewForName').textContent = 'Reviewing: ' + b.name;
+  $('#rv_name').value = ''; $('#rv_text').value = '';
+  renderRatingPicker();
+  openModal('reviewModal');
+}
+function renderRatingPicker(){
+  let s = '';
+  for(let i=1;i<=5;i++){
+    s += '<span onclick="setReviewRating('+i+')" style="color:'+(i<=state.reviewRating?'var(--brand)':'var(--border-strong)')+'">★</span>';
+  }
+  $('#ratingPicker').innerHTML = s;
+}
+function setReviewRating(n){ state.reviewRating = n; renderRatingPicker(); }
+function submitReview(){
+  if(state.reviewRating === 0){ toast('Please select a star rating', 'error'); return; }
+  const text = $('#rv_text').value.trim();
+  if(!text){ toast('Please write a few words', 'error'); return; }
+  const name = $('#rv_name').value.trim() || 'You';
+  const id = state.reviewBizId;
+  if(!state.extraReviews[id]) state.extraReviews[id] = [];
+  state.extraReviews[id].unshift({ name, area:'Delhi', rating:state.reviewRating, date:'Just now', text, helpful:0 });
+  closeModal('reviewModal');
+  toast('Review posted — thank you!', 'success');
+  const b = bizById(id);
+  if($('#detailSheet').classList.contains('show')){ $('#detailBody').innerHTML = buildDetail(b); }
+}
+
+/* ============================================================
+   SHEETS + MODALS + SCRIM
+   ============================================================ */
+function lockScroll(){ document.documentElement.style.overflow = 'hidden'; }
+function unlockScroll(){ document.documentElement.style.overflow = ''; }
+function anyOverlayOpen(){ return $$('.sheet.show, .modal.show').length > 0 || $('#searchOverlay').classList.contains('show'); }
+
+function openSheet(id){ $('#'+id).classList.add('show'); $('#scrim').classList.add('show'); lockScroll(); updateFab(); }
+function openModal(id){ $('#'+id).classList.add('show'); $('#scrim').classList.add('show'); lockScroll(); updateFab(); }
+function closeModal(id){
+  $('#'+id).classList.remove('show');
+  if(!anyOverlayOpen()){ $('#scrim').classList.remove('show'); unlockScroll(); }
+  updateFab();
+}
+function closeAllSheets(){
+  $$('.sheet.show, .modal.show').forEach(el => el.classList.remove('show'));
+  $('#scrim').classList.remove('show');
+  unlockScroll();
+  updateFab();
+}
+
+/* ============================================================
+   LOCATION SHEET
+   ============================================================ */
+function openLocationSheet(){ renderAreaGrid(); openSheet('locationSheet'); }
+function renderAreaGrid(){
+  const grid = $('#areaGrid');
+  grid.innerHTML =
+    '<button class="area-chip '+(state.area==='Delhi'?'active':'')+'" data-area="Delhi">All of Delhi</button>' +
+    APP_DATA.areas.map(a => '<button class="area-chip '+(state.area===a?'active':'')+'" data-area="'+esc(a)+'">'+esc(a)+'</button>').join('');
+}
+function selectArea(a){
+  state.area = a;
+  $('#headerArea').textContent = (a === 'Delhi') ? 'Delhi' : a;
+  $('#settingsArea').textContent = (a === 'Delhi') ? 'Delhi, NCR' : (a + ', Delhi');
+  $('#crumbArea').textContent = (a === 'Delhi') ? 'All areas' : a;
+  toast('Location set to ' + ((a === 'Delhi') ? 'Delhi' : a), 'success');
+  closeAllSheets();
+}
+
+/* ============================================================
+   SEARCH OVERLAY
+   ============================================================ */
+const POPULAR_SEARCHES = ["Karim's","AIIMS","Chandni Chowk","IFSC code","Metro","Sarojini Nagar","Apollo","Sweets"];
+const OVERLAY_CATS = ['Restaurants','Medical','Education','Shopping','Services','Auto','Finance','Electronics'];
+
+function openSearchOverlay(){
+  $('#searchOverlay').classList.add('show');
+  lockScroll();
+  $('#overlaySearchInput').value = '';
+  renderOverlayInitial();
+  setTimeout(() => $('#overlaySearchInput').focus(), 60);
+  updateFab();
+}
+function closeSearchOverlay(){
+  $('#searchOverlay').classList.remove('show');
+  $('#overlaySearchInput').value = '';
+  if(!anyOverlayOpen()) unlockScroll();
+  updateFab();
+}
+function renderOverlayInitial(){
+  let html = '';
+  if(state.recent.length){
+    html += '<div style="display:flex;align-items:center;justify-content:space-between"><div class="so-sec-title">Recent searches</div>'+
+      '<button class="so-cancel" data-clear="1" style="padding:0 4px 8px">Clear</button></div>';
+    html += state.recent.map(r =>
+      '<div class="recent-row" data-q="'+esc(r)+'">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'+
+        '<span class="rr-text">'+esc(r)+'</span>'+
+        '<span class="rr-remove" data-remove="'+esc(r)+'">✕</span>'+
+      '</div>'
+    ).join('');
+  }
+  html += '<div class="so-sec-title" style="margin-top:'+(state.recent.length?'18px':'4px')+'">Popular in Delhi</div><div class="so-chips">'+
+    POPULAR_SEARCHES.map(p => '<button class="chip" data-q="'+esc(p)+'">🔍 '+esc(p)+'</button>').join('')+'</div>';
+  html += '<div class="so-sec-title">Browse categories</div><div class="so-chips">'+
+    OVERLAY_CATS.map(c => '<button class="chip" data-cat="'+esc(c)+'">'+esc(c)+'</button>').join('')+'</div>';
+  $('#searchOverlayBody').innerHTML = html;
+}
+function overlaySearch(){
+  const q = $('#overlaySearchInput').value.trim().toLowerCase();
+  const body = $('#searchOverlayBody');
+  if(!q){ renderOverlayInitial(); return; }
+  const biz = APP_DATA.businesses.filter(b => (b.name+' '+b.category+' '+b.area+' '+b.about).toLowerCase().indexOf(q) !== -1).slice(0,12);
+  const mk = APP_DATA.markets.filter(m => (m.name+' '+m.area+' '+m.tags.join(' ')).toLowerCase().indexOf(q) !== -1).slice(0,4);
+  if(!biz.length && !mk.length){
+    body.innerHTML = '<div class="no-results-state"><div class="nr-icon">🔍</div><h3>No results for "'+esc(q)+'"</h3><p>Try a business name, category, or area in Delhi.</p></div>';
+    return;
+  }
+  let html = '';
+  if(biz.length){
+    html += '<div class="so-sec-title">Businesses</div>' + biz.map(b =>
+      '<div class="live-row" data-biz="'+b.id+'"><span class="lr-emoji">'+b.emoji+'</span><div><div class="lr-name">'+esc(b.name)+'</div><div class="lr-sub">'+esc(b.category)+' · '+esc(b.area)+' · ★'+b.rating+'</div></div></div>'
+    ).join('');
+  }
+  if(mk.length){
+    html += '<div class="so-sec-title" style="margin-top:16px">Markets</div>' + mk.map(m =>
+      '<div class="live-row" data-market="'+m.id+'"><span class="lr-emoji">🛍️</span><div><div class="lr-name">'+esc(m.name)+'</div><div class="lr-sub">'+esc(m.area)+' · '+esc(m.timings)+'</div></div></div>'
+    ).join('');
+  }
+  body.innerHTML = html;
+}
+function overlayCategory(c){ closeSearchOverlay(); goDirectoryFiltered(c); }
+function openFromOverlay(id){ const b = bizById(id); if(b) addRecentSearch(b.name); closeSearchOverlay(); openDetail(id); }
+function openMarketFromOverlay(id){ const m = APP_DATA.markets.find(x => x.id === id); if(m) addRecentSearch(m.name); closeSearchOverlay(); openMarket(id); }
+function addRecentSearch(q){
+  state.recent = state.recent.filter(x => x !== q);
+  state.recent.unshift(q);
+  state.recent = state.recent.slice(0,6);
+  lsSet(LS.recent, state.recent);
+}
+function removeRecent(q){ state.recent = state.recent.filter(x => x !== q); lsSet(LS.recent, state.recent); renderOverlayInitial(); }
+function clearRecent(){ state.recent = []; lsSet(LS.recent, []); renderOverlayInitial(); }
+
+/* ============================================================
+   EVENT WIRING
+   ============================================================ */
+function attachListeners(){
+  // tab navigation (bottom nav + sidebar)
+  $$('.nav-item, .side-item').forEach(el => {
+    el.addEventListener('click', () => switchTab(el.dataset.tab));
+  });
+  // utility sub-tabs
+  $$('#utilTabs .chip').forEach(c => c.addEventListener('click', () => setUtilTab(c.dataset.util)));
+  // community sub-tabs
+  $$('#commTabs .chip').forEach(c => c.addEventListener('click', () => setCommTab(c.dataset.comm)));
+
+  // home hero search
+  const hs = $('#homeSearchInput');
+  hs.addEventListener('input', homeSearchInput);
+  hs.addEventListener('focus', () => {
+    $('#homeSuggestChips').style.display = 'flex';
+    $('#heroSearch').classList.add('focused');
+  });
+  hs.addEventListener('blur', () => {
+    setTimeout(() => {
+      if(!hs.value.trim()){
+        $('#homeSuggestChips').style.display = 'none';
+        $('#homeLiveResults').classList.remove('show');
+        $('#heroSearch').classList.remove('focused');
+      }
+    }, 180);
+  });
+
+  // directory + utility search inputs
+  $('#dirSearchInput').addEventListener('input', renderDirectory);
+  $('#ifscSearch').addEventListener('input', e => renderIfsc(e.target.value));
+  $('#pinSearch').addEventListener('input', e => renderPin(e.target.value));
+  $('#stdSearch').addEventListener('input', e => renderStd(e.target.value));
+
+  // search overlay
+  $('#overlaySearchInput').addEventListener('input', overlaySearch);
+  $('#searchOverlayBody').addEventListener('click', e => {
+    const rm = e.target.closest('[data-remove]'); if(rm){ removeRecent(rm.dataset.remove); return; }
+    const cl = e.target.closest('[data-clear]'); if(cl){ clearRecent(); return; }
+    const q  = e.target.closest('[data-q]');     if(q){ $('#overlaySearchInput').value = q.dataset.q; overlaySearch(); return; }
+    const ct = e.target.closest('[data-cat]');   if(ct){ overlayCategory(ct.dataset.cat); return; }
+    const bz = e.target.closest('[data-biz]');   if(bz){ openFromOverlay(parseInt(bz.dataset.biz,10)); return; }
+    const mk = e.target.closest('[data-market]');if(mk){ openMarketFromOverlay(parseInt(mk.dataset.market,10)); return; }
+  });
+
+  // area grid (location sheet)
+  $('#areaGrid').addEventListener('click', e => {
+    const a = e.target.closest('[data-area]'); if(a) selectArea(a.dataset.area);
+  });
+
+  // escape closes overlays
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape'){
+      if($('#searchOverlay').classList.contains('show')) closeSearchOverlay();
+      else if(anyOverlayOpen()) closeAllSheets();
+    }
+  });
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init(){
+  applyDark(state.dark);
+  buildSuggestChips();
+  populateAreaFilter();
+  populateModalDropdowns();
+  renderHome();
+  renderDirChips();
+  renderDirectory();
+  renderUtility();
+  setCommTab('news');
+  renderSaved();
+  renderSavedDeals();
+  $('#langValue').textContent = state.lang;
+  attachListeners();
+  switchTab(state.tab || 'home');
+}
+
+if(document.readyState !== 'loading') init();
+else document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
