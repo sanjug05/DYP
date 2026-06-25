@@ -9,7 +9,7 @@
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-<meta name="apple-mobile-web-app-title" content="Digital Yellow Papers" />
+<meta name="apple-mobile-web-app-title" content="Yellow Papers" />
 <link rel="manifest" id="manifestLink" />
 <link rel="apple-touch-icon" id="appleIconLink" />
 <title>Digital Yellow Papers — Hyperlocal neighbourhood app</title>
@@ -111,8 +111,11 @@ body.dark :focus-visible{outline-color:var(--brand);}
   color:var(--ink-on-brand);font-weight:800;font-size:14px;letter-spacing:-.5px;
   display:grid;place-items:center;box-shadow:0 2px 6px rgba(184,134,11,.35);
 }
-.brand-name{font-weight:800;font-size:var(--fs-md);letter-spacing:-.4px;white-space:nowrap;}
-.brand-name b{color:var(--brand-deep);}
+.brand-name{font-weight:800;font-size:14.5px;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.brand-name b{color:var(--brand-deep);font-weight:800;}
+.brand-digital{color:#004953;}
+body.dark .brand-digital{color:#3FD0C2;}
+.side-brand .brand-name{font-size:var(--fs-md);}
 .appbar-spacer{flex:1;}
 .iconbtn{
   width:42px;height:42px;border-radius:11px;display:grid;place-items:center;position:relative;
@@ -663,7 +666,7 @@ body.dark .act-wa{background:#10301F;color:#34D27D;}
   <aside class="sidebar" aria-label="Primary">
     <div class="side-brand">
       <div class="brand-mark">DYP</div>
-      <div class="brand-name">Digital<b>Yellow<b>Papers</b></div>
+      <div class="brand-name"><span class="brand-digital">Digital</span> <b>Yellow Papers</b></div>
     </div>
     <nav class="side-nav" aria-label="Sections">
       <a class="side-item active" data-nav="home" role="button" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg><span>Home</span></a>
@@ -679,7 +682,7 @@ body.dark .act-wa{background:#10301F;color:#34D27D;}
   <header class="appbar">
     <div class="brand">
       <div class="brand-mark">DYP</div>
-      <div class="brand-name">Digital<b>Yellow<b>Papers</b></div>
+      <div class="brand-name"><span class="brand-digital">Digital</span> <b>Yellow Papers</b></div>
     </div>
     <div class="appbar-spacer"></div>
     <button class="iconbtn" data-action="open-search" aria-label="Search businesses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
@@ -1212,7 +1215,7 @@ const AppData = {
 /* ============================================================================
    5. APP STATE   (AppState)
    ============================================================================ */
-const LS = { saved:'DYP_saved', dark:'DYP_dark', tab:'DYP_tab', area:'DYP_area', lang:'DYP_lang', recent:'DYP_recent', listings:'DYP_listings', seen:'DYP_seen', installDismissed:'DYP_install_dismissed' };
+const LS = { saved:'lm_saved', dark:'lm_dark', tab:'lm_tab', area:'lm_area', lang:'lm_lang', recent:'lm_recent', listings:'lm_listings', seen:'lm_seen', installDismissed:'lm_install_dismissed' };
 
 const AppState = {
   nav:'home',
@@ -2080,14 +2083,14 @@ const PWA = {
     const r = (size-pad*2)*0.22;
     const g=x.createLinearGradient(pad,pad,size-pad,size-pad); g.addColorStop(0,'#F4B41A'); g.addColorStop(1,'#B8860B');
     x.fillStyle=g; PWA.roundRect(x,pad,pad,size-pad*2,size-pad*2,r); x.fill();
-    x.fillStyle='#241B00'; x.font='800 '+(size*0.40)+'px Inter,Arial,sans-serif'; x.textAlign='center'; x.textBaseline='middle';
+    x.fillStyle='#241B00'; x.font='800 '+(size*0.30)+'px Inter,Arial,sans-serif'; x.textAlign='center'; x.textBaseline='middle';
     x.fillText('DYP', size/2, size/2+size*0.02);
     return c.toDataURL('image/png');
   },
   buildManifest(){
     const i192=PWA.icon(192,true), i512=PWA.icon(512,true), apple=PWA.icon(180,false);
     const manifest={
-      name:'Digital Yellow Papers — Neighbourhood App', short_name:'Digital Yellow Papers',
+      name:'Digital Yellow Papers', short_name:'Yellow Papers',
       description:'Find open shops, daily essentials, offers and civic utilities near you.',
       start_url:'.', scope:'.', display:'standalone', orientation:'portrait',
       background_color:'#FBF7EF', theme_color:'#E8A000',
