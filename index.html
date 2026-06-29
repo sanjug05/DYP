@@ -96,9 +96,11 @@ h1,h2,h3,h4{font-family:var(--font-heading);font-weight:600;line-height:1.25;}
 .brand-mark{
   width:34px;height:34px;border-radius:7px;flex-shrink:0;
   background:linear-gradient(160deg,var(--brand),var(--brand-deep));
-  color:var(--ink-on-brand);font-family:var(--font-heading);font-weight:600;font-size:11px;letter-spacing:.2px;
+  color:#004953;/* match .brand-digital in light mode */
+  font-family:var(--font-heading);font-weight:600;font-size:11px;letter-spacing:.2px;
   display:grid;place-items:center;box-shadow:0 2px 5px rgba(184,134,11,.28);
 }
+body.dark .brand-mark{color:#3FD0C2;}/* match dark .brand-digital */
 .brand-name{font-family:var(--font-heading);font-weight:600;font-size:15px;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;}
 .brand-name b{color:var(--brand-deep);font-weight:600;}
 .brand-digital{color:#004953;}
@@ -521,7 +523,7 @@ body.dark .act-wa{background:#0E2A1A;color:#2ABD6E;}
 /* install banner + sheet */
 .install-banner{position:fixed;left:12px;right:12px;bottom:calc(var(--nav-h) + var(--safe-b) + 12px);z-index:58;max-width:520px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:12px 13px;border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line-2);box-shadow:var(--shadow-lg);transform:translateY(140%);opacity:0;transition:transform .4s cubic-bezier(.32,.72,0,1),opacity .3s;}
 .install-banner.show{transform:translateY(0);opacity:1;}
-.ib-ic{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--brand),var(--brand-deep));color:var(--ink-on-brand);display:grid;place-items:center;font-weight:600;font-size:17px;flex-shrink:0;box-shadow:0 2px 8px rgba(184,134,11,.4);}
+.ib-ic{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--brand),var(--brand-deep));color:#004953;/* match brand-digital */display:grid;place-items:center;font-weight:600;font-size:17px;flex-shrink:0;box-shadow:0 2px 8px rgba(184,134,11,.4);}
 .ib-id{flex:1;min-width:0;}
 .ib-title{font-size:var(--fs-sm);font-weight:600;}
 .ib-sub{font-size:var(--fs-2xs);color:var(--ink-2);margin-top:1px;line-height:1.3;}
@@ -648,6 +650,39 @@ body.dark .act-wa{background:#0E2A1A;color:#2ABD6E;}
   .dir-list{grid-template-columns:1fr 1fr 1fr;}
 }
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important;}}
+
+/* ── Small phone fixes (320px–390px) ─────────────────────────────── */
+@media (max-width:390px){
+  :root{--header-h:50px; --nav-h:58px;}
+  .navitem span{font-size:10px;}
+  .navitem svg{width:20px;height:20px;}
+  .brand-mark{width:30px;height:30px;font-size:10px;border-radius:6px;}
+  .brand-name{font-size:13px;}
+  .brand-tag{display:none;}
+  .loc-btn{height:34px;padding:0 8px;font-size:var(--fs-2xs);}
+  .iconbtn{width:38px;height:38px;}
+  .chiprow,.rail{padding-left:12px;padding-right:12px;margin-left:-12px;margin-right:-12px;}
+  .section{padding:0 12px;}
+  .hero{padding:12px 12px 4px;}
+  .ess-grid{gap:8px;}
+  .ess{padding:10px 2px;}
+  .ess-ic{width:38px;height:38px;font-size:18px;}
+  .ess-lbl{font-size:10.5px;}
+  .filterbar{padding:8px 0 6px;}
+  .dir-search{margin:0 12px;}
+  .sortrow{padding:8px 12px 2px;}
+  .results-meta{padding:10px 12px 6px;}
+  .dir-list{padding:0 12px;}
+  .upanel{padding:4px 12px 0;}
+  .util-intro{padding:0 12px;}
+  .group{margin:14px 12px 0;}
+  .profhero{padding:14px 12px;}
+  .pstats{padding:0 12px;}
+}
+
+/* news-mode wrapper (no grid, no padding — news-list handles its own) */
+.news-mode{display:block;padding:0 14px;}
+@media(max-width:390px){.news-mode{padding:0 12px;}}
 
 /* ── Auth modals ── */
 .auth-tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:18px;}
@@ -876,7 +911,7 @@ body.dark .act-wa{background:#0E2A1A;color:#2ABD6E;}
         <button class="chip" data-util="pincode" role="tab">📮 Pincode</button>
         <button class="chip" data-util="metro" role="tab">🚇 Metro</button>
         <button class="chip" data-util="std" role="tab">☎️ STD</button>
-        <button class="chip" data-util="weather" role="tab">🌤️ AQI</button>
+        <button class="chip" data-util="weather" role="tab">🌤️ Weather</button>
       </div>
       <div class="upanel active" id="u-emergency"><div class="util-intro">Tap to call any service directly. Live local helplines.</div><div class="emerg-grid" id="emergGrid"></div></div>
       <div class="upanel" id="u-ifsc"><div class="dir-search" style="margin:8px 0 12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="ifscSearch" placeholder="Bank or branch…" aria-label="Search IFSC" autocomplete="off"/></div><div id="ifscList"></div></div>
@@ -1013,6 +1048,13 @@ body.dark .act-wa{background:#0E2A1A;color:#2ABD6E;}
       <div class="field"><label>Address <span class="req">*</span></label><input id="ab_addr" type="text" placeholder="Shop no., street, landmark"/></div>
       <div class="field"><label>Area</label><select id="ab_area"></select></div>
       <div class="field"><label>About (optional)</label><textarea id="ab_about" placeholder="What do you sell or offer?"></textarea></div>
+      <div class="field">
+        <label>Photos (optional)</label>
+        <input id="ab_photos" type="file" accept="image/*" multiple
+          style="padding:10px 0;font-size:var(--fs-sm);width:100%;"/>
+        <div class="t-xs dim" style="margin-top:3px;font-style:italic">Up to 3 photos · Max 5MB each · Images only</div>
+        <div id="ab_photos_err" class="form-err"></div>
+      </div>
       <button class="btn btn-primary btn-block" data-action="submit-business">Submit for review</button>
       <p class="dim t-xs" style="text-align:center;margin-top:10px">Free listing · We verify before it goes live</p>
     </div>
@@ -1646,7 +1688,7 @@ const AppRender = {
       { u:'pincode', e:'📮', n:'Pincode', s:'Area codes' },
       { u:'metro', e:'🚇', n:'Metro', s:'Lines & routes' },
       { u:'std', e:'☎️', n:'STD', s:'City codes' },
-      { u:'weather', e:'🌤️', n:'AQI', s:'Air & weather' }
+      { u:'weather', e:'🌤️', n:'Weather', s:'Weather & AQI' }
     ];
     U.$('#utilShortcuts').innerHTML = items.map(i =>
       '<button class="opennow" style="min-width:152px" data-action="util-shortcut" data-util="'+i.u+'" aria-label="'+i.n+'"><div class="on-top"><div class="on-emoji">'+i.e+'</div><div><div class="on-name">'+i.n+'</div><div class="on-cat">'+i.s+'</div></div></div></button>'
@@ -1829,10 +1871,7 @@ const AppRender = {
 
   /* ---- COMMUNITY ---- */
   community(){
-    const sec = AppState.commSection || 'news';
-    U.$$('#commTabs .chip').forEach(c => c.classList.toggle('active', c.dataset.comm===sec));
-    const posts = AppData.community[sec] || [];
-    U.$('#commList').innerHTML = posts.map(p => AppRender.postCard(p)).join('');
+    AppActions.setCommTab(AppState.commSection || 'news');
   },
   postCard(p){
     const cta = p.contactLabel
@@ -2009,15 +2048,18 @@ const AppActions = {
   /* tab navigation */
   switchTab(nav){
     if(!nav) return;
+    // Close overlays before switching so they don't block the new tab
+    if(AppActions.anyOpen()) AppActions.closeSheets();
+    if(U.$('#searchOverlay').classList.contains('show')) AppActions.closeSearch();
     AppState.nav = nav;
     U.$$('.page').forEach(p=>p.classList.toggle('active', p.id==='page-'+nav));
     U.$$('.navitem').forEach(n=>{ const on=n.dataset.nav===nav; n.classList.toggle('active',on); on?n.setAttribute('aria-current','page'):n.removeAttribute('aria-current'); });
     U.$$('.side-item').forEach(n=>n.classList.toggle('active', n.dataset.nav===nav));
     U.lsSet(LS.tab, nav);
-    if(nav==='explore') AppRender.dirList();
-    if(nav==='community') AppRender.community();
-    if(nav==='profile') AppRender.profile();
-    window.scrollTo(0,0);
+    if(nav==='explore')   { AppRender.dirList(); }
+    if(nav==='community') { AppRender.community(); }
+    if(nav==='profile')   { AppRender.profile(); }
+    window.scrollTo({top:0,behavior:'instant'});
     AppActions.fab();
   },
 
@@ -2100,7 +2142,15 @@ const AppActions = {
   setUtilTab(u){
     U.$$('#utilTabs .chip').forEach(c=>{ const on=c.dataset.util===u; c.classList.toggle('active',on); c.setAttribute('aria-selected',on); });
     U.$$('.upanel').forEach(p=>p.classList.toggle('active', p.id==='u-'+u));
+    if (u === 'weather') {
+      const host = U.$('#u-weather');
+      if (host && !host.innerHTML.trim()) host.innerHTML = '<div class="wx-loading">Loading weather…</div>';
+      AppWeather && AppWeather.fetch()
+        .then(w => AppWeather.renderUtil(w))
+        .catch(() => { if(host && AppWeather) AppWeather.renderUtil(AppWeather._fallback()); });
+    }
   },
+  /* setCommTab: live override below handles news vs non-news routing */
   setCommTab(c){ AppState.commSection=c; AppRender.community(); },
 
   /* add business */
@@ -2114,7 +2164,8 @@ const AppActions = {
   },
   openAddBusiness(){
     AppActions.ensureSelects();
-    ['ab_name','ab_phone','ab_wa','ab_addr','ab_about'].forEach(id=>{ const el=U.$('#'+id); if(el) el.value=''; });
+    ['ab_name','ab_phone','ab_wa','ab_addr','ab_about','ab_photos'].forEach(id=>{ const el=U.$('#'+id); if(el) el.value=''; });
+    const pe = U.$('#ab_photos_err'); if(pe) pe.classList.remove('show');
     AppActions.openModal('modalAdd');
     setTimeout(()=>U.$('#ab_name').focus(),120);
   },
@@ -2225,13 +2276,23 @@ const PWA = {
   roundRect(x,a,b,w,h,r){ x.beginPath(); x.moveTo(a+r,b); x.arcTo(a+w,b,a+w,b+h,r); x.arcTo(a+w,b+h,a,b+h,r); x.arcTo(a,b+h,a,b,r); x.arcTo(a,b,a+w,b,r); x.closePath(); },
   icon(size, maskable){
     const c=document.createElement('canvas'); c.width=c.height=size; const x=c.getContext('2d');
-    if(maskable){ x.fillStyle='#E8A000'; x.fillRect(0,0,size,size); }
-    const pad = maskable ? size*0.14 : 0;
-    const r = (size-pad*2)*0.22;
-    const g=x.createLinearGradient(pad,pad,size-pad,size-pad); g.addColorStop(0,'#F4B41A'); g.addColorStop(1,'#B8860B');
+    // Background
+    const bg=x.createLinearGradient(0,0,size,size);
+    bg.addColorStop(0,'#FFF8E6'); bg.addColorStop(1,'#FAF0CE');
+    x.fillStyle=bg; x.fillRect(0,0,size,size);
+    // Amber rounded square (the "paper")
+    const pad=size*(maskable?0.10:0.06), r=(size-pad*2)*0.20;
+    const g=x.createLinearGradient(pad,pad,size-pad,size-pad);
+    g.addColorStop(0,'#F4B41A'); g.addColorStop(1,'#B8860B');
     x.fillStyle=g; PWA.roundRect(x,pad,pad,size-pad*2,size-pad*2,r); x.fill();
-    x.fillStyle='#241B00'; x.font='800 '+(size*0.30)+'px Inter,Arial,sans-serif'; x.textAlign='center'; x.textBaseline='middle';
-    x.fillText('DYP', size/2, size/2+size*0.02);
+    // "DY" stacked text — midnight green matches .brand-digital
+    x.fillStyle='#004953';
+    x.textAlign='center'; x.textBaseline='middle';
+    x.font='700 '+(size*0.28)+'px Bitter,Georgia,serif';
+    x.fillText('DY', size/2, size*0.44);
+    x.font='500 '+(size*0.15)+'px Inter,Arial,sans-serif';
+    x.fillStyle='rgba(0,73,83,0.72)';/* brand-digital at 72% opacity */
+    x.fillText('Papers', size/2, size*0.66);
     return c.toDataURL('image/png');
   },
   buildManifest(){
@@ -2283,16 +2344,35 @@ const PWA = {
   },
   dismissInstall(){ PWA.hideBanner(); U.lsSet(LS.installDismissed,true); },
 
+  registerSW(){
+    // Inline service worker via blob URL — enables install prompt without a separate file
+    const swCode = `
+      const CACHE='dyp-v1';
+      const OFFLINE=['/'];
+      self.addEventListener('install', e=>{ e.waitUntil(caches.open(CACHE).then(c=>c.addAll(OFFLINE))); self.skipWaiting(); });
+      self.addEventListener('activate', e=>{ e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k))))); self.clients.claim(); });
+      self.addEventListener('fetch', e=>{
+        if(e.request.method!=='GET') return;
+        e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));
+      });`;
+    try {
+      const blob = new Blob([swCode],{type:'application/javascript'});
+      const swUrl = URL.createObjectURL(blob);
+      navigator.serviceWorker && navigator.serviceWorker.register(swUrl).catch(()=>{});
+    } catch(e) {}
+  },
+
   init(){
     PWA.buildManifest();
-    if(PWA.isStandalone()){ U.$('#installGroup').style.display='none'; PWA.hideBanner(); return; }
+    PWA.registerSW();
+    if(PWA.isStandalone()){ U.$('#installGroup') && (U.$('#installGroup').style.display='none'); PWA.hideBanner(); return; }
     window.addEventListener('beforeinstallprompt', e=>{
       e.preventDefault(); PWA.deferred=e;
       PWA.showGroup();
       setTimeout(PWA.showBanner, 2200);
     });
     window.addEventListener('appinstalled', ()=>{
-      PWA.deferred=null; PWA.hideBanner(); U.$('#installGroup').style.display='none';
+      PWA.deferred=null; PWA.hideBanner(); U.$('#installGroup') && (U.$('#installGroup').style.display='none');
       U.toast('Installed! Open Digital Yellow Papers from your home screen.','success');
     });
     PWA.showGroup();
@@ -2355,16 +2435,18 @@ const AppEvents = {
   },
 
   onClick(e){
-    const el = e.target.closest('[data-action],[data-nav],[data-filter],[data-comm]');
+    // All routable attributes in one selector — missing [data-util] was the nav bug
+    const el = e.target.closest('[data-action],[data-nav],[data-filter],[data-comm],[data-util],[data-news],[data-authtab],[data-rdash]');
     if(!el) return;
-    // ov-remove sits inside an ov-fill row — let the inner action win
-    if(el.dataset.filter){ AppActions.toggleFilter(el.dataset.filter); return; }
-    if(el.dataset.comm){ AppActions.setCommTab(el.dataset.comm); return; }
-    // utility tab chips carry data-util but live directly inside #utilTabs
-    if(el.parentElement && el.parentElement.id==='utilTabs' && el.dataset.util){ AppActions.setUtilTab(el.dataset.util); return; }
-    if(el.dataset.nav){ AppActions.switchTab(el.dataset.nav); return; }
+    if(el.dataset.filter)  { AppActions.toggleFilter(el.dataset.filter); return; }
+    if(el.dataset.comm)    { AppActions.setCommTab(el.dataset.comm); return; }
+    if(el.dataset.util)    { AppActions.setUtilTab(el.dataset.util); return; }   // was missing — root cause
+    if(el.dataset.news)    { AppActions.setNewsTab(el.dataset.news); return; }
+    if(el.dataset.authtab) { AppActions.switchAuthTab(el.dataset.authtab); return; }
+    if(el.dataset.rdash)   { AppRender.retailerDash(el.dataset.rdash); return; }
+    if(el.dataset.nav)     { AppActions.switchTab(el.dataset.nav); return; }
     const a = el.dataset.action;
-    if(!a || a==='external') return;               // real links navigate natively
+    if(!a || a==='external') return;
     const fn = AppEvents.map[a];
     if(fn){ e.preventDefault(); fn(el); }
   },
@@ -2555,6 +2637,39 @@ const AppFirebase = {
     await this.db.collection('users').doc(uid).set({
       ...data, updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     }, { merge: true });
+  },
+
+  /* -- Storage uploads --
+     Path: /businesses/{uid}/{bizId}/{filename}  → matches storage.rules
+     Path: /users/{uid}/{filename}               → matches storage.rules
+  */
+  async uploadBusinessImages(uid, bizId, files) {
+    if (!this.ready || !this.storage) return [];
+    const MAX = 5 * 1024 * 1024; // 5MB per storage.rules
+    const urls = [];
+    for (const file of Array.from(files)) {
+      if (!file.type.startsWith('image/')) throw new Error('Images only (JPEG, PNG, WebP)');
+      if (file.size > MAX) throw new Error(`${file.name} exceeds 5MB limit`);
+      // Sanitize filename to avoid path injection
+      const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 80);
+      // Storage path matches the rule: /businesses/{uid}/{bizId}/{file}
+      const ref = this.storage.ref(`businesses/${uid}/${bizId}/${Date.now()}_${safe}`);
+      const snap = await ref.put(file, { contentType: file.type });
+      urls.push(await snap.ref.getDownloadURL());
+    }
+    return urls;
+  },
+
+  async uploadProfilePhoto(uid, file) {
+    if (!this.ready || !this.storage) return null;
+    const MAX = 2 * 1024 * 1024; // 2MB per storage.rules
+    if (!file.type.startsWith('image/')) throw new Error('Images only');
+    if (file.size > MAX) throw new Error('Profile photo must be under 2MB');
+    const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 80);
+    // Storage path matches the rule: /users/{uid}/{file}
+    const ref = this.storage.ref(`users/${uid}/${Date.now()}_${safe}`);
+    const snap = await ref.put(file, { contentType: file.type });
+    return snap.ref.getDownloadURL();
   }
 };
 
@@ -2698,7 +2813,7 @@ const AppWeather = {
         <div class="hw-cond">${w.temp}°C · ${AppUtils.esc(w.condition)}</div>
         <div class="hw-sub">Feels ${w.feels}°C · Humidity ${w.humidity}% · Wind ${w.wind} km/h</div>
       </div>
-      <button class="chip btn-sm" data-nav="utility" style="flex-shrink:0;height:32px;font-size:11.5px" data-action-util="weather">AQI</button>`;
+      <button class="chip btn-sm" data-nav="utility" data-util-after="weather" style="flex-shrink:0;height:32px;font-size:11.5px">Weather</button>`;
   },
 
   renderUtil(w) {
@@ -2808,19 +2923,24 @@ const AppNews = {
 /* ============================================================================
    OVERRIDE: community() — news tab loads live RSS
    ============================================================================ */
-const _origSetCommTab = AppActions.setCommTab.bind(AppActions);
+/* setCommTab: fixed class conflict — news mode strips comm-list grid */
 AppActions.setCommTab = function(tab) {
   AppState.commSection = tab;
   U.$$('#commTabs .chip').forEach(c => c.classList.toggle('active', c.dataset.comm === tab));
   const newsSubTabs = U.$('#newsSubTabs');
+  const host = U.$('#commList');
+  if (!host) return;
   if (tab === 'news') {
     if (newsSubTabs) newsSubTabs.style.display = 'flex';
+    host.className = 'news-mode';   // remove comm-list grid so news cards aren't broken
     AppNews._currentNewsTab = AppNews._currentNewsTab || 'delhi';
     AppActions.setNewsTab(AppNews._currentNewsTab);
   } else {
     if (newsSubTabs) newsSubTabs.style.display = 'none';
+    host.className = 'comm-list';   // restore grid for community posts
     const posts = AppData.community[tab] || [];
-    U.$('#commList').innerHTML = posts.map(p => AppRender.postCard(p)).join('') || AppRender.miniEmpty('📭','Nothing here','Check back soon.');
+    host.innerHTML = posts.map(p => AppRender.postCard(p)).join('') ||
+      AppRender.miniEmpty('📭','Nothing here yet','Check back soon.');
   }
 };
 
@@ -2828,21 +2948,17 @@ AppActions.setNewsTab = async function(tab) {
   AppNews._currentNewsTab = tab;
   U.$$('#newsSubTabs .chip').forEach(c => c.classList.toggle('active', c.dataset.news === tab));
   const host = U.$('#commList');
+  if (!host) return;
+  host.className = 'news-mode';
   host.innerHTML = '<div class="news-loading">Loading headlines…</div>';
-  const items = await AppNews.fetch(tab);
-  host.innerHTML = AppNews.renderCards(items);
-};
-
-/* ============================================================================
-   OVERRIDE: weather utility tab — load live weather
-   ============================================================================ */
-const _origSetUtilTab = AppActions.setUtilTab.bind(AppActions);
-AppActions.setUtilTab = function(u) {
-  U.$$('#utilTabs .chip').forEach(c=>{ const on=c.dataset.util===u; c.classList.toggle('active',on); c.setAttribute('aria-selected',on); });
-  U.$$('.upanel').forEach(p=>p.classList.toggle('active', p.id==='u-'+u));
-  if (u === 'weather' && !AppWeather.cache) {
-    AppWeather.fetch().then(w => AppWeather.renderUtil(w));
+  let items;
+  try { items = await AppNews.fetch(tab); } catch(e) { items = null; }
+  if (host.className !== 'news-mode') return; // user switched away during fetch
+  if (!items || !items.length) {
+    host.innerHTML = '<div class="news-empty">Could not load headlines — check your connection.</div>';
+    return;
   }
+  host.innerHTML = AppNews.renderCards(items);
 };
 
 /* ============================================================================
@@ -2925,10 +3041,34 @@ AppActions.submitBusiness = async function() {
   if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
 
   try {
+    // Upload photos first (if any), then submit Firestore doc
+    let photoUrls = [];
+    const photoInput = U.$('#ab_photos');
+    const errEl = U.$('#ab_photos_err');
+    if (errEl) errEl.classList.remove('show');
+
+    if (photoInput && photoInput.files && photoInput.files.length > 0) {
+      if (photoInput.files.length > 3) {
+        AppUtils.toast('Max 3 photos allowed','error'); return;
+      }
+      if (btn) btn.textContent = 'Uploading photos…';
+      try {
+        // Use a temp bizId for the storage path; real bizId assigned after Firestore write
+        const tempBizId = 'sub_' + Date.now();
+        photoUrls = await AppFirebase.uploadBusinessImages(AppAuth.uid(), tempBizId, photoInput.files);
+      } catch(uploadErr) {
+        if (errEl) { errEl.textContent = uploadErr.message; errEl.classList.add('show'); }
+        AppUtils.toast(uploadErr.message, 'error');
+        return; // stop — don't submit without photos if upload failed
+      }
+      if (btn) btn.textContent = 'Submitting…';
+    }
+
     await AppFirebase.submitBusiness({
       name, phone, whatsapp: U.$('#ab_wa').value.trim(),
       category: U.$('#ab_cat').value, address: addr,
-      area: U.$('#ab_area').value, about: U.$('#ab_about').value.trim()
+      area: U.$('#ab_area').value, about: U.$('#ab_about').value.trim(),
+      photos: photoUrls  // may be empty if no photos or Firebase not ready
     }, AppAuth.uid());
     AppActions.closeModal('modalAdd');
     AppUtils.toast('Submitted! We’ll review and publish soon.','success');
@@ -2980,7 +3120,7 @@ AppActions.openAuth = function() {
   AppActions.openModal('modalAuth');
   U.$('#loginEmail') && U.$('#loginEmail').focus();
 };
-AppActions.switchAuthTab = function(tab) {
+AppActions.switchAuthTab = AppActions.switchAuthTab || function(tab) {
   U.$$('.auth-tab').forEach(t => t.classList.toggle('active', t.dataset.authtab === tab));
   U.$$('.auth-panel').forEach(p => p.classList.toggle('active', p.id === 'auth' + (tab==='login'?'Login':'Signup')));
 };
@@ -3038,32 +3178,53 @@ AppActions.openAdmin = function() { window.open('admin.html','_blank'); };
 AppRender.retailerDash = async function(panel) {
   const host = U.$('#rdashContent'); if (!host) return;
   U.$$('#rdashTabs .chip').forEach(c => c.classList.toggle('active', c.dataset.rdash === panel));
-  host.innerHTML = '<div class="news-loading">Loading…</div>';
-
-  if (!AppAuth.isLoggedIn()) { host.innerHTML = AppRender.miniEmpty('🔒','Sign in required','Please sign in to view your listings.'); return; }
+  host.innerHTML = '<div class="news-loading">Loading\u2026</div>';
+  if (!AppAuth.isLoggedIn()) { host.innerHTML = AppRender.miniEmpty('\uD83D\uDD12','Sign in required','Please sign in to view your listings.'); return; }
 
   if (panel === 'active') {
     const items = await AppFirebase.getMyLiveBusinesses(AppAuth.uid());
     if (!items.length) {
-      host.innerHTML = AppRender.miniEmpty('🏪','No live listings yet','Submit your first listing — it will appear here once approved.'); return;
+      host.innerHTML = AppRender.miniEmpty('\uD83C\uDFEA','No live listings yet','Your first approved listing will appear here.'); return;
     }
-    host.innerHTML = items.map(b => `<div class="sub-card">
-      <div class="sub-card-name">${U.esc(b.name)}</div>
-      <div class="sub-card-meta">${U.esc(b.category)} · ${U.esc(b.area)}</div>
-      <span class="sub-status approved">✓ Live</span>
-    </div>`).join('');
+    host.innerHTML = items.map(b => {
+      const bid = b.id || b._fsId || '';
+      const bname = U.esc(b.name||'Untitled');
+      return `<div class="sub-card">
+        <div class="sub-card-name">${bname}</div>
+        <div class="sub-card-meta">${U.esc(b.category||'\u2014')} \u00B7 ${U.esc(b.area||'\u2014')}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+          <span class="sub-status approved">\u2713 Live</span>
+          ${b.verified?'<span class="badge b-verified">Verified</span>':''}
+          ${b.featured?'<span class="badge b-featured">Featured</span>':''}
+        </div>
+        <div style="margin-top:10px">
+          <button class="btn btn-sm btn-ghost" onclick="AppActions._openEditForm('${bid}','${bname}')">&#x270F;&#xFE0F; Edit listing</button>
+        </div>
+      </div>`;
+    }).join('');
   } else {
-    const subs = await AppFirebase.getMySubmissions(AppAuth.uid());
-    const filtered = subs.filter(s => s.reviewStatus === (panel === 'pending' ? 'pending' : 'rejected'));
+    const allSubs = await AppFirebase.getMySubmissions(AppAuth.uid());
+    const filtered = allSubs.filter(sub => sub.reviewStatus === (panel === 'pending' ? 'pending' : 'rejected'));
     if (!filtered.length) {
-      host.innerHTML = AppRender.miniEmpty('📭', panel==='pending'?'No pending submissions':'No rejected submissions', ''); return;
+      const msg = panel==='pending' ? 'Approved submissions appear under Live.' : 'No rejected items.';
+      host.innerHTML = AppRender.miniEmpty('\uD83D\uDCEB', panel==='pending'?'Nothing pending':'Nothing rejected', msg); return;
     }
-    host.innerHTML = filtered.map(s => `<div class="sub-card">
-      <div class="sub-card-name">${U.esc(s.name || (s.payload&&s.payload.name) || 'Untitled')}</div>
-      <div class="sub-card-meta">Submitted ${s.submittedAt ? new Date(s.submittedAt.seconds*1000).toLocaleDateString('en-IN') : '—'}</div>
-      <span class="sub-status ${s.reviewStatus}">${s.reviewStatus}</span>
-      ${s.rejectionReason ? `<div class="reject-reason">Reason: ${U.esc(s.rejectionReason)}</div>` : ''}
-    </div>`).join('');
+    host.innerHTML = filtered.map(sub => {
+      const ts = sub.submittedAt && sub.submittedAt.seconds ? new Date(sub.submittedAt.seconds*1000) : null;
+      const dateStr = ts ? ts.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '\u2014';
+      const isEdit = sub.submissionType === 'edit';
+      const nm = U.esc(sub.name||(sub.payload&&sub.payload.name)||'Untitled');
+      return `<div class="sub-card">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px">
+          <div class="sub-card-name">${nm}</div>
+          ${isEdit?'<span class="badge b-claimed" style="font-size:10px">Edit request</span>':''}
+        </div>
+        <div class="sub-card-meta">Submitted ${dateStr}</div>
+        <span class="sub-status ${sub.reviewStatus}" style="margin-top:7px">${sub.reviewStatus==='pending'?'\u23F3 Awaiting review':sub.reviewStatus==='approved'?'\u2713 Approved':'\u2715 Rejected'}</span>
+        ${sub.rejectionReason?`<div class="reject-reason"><b>Reason:</b> ${U.esc(sub.rejectionReason)}</div>`:''}
+        ${sub.reviewStatus==='rejected'?'<div style="margin-top:8px"><button class="btn btn-sm btn-ghost" onclick="AppActions.openAddBusiness()">Resubmit \u2192</button></div>':''}
+      </div>`;
+    }).join('');
   }
 };
 
@@ -3071,6 +3232,60 @@ AppRender.retailerDash = async function(panel) {
    LIVE BUSINESS LOADING — merge Firestore with seed data
    ============================================================================ */
 AppFirebase._liveBizCache = null;
+
+/* Retailer edit modal HTML is created dynamically */
+AppActions._openEditForm = function(bizId) {
+  const b = AppFirebase._liveBizCache && AppFirebase._liveBizCache.find(x=>x.id===bizId);
+  const name = b ? b.name : 'your listing';
+  const existing = document.getElementById('modalEdit');
+  if(existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.className = 'modal show'; modal.id = 'modalEdit';
+  modal.setAttribute('role','dialog'); modal.setAttribute('aria-modal','true');
+  modal.innerHTML = `<div class="modal-head"><h2>Edit: ${U.esc(name)}</h2><button class="modal-x" onclick="AppActions.closeModal('modalEdit')">✕</button></div>
+    <div class="modal-body">
+      <p class="t-xs dim" style="margin-bottom:14px;font-style:italic">Your edit goes to admin review before going live. Current listing stays unchanged until approved.</p>
+      <div class="field"><label>Phone</label><input id="edit_phone" type="tel" placeholder="10-digit mobile" value="${U.esc(b&&b.phone||'')}"/></div>
+      <div class="field"><label>WhatsApp</label><input id="edit_wa" type="tel" placeholder="WhatsApp number" value="${U.esc(b&&b.whatsapp||'')}"/></div>
+      <div class="field"><label>Address</label><input id="edit_addr" type="text" placeholder="Updated address" value="${U.esc(b&&b.address||'')}"/></div>
+      <div class="field"><label>About / Description</label><textarea id="edit_about" placeholder="What you offer…">${U.esc(b&&b.about||'')}</textarea></div>
+      <button class="btn btn-primary btn-block" onclick="AppActions._submitEdit('${bizId}','${U.esc(name)}')">Submit for review</button>
+    </div>`;
+  document.getElementById('app').appendChild(modal);
+  U.$('#scrim').classList.add('show');
+  AppActions.lock();
+};
+
+AppActions._submitEdit = async function(bizId, bizName) {
+  if(!AppAuth.isLoggedIn()) { AppUtils.toast('Please sign in','error'); return; }
+  const payload = {
+    phone:   (U.$('#edit_phone')||{}).value.trim(),
+    whatsapp:(U.$('#edit_wa')||{}).value.trim(),
+    address: (U.$('#edit_addr')||{}).value.trim(),
+    about:   (U.$('#edit_about')||{}).value.trim()
+  };
+  const btn = document.querySelector('#modalEdit .btn-primary');
+  if(btn){btn.disabled=true;btn.textContent='Submitting…';}
+  try {
+    if(AppFirebase.ready){
+      await AppFirebase.db.collection('business_edits_pending').add({
+        ownerUid: AppAuth.uid(), targetBusinessId: bizId,
+        submissionType: 'edit', reviewStatus: 'pending',
+        payload, bizName,
+        submittedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      AppUtils.toast('Edit submitted for review','success');
+    } else {
+      AppUtils.toast('Edit saved locally (Firebase not configured)','info');
+    }
+    AppActions.closeModal('modalEdit');
+    document.getElementById('modalEdit') && document.getElementById('modalEdit').remove();
+  } catch(e) {
+    AppUtils.toast('Error: '+e.message,'error');
+  } finally {
+    if(btn){btn.disabled=false;btn.textContent='Submit for review';}
+  }
+};
 
 AppFirebase.refreshBusinesses = async function() {
   const remote = await AppFirebase.getBusinesses(AppState.area);
@@ -3097,6 +3312,16 @@ AppFirebase.refreshBusinesses = async function() {
 /* ============================================================================
    EXTEND EVENT MAP
    ============================================================================ */
+/* weather-shortcut on home taps nav=utility then opens weather panel */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-util-after]');
+  if (!el) return;
+  const nav = el.dataset.nav;
+  if (nav) AppActions.switchTab(nav);
+  const after = el.dataset.utilAfter;
+  if (after) setTimeout(() => AppActions.setUtilTab(after), 80);
+});
+
 Object.assign(AppEvents.map, {
   'open-auth':          () => AppActions.openAuth(),
   'do-login':           () => AppActions.doLogin(),
@@ -3107,34 +3332,22 @@ Object.assign(AppEvents.map, {
   'open-admin':         () => AppActions.openAdmin()
 });
 
-/* auth tab switch inside modal */
-document.addEventListener('click', e => {
-  const el = e.target.closest('[data-authtab]');
-  if (el) AppActions.switchAuthTab(el.dataset.authtab);
-  const rdt = e.target.closest('[data-rdash]');
-  if (rdt) AppRender.retailerDash(rdt.dataset.rdash);
-  const nt  = e.target.closest('[data-news]');
-  if (nt)   AppActions.setNewsTab(nt.dataset.news);
-  const au  = e.target.closest('[data-action-util]');
-  if (au && au.dataset.actionUtil === 'weather') { AppActions.switchTab('utility'); AppActions.setUtilTab('weather'); AppWeather.fetch().then(w => AppWeather.renderUtil(w)); }
-});
+/* auth tab switch, news tabs, rdash — all handled in AppEvents.onClick above */
 
 /* ============================================================================
-   EXTEND INIT
+   EXTEND INIT — single consolidated DOMContentLoaded (avoids race conditions)
    ============================================================================ */
-const _origInit = init;
-window.addEventListener('DOMContentLoaded', async () => {
-  // Weather — home widget
-  AppWeather.fetch().then(w => {
-    AppWeather.renderHome(w);
-    if (U.$('#u-weather') && U.$('.upanel.active#u-weather')) AppWeather.renderUtil(w);
-  });
-  // News — home snippet
-  AppNews.renderHome();
-  // Firebase
+document.addEventListener('DOMContentLoaded', async () => {
+  // 1. Firebase (sets up auth observer which re-renders profile)
   await AppFirebase.init();
-  // Load live businesses in background
+  // 2. Weather home card (fast, no key needed)
+  AppWeather.fetch().then(w => AppWeather.renderHome(w)).catch(()=>{});
+  // 3. News home snippet
+  AppNews.renderHome().catch(()=>{});
+  // 4. Live businesses in background
   if (AppFirebase.ready) AppFirebase.refreshBusinesses();
+  // 5. Community starts on news tab — trigger live load
+  if (AppState.nav === 'community') AppActions.setCommTab(AppState.commSection || 'news');
 }, { once: true });
 
 </script>
