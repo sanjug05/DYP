@@ -254,7 +254,7 @@ body.dark .chip.filter.active{color:var(--ink-on-brand);}
 .live-sub{font-size:var(--fs-2xs);color:var(--ink-2);margin-top:1px;}
 
 /* ---- Quick action chips (thumb zone) ---- */
-.quick{display:flex;gap:9px;overflow-x:auto;padding:2px 14px;margin:14px -14px 0;scrollbar-width:none;}
+.quick{display:flex;gap:9px;overflow-x:auto;padding:2px 14px;margin:14px 0 0;scrollbar-width:none;touch-action:pan-x;-webkit-overflow-scrolling:touch;}
 .quick::-webkit-scrollbar{display:none;}
 .qa{
   display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;width:72px;padding:12px 4px;
@@ -633,6 +633,12 @@ body.dark .act-wa{background:#0E2A1A;color:#2ABD6E;}
 /* ============================================================================
    RESPONSIVE — mobile first; enhance upward
    ============================================================================ */
+/* 414px: plus-sized phones — slightly roomier essentials */
+@media (min-width:414px) and (max-width:559px){
+  .ess-grid{grid-template-columns:repeat(5,1fr);}
+  .qa{width:74px;}
+}
+
 @media (min-width:560px){
   .ess-grid{grid-template-columns:repeat(5,1fr);}
   .dir-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
@@ -740,9 +746,102 @@ body.dark .act-wa{background:#0E2A1A;color:#2ABD6E;}
   .pstats{padding:0 12px;}
 }
 
+/* ── 375px: iPhone 6 / 7 / 8 / SE 2nd gen / 13 mini ── */
+@media (max-width:375px){
+  .brand-tag{display:none;}
+  .loc-btn{max-width:110px;}
+}
+
+/* ── 360px: common small Android, older iPhones ── */
+@media (max-width:360px){
+  :root{--header-h:48px;--nav-h:54px;--fs-base:14.5px;}
+  .navitem span{font-size:8.5px;}
+  .navitem svg{width:19px;height:19px;}
+  .brand-name{font-size:12px;}
+  .brand-tag{display:none;}
+  .loc-btn{max-width:96px;font-size:10.5px;padding:0 7px;}
+  .ess-grid{grid-template-columns:repeat(4,1fr);gap:6px;}
+  .ess{padding:9px 2px;} .ess-ic{width:34px;height:34px;font-size:16px;}
+  .qa{width:60px;} .qa-ic{width:32px;height:32px;font-size:15px;} .qa-lbl{font-size:8.5px;}
+  .deal{min-width:190px;} .chl{min-width:220px;} .opennow{min-width:175px;}
+  .section{padding:0 10px;} .hero{padding:10px 10px 4px;}
+  .chiprow,.rail{padding-left:10px;padding-right:10px;margin-left:-10px;margin-right:-10px;}
+  .dir-list{padding:0 10px;} .dir-search{margin:0 10px;}
+  .group{margin:10px 10px 0;} .profhero{padding:10px;} .pstats{padding:0 10px;}
+  .upanel{padding:4px 10px 0;}
+  .main{padding-bottom:calc(var(--nav-h) + var(--safe-b) + 24px);}
+}
+
+/* ── 320px: iPhone 5 / SE 1st gen — tightest phone in use ── */
+@media (max-width:320px){
+  :root{--header-h:46px;--nav-h:52px;--fs-base:14px;--fs-md:15px;}
+
+  /* Header: hide brand text, show only mark + actions */
+  .brand-name{display:none;}
+  .brand-mark{width:28px;height:28px;font-size:9px;border-radius:5px;}
+  .loc-btn{height:32px;padding:0 7px;font-size:10px;max-width:88px;}
+  .iconbtn{width:36px;height:36px;}
+  .notif-dot{top:8px;right:9px;}
+
+  /* Bottom nav: tighten labels */
+  .navitem span{font-size:7.5px;letter-spacing:-.2px;}
+  .navitem svg{width:18px;height:18px;}
+  .navitem{gap:1px;padding:3px 0;}
+
+  /* Essential grid: 4 col at 320px — very tight but possible */
+  .ess-grid{grid-template-columns:repeat(4,1fr);gap:5px;}
+  .ess{padding:8px 1px;border-radius:6px;}
+  .ess-ic{width:30px;height:30px;font-size:14px;border-radius:9px;}
+  .ess-lbl{font-size:9px;}
+
+  /* Quick actions: smaller so 8 fit without overflow */
+  .quick{gap:6px;}
+  .qa{width:54px;padding:9px 2px;border-radius:7px;}
+  .qa-ic{width:30px;height:30px;font-size:14px;border-radius:9px;}
+  .qa-lbl{font-size:8px;}
+
+  /* Cards / rails */
+  .deal{min-width:175px;} .chl{min-width:200px;} .opennow{min-width:165px;}
+  .mkt{min-width:200px;} .mkt-head{height:64px;}
+  .bcard-thumb{width:44px;height:44px;font-size:21px;}
+  .bcard-name{font-size:14.5px;}
+
+  /* Sections / layout */
+  .section{padding:0 10px;margin-top:18px;}
+  .hero{padding:10px 10px 4px;}
+  .sec-title{font-size:var(--fs-md);}
+  .chiprow,.rail{padding-left:10px;padding-right:10px;margin-left:-10px;margin-right:-10px;}
+  .chip{min-height:36px;padding:0 10px;font-size:11.5px;}
+
+  /* Forms / utility */
+  .dir-search{margin:0 10px;height:42px;}
+  .dir-list,.upanel,.util-intro,.group,.comm-list{padding-left:10px;padding-right:10px;}
+  .news-mode{padding:0 10px;}
+  .profhero{padding:10px 10px;} .pstats{padding:0 10px;}
+  .prof-av{width:52px;height:52px;font-size:20px;}
+  .prof-name{font-size:18px;}
+
+  /* Profile stats: compact row */
+  .pstats{gap:7px;}
+  .pstat{padding:10px 6px;}
+  .pstat-n{font-size:18px;}
+
+  /* Sheets / modals */
+  .modal{width:calc(100% - 20px);}
+  .field input,.field select,.field textarea{height:44px;}
+
+  /* Install banner */
+  .install-banner{left:8px;right:8px;padding:9px 10px;gap:8px;}
+  .ib-title{font-size:12px;} .ib-sub{display:none;}
+  .ib-install{height:34px;padding:0 10px;font-size:11px;}
+
+  /* main content bottom clearance */
+  .main{padding-bottom:calc(var(--nav-h) + var(--safe-b) + 20px);}
+}
+
 /* news-mode wrapper (no grid, no padding — news-list handles its own) */
 .news-mode{display:block;padding:0 14px;}
-@media(max-width:390px){.news-mode{padding:0 12px;}}
+.news-mode{padding:0 12px;}}
 
 /* ── Auth modals ── */
 .auth-tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:18px;}
@@ -779,7 +878,8 @@ body.dark .act-wa{background:#0E2A1A;color:#2ABD6E;}
 .news-card{display:flex;gap:11px;padding:13px;background:var(--surface);text-decoration:none;color:inherit;transition:background .15s;}
 .news-card:active{background:var(--bg-2);}
 .news-thumb{width:72px;height:62px;border-radius:var(--r-sm);overflow:hidden;flex-shrink:0;background:var(--bg-2);}
-.news-thumb img{width:100%;height:100%;object-fit:cover;}
+.news-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.news-thumb img[src=""]{display:none;}
 .news-body{flex:1;min-width:0;}
 .news-title{font-family:var(--font-heading);font-size:var(--fs-sm);font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
 .news-desc{display:none;}
@@ -814,7 +914,7 @@ body.dark .act-wa{background:#0E2A1A;color:#2ABD6E;}
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#E8A000" id="themeColorMeta" />
 <meta name="description" content="Digital Yellow Papers — your neighbourhood in your pocket. Find open shops, daily essentials, offers, civic utilities and local updates near you." />
 <!-- PWA / installability (manifest + icons injected at runtime to stay single-file) -->
@@ -822,8 +922,10 @@ body.dark .act-wa{background:#0E2A1A;color:#2ABD6E;}
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="apple-mobile-web-app-title" content="Yellow Papers" />
+<!-- iPhone pinch-to-zoom allowed; telephone detection on; splash support -->
+<meta name="format-detection" content="telephone=yes" />
+<link rel="apple-touch-icon" sizes="180x180" id="appleIconLink180" />
 <link rel="manifest" id="manifestLink" />
-<link rel="apple-touch-icon" id="appleIconLink" />
 <title>Digital Yellow Papers — Hyperlocal neighbourhood app</title>
 
 <!-- Firebase SDKs (compat mode — no bundler needed) -->
@@ -831,6 +933,7 @@ body.dark .act-wa{background:#0E2A1A;color:#2ABD6E;}
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
 </head>
 <body>
 <div id="app">
@@ -1115,8 +1218,18 @@ body.dark .act-wa{background:#0E2A1A;color:#2ABD6E;}
         <div class="t-xs dim" style="margin-top:3px;font-style:italic">Up to 3 photos · Max 5MB each · Images only</div>
         <div id="ab_photos_err" class="form-err"></div>
       </div>
+      <div id="ab_preview" style="display:none;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-bottom:14px">
+        <div class="t-xs muted" style="margin-bottom:8px;font-style:italic">Preview of your listing:</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="bcard-thumb" style="width:40px;height:40px;font-size:20px;background:var(--brand-soft)">🏪</div>
+          <div>
+            <div class="bcard-name" id="prev_name" style="font-size:var(--fs-base)"></div>
+            <div class="bcard-meta" id="prev_meta"></div>
+          </div>
+        </div>
+      </div>
       <button class="btn btn-primary btn-block" data-action="submit-business">Submit for review</button>
-      <p class="dim t-xs" style="text-align:center;margin-top:10px">Free listing · We verify before it goes live</p>
+      <p class="dim t-xs" style="text-align:center;margin-top:10px">Free · We verify and publish within 24 hours</p>
     </div>
   </div>
 
@@ -1139,6 +1252,24 @@ body.dark .act-wa{background:#0E2A1A;color:#2ABD6E;}
     </div>
     <div class="ov-body" id="ovBody"></div>
   </div>
+
+  <!-- ===== Update banner (shown when new SW version is waiting) ===== -->
+  <div id="updateBanner" role="alert" aria-live="assertive"
+    style="position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;
+      gap:10px;padding:10px 14px calc(10px + var(--safe-t));background:var(--brand);color:var(--ink-on-brand);
+      font-size:var(--fs-sm);font-weight:600;transform:translateY(-110%);
+      transition:transform .35s cubic-bezier(.32,.72,0,1);pointer-events:none;box-shadow:0 4px 14px rgba(184,134,11,.4);">
+    <span style="flex:1">✨ New version available</span>
+    <button data-action="apply-update" style="background:var(--ink-on-brand);color:var(--brand);font-weight:700;
+      font-size:var(--fs-xs);padding:5px 12px;border-radius:var(--r-pill);touch-action:manipulation;">Update now</button>
+    <button data-action="dismiss-update" style="font-size:18px;line-height:1;padding:4px;
+      touch-action:manipulation;" aria-label="Dismiss">✕</button>
+  </div>
+  <style>
+    #updateBanner.show{transform:translateY(0);pointer-events:auto;}
+    /* push main content down when update banner shows */
+    #updateBanner.show ~ * .main,.update-nudge{margin-top:44px;}
+  </style>
 
   <!-- ===== Install banner ===== -->
   <div class="install-banner" id="installBanner">
@@ -1197,6 +1328,8 @@ body.dark .act-wa{background:#0E2A1A;color:#2ABD6E;}
   </div>
 
   <div class="toasts" id="toasts" aria-live="polite"></div>
+  <!-- Screen reader announcements for tab/content changes -->
+  <div id="ariaLive" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 </div>
 <script>
 "use strict";
@@ -1947,16 +2080,7 @@ const AppRender = {
   },
 
   /* ---- PROFILE ---- */
-  profile(){
-    U.$('#statSaved').textContent = AppState.saved.length;
-    U.$('#statSeen').textContent  = AppState.seen;
-    U.$('#statListed').textContent= AppState.listings.length;
-    U.$('#profArea').textContent  = 'Browsing '+(AppState.area==='Delhi'?'Delhi':AppState.area)+' · Guest';
-    U.$('#settingsArea').textContent = AppState.area==='Delhi'?'Delhi (all areas)':AppState.area;
-    U.$('#langVal').textContent   = AppState.lang;
-    U.$('#darkToggle').classList.toggle('on', AppState.dark);
-    AppRender.savedList();
-  },
+  profile(){ /* authoritative version defined below AppFirebase */ },
   savedList(){
     const host = U.$('#savedList');
     const items = AppState.saved.map(id=>U.biz(id)).filter(Boolean);
@@ -2096,6 +2220,25 @@ const AppRender = {
    ============================================================================ */
 const AppActions = {
   /* overlay/scroll plumbing */
+  _trapFocus(el) {
+    if (!el) return;
+    const SEL = 'button:not([disabled]),a[href],[tabindex]:not([tabindex="-1"]),input:not([disabled]),select,textarea';
+    const nodes = Array.from(el.querySelectorAll(SEL));
+    if (!nodes.length) return;
+    const first = nodes[0], last = nodes[nodes.length - 1];
+    el._dyp_trap = e => {
+      if (e.key !== 'Tab') return;
+      if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+      else            { if (document.activeElement === last)  { e.preventDefault(); first.focus(); } }
+    };
+    el.addEventListener('keydown', el._dyp_trap);
+    // Move focus into dialog immediately
+    const focusTarget = el.querySelector('[autofocus]') || first;
+    setTimeout(() => focusTarget && focusTarget.focus(), 50);
+  },
+  _releaseFocus(el) {
+    if (el && el._dyp_trap) { el.removeEventListener('keydown', el._dyp_trap); delete el._dyp_trap; }
+  },
   _scrollY:0,
   lock(){
     this._scrollY = window.scrollY;
@@ -2110,11 +2253,11 @@ const AppActions = {
     window.scrollTo(0, this._scrollY);
   },
   anyOpen(){ return U.$$('.sheet.show, .modal.show').length>0 || U.$('#searchOverlay').classList.contains('show'); },
-  openSheet(id){ U.$('#'+id).classList.add('show'); U.$('#scrim').classList.add('show'); AppActions.lock(); AppActions.fab(); },
-  openModal(id){ U.$('#'+id).classList.add('show'); U.$('#scrim').classList.add('show'); AppActions.lock(); AppActions.fab(); },
+  openSheet(id){ U.$('#'+id).classList.add('show'); U.$('#scrim').classList.add('show'); AppActions.lock(); AppActions.fab(); AppActions._trapFocus(U.$('#'+id)); },
+  openModal(id){ U.$('#'+id).classList.add('show'); U.$('#scrim').classList.add('show'); AppActions.lock(); AppActions.fab(); AppActions._trapFocus(U.$('#'+id)); },
   closeModal(id){ U.$('#'+id).classList.remove('show'); if(!AppActions.anyOpen()){ U.$('#scrim').classList.remove('show'); AppActions.unlock(); } AppActions.fab(); },
   closeSheets(){
-    U.$$('.sheet.show, .modal.show').forEach(e=>e.classList.remove('show'));
+    U.$$('.sheet.show, .modal.show').forEach(e=>{ AppActions._releaseFocus(e); e.classList.remove('show'); });
     const scrim = U.$('#scrim');
     if(scrim) scrim.classList.remove('show');
     // also close any dynamically created modal (e.g. #modalEdit)
@@ -2138,6 +2281,8 @@ const AppActions = {
     if(nav==='explore')   { AppRender.dirList(); }
     if(nav==='community') { AppRender.community(); }
     if(nav==='profile')   { AppRender.profile(); }
+    AppAnalytics && AppAnalytics.page(nav);
+    const lr=U.$('#ariaLive'); if(lr){lr.textContent='';setTimeout(()=>{lr.textContent='Showing '+nav.charAt(0).toUpperCase()+nav.slice(1)+' page';},60);}
     window.scrollTo({top:0,behavior:'instant'});
     AppActions.fab();
   },
@@ -2147,6 +2292,7 @@ const AppActions = {
     AppRender.buildDetail(b);
     AppState.seen++; U.lsSet(LS.seen, AppState.seen);
     AppActions.openSheet('sheetDetail');
+    AppAnalytics && AppAnalytics.bizView(id, b.name);
   },
   openMarket(id){
     const m = AppData.markets.find(x=>x.id===+id); if(!m) return;
@@ -2160,18 +2306,7 @@ const AppActions = {
     U.$$('#marketBody .mpanel').forEach(p=>p.classList.toggle('active', p.id==='m-'+tab));
   },
 
-  toggleSave(id){
-    id=+id;
-    const i = AppState.saved.indexOf(id);
-    if(i>=0){ AppState.saved.splice(i,1); U.toast('Removed from saved','info'); }
-    else { AppState.saved.unshift(id); U.toast('Saved!','success'); }
-    U.lsSet(LS.saved, AppState.saved);
-    // refresh any visible save buttons for this id
-    U.$$('.savebtn[data-id="'+id+'"]').forEach(btn=>{
-      const on=AppState.saved.includes(id); btn.classList.toggle('on',on); btn.setAttribute('aria-pressed',on); btn.setAttribute('aria-label',on?'Saved':'Save');
-    });
-    if(AppState.nav==='profile') AppRender.profile();
-  },
+  toggleSave(id){ /* authoritative version defined below */ },
   unsave(id){ AppActions.toggleSave(id); },
 
   /* location */
@@ -2248,18 +2383,7 @@ const AppActions = {
     AppActions.openModal('modalAdd');
     setTimeout(()=>U.$('#ab_name').focus(),120);
   },
-  submitBusiness(){
-    const name=U.$('#ab_name').value.trim(), phone=U.$('#ab_phone').value.trim(), addr=U.$('#ab_addr').value.trim();
-    if(!name){ U.toast('Please enter a business name','error'); U.$('#ab_name').focus(); return; }
-    if(!phone || phone.replace(/[^0-9]/g,'').length<10){ U.toast('Enter a valid 10-digit phone','error'); U.$('#ab_phone').focus(); return; }
-    if(!addr){ U.toast('Please enter an address','error'); U.$('#ab_addr').focus(); return; }
-    // FS: pendingSubmissions — awaiting verification before going live
-    AppState.listings.unshift({ name, phone, category:U.$('#ab_cat').value, whatsapp:U.$('#ab_wa').value.trim(), address:addr, area:U.$('#ab_area').value, about:U.$('#ab_about').value.trim(), status:'pending', submittedAt:Date.now() });
-    U.lsSet(LS.listings, AppState.listings);
-    AppActions.closeModal('modalAdd');
-    U.toast('Submitted! We\u2019ll verify and publish soon.','success');
-    if(AppState.nav==='profile') AppRender.profile();
-  },
+  submitBusiness(){ /* authoritative version defined below */ },
 
   /* reviews */
   openReview(id){
@@ -2290,7 +2414,12 @@ const AppActions = {
   /* settings */
   applyDark(d){
     AppState.dark=d; document.body.classList.toggle('dark',d);
-    U.$('#themeColorMeta').setAttribute('content', d?'#100E0B':'#E8A000');
+    // Update theme-color for browser chrome/status bar
+    const tc = U.$('#themeColorMeta');
+    if(tc) tc.setAttribute('content', d?'#100E0B':'#FFF8E6');
+    // Also update apple-status-bar
+    const sb = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+    if(sb) sb.setAttribute('content', d?'black':'default');
     U.$('#darkToggle').classList.toggle('on',d);
     U.$('#darkToggle').setAttribute('aria-checked',d);
   },
@@ -2396,7 +2525,7 @@ const PWA = {
   isStandalone(){ return (window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone===true; },
   dismissed(){ return U.lsGet(LS.installDismissed,false); },
 
-  showBanner(){ if(PWA.dismissed()||PWA.isStandalone()) return; U.$('#installBanner').classList.add('show'); },
+  showBanner(){ if(PWA.dismissed()||PWA.isStandalone()) return; U.$('#installBanner').classList.add('show'); AppAnalytics && AppAnalytics.installPrompt(); },
   hideBanner(){ U.$('#installBanner').classList.remove('show'); },
   showGroup(){ if(!PWA.isStandalone()) U.$('#installGroup').style.display='block'; },
 
@@ -2423,22 +2552,121 @@ const PWA = {
   },
   dismissInstall(){ PWA.hideBanner(); U.lsSet(LS.installDismissed,true); },
 
+  /* ── SERVICE WORKER VERSION ─────────────────────────────────────────────
+     Bump this string whenever you deploy changes.
+     Chrome compares SW bytes; changing CACHE_VER triggers the update flow.
+     ───────────────────────────────────────────────────────────────────── */
+  SW_VER: 'dyp-v3.1',
+
   registerSW(){
-    // Inline service worker via blob URL — enables install prompt without a separate file
+    if (!navigator.serviceWorker) return;
+    const ver = PWA.SW_VER;
+
+    // Full SW with versioned cache + update messaging + offline fallback
     const swCode = `
-      const CACHE='dyp-v1';
-      const OFFLINE=['/'];
-      self.addEventListener('install', e=>{ e.waitUntil(caches.open(CACHE).then(c=>c.addAll(OFFLINE))); self.skipWaiting(); });
-      self.addEventListener('activate', e=>{ e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k))))); self.clients.claim(); });
-      self.addEventListener('fetch', e=>{
-        if(e.request.method!=='GET') return;
-        e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));
-      });`;
+"use strict";
+const CACHE_VER = '${ver}'; /* changed = triggers update */
+const APP_SHELL = ['/']; /* extend for more assets once hosted */
+
+/* INSTALL — cache app shell, but wait for explicit skipWaiting */
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE_VER)
+      .then(c => c.addAll(APP_SHELL).catch(() => {}))
+      .then(() => { /* Do NOT skipWaiting here — wait for user to trigger update */ })
+  );
+});
+
+/* ACTIVATE — delete old caches, take control */
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE_VER).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
+      .then(() => {
+        /* Tell all open pages a new version is now active */
+        self.clients.matchAll({ includeUncontrolled: true })
+          .then(clients => clients.forEach(c => c.postMessage({ type: 'SW_ACTIVATED', version: CACHE_VER })));
+      })
+  );
+});
+
+/* FETCH — network-first, fall back to cache for same-origin GET */
+self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
+  if (!e.request.url.startsWith(self.location.origin)) return;
+  e.respondWith(
+    fetch(e.request)
+      .then(res => {
+        if (res && res.ok && res.type !== 'opaque') {
+          const clone = res.clone();
+          caches.open(CACHE_VER).then(c => c.put(e.request, clone)).catch(() => {});
+        }
+        return res;
+      })
+      .catch(() => caches.match(e.request).then(cached => cached || new Response('Offline', { status: 503 })))
+  );
+});
+
+/* MESSAGE — page can trigger skipWaiting to apply update */
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+`.replace(/\$\{ver\}/g, ver);
+
     try {
-      const blob = new Blob([swCode],{type:'application/javascript'});
+      const blob = new Blob([swCode], { type: 'application/javascript' });
       const swUrl = URL.createObjectURL(blob);
-      navigator.serviceWorker && navigator.serviceWorker.register(swUrl).catch(()=>{});
+
+      navigator.serviceWorker.register(swUrl)
+        .then(reg => {
+          /* ── UPDATE DETECTION ─────────────────────────────────────── */
+          // Already a waiting worker (page reloaded after update found)?
+          if (reg.waiting) PWA._offerUpdate(reg);
+
+          // New worker found while page is open
+          reg.addEventListener('updatefound', () => {
+            const w = reg.installing;
+            if (!w) return;
+            w.addEventListener('statechange', () => {
+              if (w.state === 'installed' && navigator.serviceWorker.controller) {
+                PWA._offerUpdate(reg); // show update banner
+              }
+            });
+          });
+
+          // New SW activated (e.g. user approved update on another tab) → reload
+          navigator.serviceWorker.addEventListener('message', e => {
+            if (e.data && e.data.type === 'SW_ACTIVATED') {
+              const b = U.$('#updateBanner');
+              if (b && b.classList.contains('show')) { b.classList.remove('show'); location.reload(); }
+            }
+          });
+        })
+        .catch(() => {});
     } catch(e) {}
+  },
+
+  _offerUpdate(reg) {
+    /* Store reg ref for the action handler, show the update banner */
+    PWA._waitingReg = reg;
+    const b = U.$('#updateBanner');
+    if (b) b.classList.add('show');
+  },
+
+  applyUpdate() {
+    const reg = PWA._waitingReg;
+    const b = U.$('#updateBanner');
+    if (b) b.classList.remove('show');
+    if (reg && reg.waiting) {
+      reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+      // Reload once the new SW takes control
+      navigator.serviceWorker.addEventListener('controllerchange', () => location.reload(), { once: true });
+    } else {
+      location.reload();
+    }
   },
 
   init(){
@@ -2510,7 +2738,9 @@ const AppEvents = {
     'ov-open':       (el)=>AppActions.ovOpen(el.dataset.id),
     'ov-market':     (el)=>AppActions.ovMarket(el.dataset.id),
     'install':       ()=>PWA.install(),
-    'dismiss-install':()=>PWA.dismissInstall()
+    'dismiss-install':()=>PWA.dismissInstall(),
+  'apply-update':  ()=>PWA.applyUpdate(),
+  'dismiss-update':()=>{ const b=U.$('#updateBanner'); if(b) b.classList.remove('show'); }
   },
 
   onClick(e){
@@ -2553,9 +2783,34 @@ const AppEvents = {
     hs.addEventListener('blur', ()=>setTimeout(()=>{ hb.classList.remove('focus'); if(!hs.value.trim()) U.$('#homeLive').classList.remove('show'); },160));
 
     const ds=U.$('#dirSearch'), db=U.$('#dirSearchBox');
-    ds.addEventListener('input', ()=>{ db.classList.toggle('has', !!ds.value); AppRender.dirList(); });
+    let _searchTimer;
+    ds.addEventListener('input', ()=>{
+      db.classList.toggle('has', !!ds.value);
+      AppRender.dirList();
+      // Debounced analytics — only fire after user pauses typing
+      clearTimeout(_searchTimer);
+      if(ds.value.trim().length > 1) {
+        _searchTimer = setTimeout(()=>{
+          const res = AppRender.getDirResults ? AppRender.getDirResults().length : 0;
+          AppAnalytics && AppAnalytics.search(ds.value.trim(), res);
+        }, 1200);
+      }
+    });
 
     U.$('#ifscSearch').addEventListener('input', e=>AppRender.ifsc(e.target.value));
+    // Retailer listing preview — live update as they type
+    ['ab_name','ab_cat','ab_area'].forEach(id => {
+      const el = U.$(('#'+id));
+      if(el) el.addEventListener('input', () => {
+        const nm = (U.$('#ab_name')||{}).value.trim();
+        const prev = U.$('#ab_preview');
+        if(!prev) return;
+        prev.style.display = nm ? 'block' : 'none';
+        const pn = U.$('#prev_name'), pm = U.$('#prev_meta');
+        if(pn) pn.textContent = nm || '';
+        if(pm) pm.textContent = [(U.$('#ab_cat')||{}).value||'', (U.$('#ab_area')||{}).value||''].filter(Boolean).join(' · ');
+      });
+    });
     U.$('#pinSearch').addEventListener('input', e=>AppRender.pincode(e.target.value));
     U.$('#stdSearch').addEventListener('input', e=>AppRender.std(e.target.value));
     U.$('#ovInput').addEventListener('input', ()=>AppRender.overlay());
@@ -2601,8 +2856,44 @@ function init(){
   AppActions.fab();
 }
 
+window.addEventListener('error', e => {
+  AppAnalytics && AppAnalytics.error('uncaught', { message: e.message, source: e.filename, line: e.lineno });
+});
+window.addEventListener('unhandledrejection', e => {
+  AppAnalytics && AppAnalytics.error('unhandled_promise', { message: String(e.reason) });
+});
+
 if(document.readyState!=='loading') init();
 else document.addEventListener('DOMContentLoaded', init);
+
+
+/* ============================================================================
+   ANALYTICS + ERROR MONITORING  (AppAnalytics)
+   ============================================================================ */
+const AppAnalytics = {
+  _a: null,
+  init() {
+    if (!AppFirebase.ready) return;
+    try { this._a = firebase.analytics(); } catch(e) {}
+  },
+  log(event, params = {}) {
+    if (this._a) { try { this._a.logEvent(event, { ...params, area: AppState.area }); } catch(e) {} }
+    if (event === 'app_error' && AppFirebase.ready) {
+      AppFirebase.db.collection('audit_logs').add({
+        type: 'client_error', ...params, uid: AppAuth.uid(),
+        nav: AppState.nav, ts: firebase.firestore.FieldValue.serverTimestamp()
+      }).catch(() => {});
+    }
+  },
+  page(n)         { this.log('page_view',        { page_title: n }); },
+  bizView(id, n)  { this.log('business_view',    { biz_id: String(id), biz_name: n }); },
+  search(q, cnt)  { this.log('search',           { query: q, result_count: cnt }); },
+  listingSubmit() { this.log('listing_submit',   {}); },
+  listingSave(sv) { this.log(sv ? 'listing_save' : 'listing_unsave', {}); },
+  installPrompt() { this.log('pwa_install_prompt', {}); },
+  authEvent(t)    { this.log('auth_' + t, {}); },
+  error(msg, ctx) { this.log('app_error', { error_message: msg, context: ctx }); }
+};
 
 /* ============================================================================
    FIREBASE CONFIG — paste your Firebase project values here
@@ -2632,7 +2923,7 @@ const AppFirebase = {
   async init() {
     try {
       if (!firebase || FIREBASE_CONFIG.apiKey.startsWith('YOUR')) {
-        console.info('[DYP] Firebase not configured — running in demo mode.');
+        /* Firebase not configured — demo mode */
         return;
       }
       firebase.initializeApp(FIREBASE_CONFIG);
@@ -2642,7 +2933,7 @@ const AppFirebase = {
       this.ready   = true;
       this.auth.onAuthStateChanged(user => AppAuth._onStateChange(user));
     } catch(e) {
-      console.warn('[DYP] Firebase init failed:', e.message);
+      AppAnalytics && AppAnalytics.error('firebase_init_failed', { message: e.message });
     }
   },
 
@@ -2654,7 +2945,7 @@ const AppFirebase = {
       if (areaFilter && areaFilter !== 'Delhi') q = q.where('area','==',areaFilter);
       const snap = await q.get();
       return snap.docs.map(d => ({ _fsId: d.id, ...d.data() }));
-    } catch(e) { console.warn('[DYP] getBusinesses:', e); return null; }
+    } catch(e) { AppAnalytics && AppAnalytics.error('firestore_read', { message: e.message }); return null; }
   },
 
   /* -- Submissions -- */
@@ -2947,7 +3238,7 @@ const AppNews = {
         time:        this._rel(i.pubDate),
         thumb:       i.thumbnail || (i.enclosure && i.enclosure.link) || null,
         description: i.description
-          ? i.description.replace(/<[^>]+>/g,'').trim().slice(0,110) + '…' : ''
+          ? AppUtils && AppUtils.esc ? AppUtils.esc(i.description.replace(/<[^>]+>/g,'').trim().slice(0,110)) + '…' : i.description.replace(/<[^>]+>/g,'').trim().slice(0,110) + '…' : ''
       }));
       this.cache[tab] = { d:items, t:now };
       return items;
@@ -3050,9 +3341,19 @@ AppRender._authHeader = function() {
 /* ============================================================================
    OVERRIDE: profile() — role-aware
    ============================================================================ */
-const _origProfile = AppRender.profile.bind(AppRender);
+/* Authoritative profile render — stats + auth-aware content */
 AppRender.profile = function() {
-  _origProfile();
+  // Base stats
+  const sv=U.$('#statSaved'); if(sv) sv.textContent=AppState.saved.length;
+  const se=U.$('#statSeen');  if(se) se.textContent=AppState.seen;
+  const sl=U.$('#statListed');if(sl) sl.textContent=AppState.listings.length;
+  const sa=U.$('#settingsArea');if(sa) sa.textContent=AppState.area==='Delhi'?'Delhi (all areas)':AppState.area;
+  const lv=U.$('#langVal');   if(lv) lv.textContent=AppState.lang;
+  const dt=U.$('#darkToggle');if(dt){dt.classList.toggle('on',AppState.dark);dt.setAttribute('aria-checked',AppState.dark);}
+  // Sync profArea with auth state
+  const pa=U.$('#profArea');
+  if(pa && !AppAuth.isLoggedIn()) pa.textContent='Browsing '+(AppState.area==='Delhi'?'Delhi':AppState.area)+' · Guest';
+  AppRender.savedList();
   const authBlock = U.$('#profileAuthBlock');
   const nameEl    = U.$('#profName');
   const areaEl    = U.$('#profArea');
@@ -3101,7 +3402,6 @@ AppRender.profile = function() {
 /* ============================================================================
    OVERRIDE: submitBusiness → Firestore
    ============================================================================ */
-const _origSubmit = AppActions.submitBusiness.bind(AppActions);
 AppActions.submitBusiness = async function() {
   if (!AppAuth.isLoggedIn()) {
     AppActions.closeModal('modalAdd');
@@ -3126,15 +3426,22 @@ AppActions.submitBusiness = async function() {
     const errEl = U.$('#ab_photos_err');
     if (errEl) errEl.classList.remove('show');
 
+    // Pre-generate submission doc ref so storage path matches the Firestore doc ID
+    // Prevents orphaned /businesses/{uid}/sub_xxx/ paths after approval
+    const subDocRef = AppFirebase.ready
+      ? AppFirebase.db.collection('business_submissions').doc()
+      : null;
+    const subDocId = subDocRef ? subDocRef.id : ('local_' + Date.now());
+
     if (photoInput && photoInput.files && photoInput.files.length > 0) {
       if (photoInput.files.length > 3) {
         AppUtils.toast('Max 3 photos allowed','error'); return;
       }
       if (btn) btn.textContent = 'Uploading photos…';
       try {
-        // Use a temp bizId for the storage path; real bizId assigned after Firestore write
-        const tempBizId = 'sub_' + Date.now();
-        photoUrls = await AppFirebase.uploadBusinessImages(AppAuth.uid(), tempBizId, photoInput.files);
+        // Storage path: /businesses/{uid}/{submissionDocId}/{file}
+        // At approval, admin copies images to /businesses/{uid}/{liveDocId}/
+        photoUrls = await AppFirebase.uploadBusinessImages(AppAuth.uid(), subDocId, photoInput.files);
       } catch(uploadErr) {
         if (errEl) { errEl.textContent = uploadErr.message; errEl.classList.add('show'); }
         AppUtils.toast(uploadErr.message, 'error');
@@ -3143,14 +3450,28 @@ AppActions.submitBusiness = async function() {
       if (btn) btn.textContent = 'Submitting…';
     }
 
-    await AppFirebase.submitBusiness({
-      name, phone, whatsapp: U.$('#ab_wa').value.trim(),
-      category: U.$('#ab_cat').value, address: addr,
-      area: U.$('#ab_area').value, about: U.$('#ab_about').value.trim(),
-      photos: photoUrls  // may be empty if no photos or Firebase not ready
-    }, AppAuth.uid());
+    if (AppFirebase.ready && subDocRef) {
+      // Use the pre-generated ref (so storage path matches doc ID)
+      await subDocRef.set({
+        name, phone, whatsapp: U.$('#ab_wa').value.trim(),
+        category: U.$('#ab_cat').value, address: addr,
+        area: U.$('#ab_area').value, about: U.$('#ab_about').value.trim(),
+        photos: photoUrls,
+        ownerUid: AppAuth.uid(),
+        submissionType: 'new', reviewStatus: 'pending',
+        submittedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } else {
+      await AppFirebase.submitBusiness({
+        name, phone, whatsapp: U.$('#ab_wa').value.trim(),
+        category: U.$('#ab_cat').value, address: addr,
+        area: U.$('#ab_area').value, about: U.$('#ab_about').value.trim(),
+        photos: photoUrls
+      }, AppAuth.uid());
+    }
     AppActions.closeModal('modalAdd');
     AppUtils.toast('Submitted! We’ll review and publish soon.','success');
+    AppAnalytics && AppAnalytics.listingSubmit();
     if (AppState.nav === 'profile') AppRender.profile();
   } catch(e) {
     if (AppFirebase.ready) {
@@ -3170,7 +3491,6 @@ AppActions.submitBusiness = async function() {
 /* ============================================================================
    OVERRIDE: toggleSave → Firestore
    ============================================================================ */
-const _origToggleSave = AppActions.toggleSave.bind(AppActions);
 AppActions.toggleSave = function(id) {
   id = +id;
   const saved = AppState.saved.includes(id);
@@ -3233,6 +3553,7 @@ AppActions.doSignup = async function() {
   try {
     await AppAuth.signup(email, pass, name, isRet);
     AppUtils.toast('Welcome to Digital Yellow Papers!','success');
+    AppAnalytics && AppAnalytics.authEvent('signup');
   } catch(e) {
     const msg = e.code==='auth/email-already-in-use' ? 'This email is already registered.' : e.message;
     if (err) { err.textContent=msg; err.classList.add('show'); }
@@ -3374,13 +3695,21 @@ AppFirebase.refreshBusinesses = async function() {
     // Augment with computed fields like seed data
     remote.forEach(b => {
       if (!b.id && b._fsId) b.id = b._fsId;
+      // Sanitize user-supplied text fields from Firestore before render
+      b.name     = String(b.name     || '').slice(0,120);
+      b.category = String(b.category || '').slice(0,60);
+      b.area     = String(b.area     || '').slice(0,60);
+      b.address  = String(b.address  || '').slice(0,200);
+      b.about    = String(b.about    || '').slice(0,500);
+      b.phone    = String(b.phone    || '').replace(/[^0-9+\- ]/g,'').slice(0,16);
+      if (!Array.isArray(b.services)) b.services = [];
+      b.services = b.services.slice(0,20).map(sv => String(sv).slice(0,100));
       if (!b.distanceKm) b.distanceKm = +(0.3 + ((Math.random()*60)/10)).toFixed(1);
       if (!b.updatedDaysAgo) b.updatedDaysAgo = 1;
       b.verified  = !!b.verified;
       b.claimed   = !!b.claimed;
       b.sponsored = !!b.sponsored;
       b.hasOffer  = !!b.offerText;
-      if (!b.services) b.services = [];
     });
     // Prepend live businesses to the explore list (they override seed for same area)
     AppRender.dirList();
@@ -3419,6 +3748,7 @@ Object.assign(AppEvents.map, {
 document.addEventListener('DOMContentLoaded', async () => {
   // 1. Firebase (sets up auth observer which re-renders profile)
   await AppFirebase.init();
+  AppAnalytics.init(); // fire after Firebase ready
   // 2. Weather home card (fast, no key needed)
   AppWeather.fetch().then(w => AppWeather.renderHome(w)).catch(()=>{});
   // 3. News home snippet
