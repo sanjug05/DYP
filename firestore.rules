@@ -1,0 +1,69 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuth()      { return request.auth != null; }
+    function uid()         { return request.auth.uid; }
+    function userDoc()     { return get(/databases/$(database)/documents/users/$(uid())); }
+    function role()        { return userDoc().data.get('role', 'user'); }
+    function isAdmin()     { return isAuth() && role() == 'admin'; }
+    function isRetailer()  { return isAuth() && (role() == 'retailer' || role() == 'admin'); }
+
+    // Users — own doc readable/writable; admin sees all
+    match /users/{userId} {
+      allow read:   if isAuth() && (uid() == userId || isAdmin());
+      allow create: if isAuth() && uid() == userId;
+      allow update: if isAuth() && (uid() == userId || isAdmin());
+      match /saved/{bizId} {
+        allow read, write: if isAuth() && uid() == userId;
+      }
+    }
+
+    // Live businesses — public read; only admin can write
+    match /businesses_live/{bizId} {
+      allow read:   if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Submissions — retailer creates own; only admin updates
+    match /business_submissions/{subId} {
+      allow read:   if isAuth() && (resource.data.ownerUid == uid() || isAdmin());
+      allow create: if isRetailer() && request.resource.data.ownerUid == uid();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Pending edits — same rules as submissions
+    match /business_edits_pending/{editId} {
+      allow read:   if isAuth() && (resource.data.ownerUid == uid() || isAdmin());
+      allow create: if isRetailer() && request.resource.data.ownerUid == uid();
+      allow update: if isAdmin();
+    }
+
+    // Reviews — authenticated users can create; admin can delete
+    match /reviews/{reviewId} {
+      allow read:   if true;
+      allow create: if isAuth();
+      allow delete: if isAdmin();
+    }
+
+    // Categories and areas — public read; admin write
+    match /categories/{id}  { allow read: if true; allow write: if isAdmin(); }
+    match /areas/{id}       { allow read: if true; allow write: if isAdmin(); }
+    match /sponsored_slots/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /app_settings/{id}    { allow read: if true; allow write: if isAdmin(); }
+
+    // Community posts — public read; auth users create; admin delete
+    match /local_posts/{postId} {
+      allow read:   if true;
+      allow create: if isAuth();
+      allow update: if isAuth() && (resource.data.ownerUid == uid() || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // Audit logs — admin only
+    match /audit_logs/{logId} { allow read, write: if isAdmin(); }
+  }
+}
